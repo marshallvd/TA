@@ -4,36 +4,41 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class CheckRole
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
+        // Debug logging
+        \Log::info('=== Role Check Debug ===');
+        \Log::info('Request URL: ' . $request->url());
+        \Log::info('Required roles:', $roles);
+        
         // Check if user is authenticated
         if (!$request->user()) {
-            return response()->json([
-                'message' => 'Unauthorized'
-            ], 401);
+            \Log::info('User is not authenticated');
+            return response()->json(['message' => 'Unauthorized'], 401);
         }
+
+        // Log user info
+        \Log::info('User ID: ' . $request->user()->id);
+        \Log::info('User Role ID: ' . $request->user()->id_role);
 
         // Convert role ID to role name for comparison
         $userRole = $this->getRoleName($request->user()->id_role);
-        
+        \Log::info('User role name: ' . $userRole);
+
         // Check if user's role is in allowed roles
         if (in_array($userRole, $roles)) {
+            \Log::info('Access granted for role: ' . $userRole);
             return $next($request);
         }
 
-        // If role doesn't match, return forbidden response
-        return response()->json([
-            'message' => 'Forbidden access'
-        ], 403);
+        // Log forbidden access
+        \Log::info('Access forbidden. User role ' . $userRole . ' not in allowed roles: ' . implode(', ', $roles));
+        return response()->json(['message' => 'Forbidden access'], 403);
     }
 
     /**
@@ -45,9 +50,10 @@ class CheckRole
             1 => 'admin',
             2 => 'hrd',
             3 => 'pegawai'
-            // Tambahkan role lain jika ada
         ];
 
-        return $roles[$roleId] ?? 'unknown';
+        $roleName = $roles[$roleId] ?? 'unknown';
+        \Log::info('Role conversion: ID ' . $roleId . ' => ' . $roleName);
+        return $roleName;
     }
 }

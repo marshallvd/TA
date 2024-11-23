@@ -16,6 +16,7 @@ class KomponenCoreValues extends Model
     protected $fillable = [
         'nama_core_values',
         'bobot',
+        'perilaku_utama'
     ];
 
     protected $casts = [

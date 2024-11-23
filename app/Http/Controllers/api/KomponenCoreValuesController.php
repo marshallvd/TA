@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-
 use App\Models\KomponenCoreValues;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -21,6 +20,7 @@ class KomponenCoreValuesController extends Controller
         $validator = Validator::make($request->all(), [
             'nama_core_values' => 'required|string|max:100',
             'bobot' => 'required|numeric|between:0,100',
+            'perilaku_utama' => 'nullable|string'
         ]);
 
         if ($validator->fails()) {
@@ -28,7 +28,10 @@ class KomponenCoreValuesController extends Controller
         }
 
         $komponenCoreValues = KomponenCoreValues::create($request->all());
-        return response()->json(['data' => $komponenCoreValues, 'message' => 'Komponen core values berhasil ditambahkan'], 201);
+        return response()->json([
+            'data' => $komponenCoreValues, 
+            'message' => 'Komponen core values berhasil ditambahkan'
+        ], 201);
     }
 
     public function show($id)
@@ -50,6 +53,7 @@ class KomponenCoreValuesController extends Controller
         $validator = Validator::make($request->all(), [
             'nama_core_values' => 'required|string|max:100',
             'bobot' => 'required|numeric|between:0,100',
+            'perilaku_utama' => 'nullable|string'
         ]);
 
         if ($validator->fails()) {
@@ -57,7 +61,10 @@ class KomponenCoreValuesController extends Controller
         }
 
         $komponenCoreValues->update($request->all());
-        return response()->json(['data' => $komponenCoreValues, 'message' => 'Komponen core values berhasil diperbarui'], 200);
+        return response()->json([
+            'data' => $komponenCoreValues, 
+            'message' => 'Komponen core values berhasil diperbarui'
+        ], 200);
     }
 
     public function destroy($id)

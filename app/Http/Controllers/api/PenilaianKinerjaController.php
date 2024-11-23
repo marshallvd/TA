@@ -15,12 +15,92 @@ use Illuminate\Support\Facades\Validator;
 
 class PenilaianKinerjaController extends Controller
 {
-    public function index()
-    {
-        $penilaianKinerja = PenilaianKinerja::with(['pegawai', 'penilaianKPI', 'penilaianKompetensi', 'penilaianCoreValues'])->get();
-        return response()->json(['data' => $penilaianKinerja], 200);
+    // public function index(Request $request)
+    // {
+    //     $query = PenilaianKinerja::with(['pegawai', 'penilaianKPI', 'penilaianKompetensi', 'penilaianCoreValues']);
+    
+    //     if ($request->has('periode')) {
+    //         $query->where('periode_penilaian', 'like', $request->periode . '%');
+    //     }
+    
+    //     $penilaianKinerja = $query->get();
+    
+    //     // Ambil semua pegawai
+    //     $allPegawai = Pegawai::all();
+    
+    //     // Siapkan array untuk hasil akhir
+    //     $result = [];
+    
+    //     // Loop through semua pegawai
+    //     foreach ($allPegawai as $pegawai) {
+    //         // Cek apakah pegawai sudah memiliki penilaian
+    //         $penilaian = $penilaianKinerja->first(function ($item) use ($pegawai) {
+    //             return $item->id_pegawai === $pegawai->id_pegawai;
+    //         });
+    
+    //         if ($penilaian) {
+    //             // Jika sudah ada penilaian, masukkan data penilaian
+    //             $result[] = $penilaian;
+    //         } else {
+    //             // Jika belum ada penilaian, masukkan data pegawai saja
+    //             $result[] = [
+    //                 'id_pegawai' => $pegawai->id_pegawai,
+    //                 'pegawai' => $pegawai,
+    //                 'periode_penilaian' => $request->periode ?? date('Y-m'),
+    //                 'nilai_akhir' => null,
+    //                 'predikat' => null,
+    //                 'penilaianKPI' => null,
+    //                 'penilaianKompetensi' => null,
+    //                 'penilaianCoreValues' => null
+    //             ];
+    //         }
+    //     }
+    
+    //     return response()->json(['data' => $result], 200);
+    // }
+
+
+    public function index(Request $request)
+{
+    // Ambil semua pegawai
+    $allPegawai = Pegawai::all();
+    
+    // Ambil penilaian kinerja yang sesuai dengan periode jika ada
+    $penilaianKinerja = PenilaianKinerja::with(['pegawai', 'penilaianKPI', 'penilaianKompetensi', 'penilaianCoreValues'])
+        ->when($request->has('periode'), function ($query) use ($request) {
+            return $query->where('periode_penilaian', 'like', $request->periode . '%');
+        })
+        ->get()
+        ->keyBy('id_pegawai'); // Menggunakan keyBy untuk memudahkan pencarian
+
+    // Siapkan array untuk hasil akhir
+    $result = [];
+
+    // Loop through semua pegawai
+    foreach ($allPegawai as $pegawai) {
+        // Cek apakah pegawai sudah memiliki penilaian
+        $penilaian = $penilaianKinerja->get($pegawai->id_pegawai);
+
+        if ($penilaian) {
+            // Jika sudah ada penilaian, masukkan data penilaian
+            $result[] = $penilaian;
+        } else {
+            // Jika belum ada penilaian, masukkan data pegawai saja
+            $result[] = [
+                'id_pegawai' => $pegawai->id_pegawai,
+                'pegawai' => $pegawai,
+                'periode_penilaian' => $request->periode ?? date('Y-m'),
+                'nilai_akhir' => null,
+                'predikat' => null,
+                'penilaianKPI' => null,
+                'penilaianKompetensi' => null,
+                'penilaianCoreValues' => null
+            ];
+        }
     }
 
+    return response()->json(['data' => $result], 200);
+}
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -73,13 +153,24 @@ class PenilaianKinerjaController extends Controller
     }
 
     public function show($id)
-    {
-        $penilaianKinerja = PenilaianKinerja::with(['pegawai', 'penilaianKPI', 'penilaianKompetensi', 'penilaianCoreValues'])->find($id);
-        if (!$penilaianKinerja) {
-            return response()->json(['message' => 'Penilaian kinerja tidak ditemukan'], 404);
-        }
-        return response()->json(['data' => $penilaianKinerja], 200);
+{
+    $penilaianKinerja = PenilaianKinerja::with(['pegawai', 'penilaianKPI', 'penilaianKompetensi', 'penilaianCoreValues'])
+        ->find($id); // Use find to fetch by primary key (id_penilaian_kinerja)
+
+    if (!$penilaianKinerja) {
+        return response()->json(['message' => 'Penilaian kinerja tidak ditemukan'], 404);
     }
+
+    return response()->json(['data' => $penilaianKinerja], 200);
+}
+    // public function show($id)
+    // {
+    //     $penilaianKinerja = PenilaianKinerja::with(['pegawai', 'penilaianKPI', 'penilaianKompetensi', 'penilaianCoreValues'])->find($id);
+    //     if (!$penilaianKinerja) {
+    //         return response()->json(['message' => 'Penilaian kinerja tidak ditemukan'], 404);
+    //     }
+    //     return response()->json(['data' => $penilaianKinerja], 200);
+    // }
 
     public function update(Request $request, $id)
     {
@@ -160,4 +251,51 @@ class PenilaianKinerjaController extends Controller
             return 'Sangat Kurang';
         }
     }
+
+    public function getPenilaianByPegawaiAndPeriod($id, $tahun, $bulan)
+    {
+        // Validate year and month
+        if (!preg_match('/^\d{4}$/', $tahun) || !preg_match('/^(0[1-9]|1[0-2])$/', $bulan)) {
+            return response()->json(['message' => 'Tahun atau bulan tidak valid'], 400);
+        }
+    
+        // Format the period for querying
+        $periode = $tahun . '-' . $bulan;
+    
+        // Fetch performance evaluation for the specified employee and period
+        $penilaianKinerja = PenilaianKinerja::with(['pegawai', 'penilaianKPI', 'penilaianKompetensi', 'penilaianCoreValues'])
+            ->where('id_pegawai', $id)
+            ->where('periode_penilaian', 'like', $periode . '%')
+            ->first(); // Get the first matching record
+    
+        if (!$penilaianKinerja) {
+            return response()->json(['message' => 'Penilaian kinerja tidak ditemukan'], 404);
+        }
+    
+        return response()->json(['data' => $penilaianKinerja], 200);
+    }
+
+    public function getPenilaianKinerja(Request $request)
+    {
+        $query = PenilaianKinerja::with(['pegawai', 'penilaianKPI', 'penilaianKompetensi', 'penilaianCoreValues']);
+    
+        // Filter berdasarkan ID Pegawai jika disediakan
+        if ($request->has('id_pegawai')) {
+            $query->where('id_pegawai', $request->id_pegawai);
+        }
+    
+        // Filter berdasarkan periode jika disediakan
+        if ($request->has('periode')) {
+            $query->where('periode_penilaian', 'like', $request->periode . '%');
+        }
+    
+        $result = $query->get();
+    
+        if ($result->isEmpty()) {
+            return response()->json(['status' => 'error', 'message' => 'Penilaian kinerja tidak ditemukan'], 404);
+        }
+    
+        return response()->json(['status' => 'success', 'data' => $result]);
+    }
+
 }

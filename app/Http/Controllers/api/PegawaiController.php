@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-
 use App\Models\Pegawai;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -12,7 +11,7 @@ class PegawaiController extends Controller
 {
     public function index()
     {
-        $pegawai = Pegawai::all();
+        $pegawai = Pegawai::with(['user', 'divisi', 'jabatan'])->get();
         return response()->json(['data' => $pegawai], 200);
     }
 
@@ -45,11 +44,18 @@ class PegawaiController extends Controller
 
     public function show($id)
     {
-        $pegawai = Pegawai::find($id);
-        if (!$pegawai) {
-            return response()->json(['message' => 'Pegawai tidak ditemukan'], 404);
+        try {
+            $pegawai = Pegawai::findOrFail($id);
+            return response()->json([
+                'status' => 'success',
+                'data' => $pegawai
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Pegawai tidak ditemukan'
+            ], 404);
         }
-        return response()->json(['data' => $pegawai], 200);
     }
 
     public function update(Request $request, $id)

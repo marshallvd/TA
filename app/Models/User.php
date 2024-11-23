@@ -29,7 +29,9 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $table = 'tb_users';
     protected $primaryKey = 'id_user';
-    protected $fillable = ['id_pegawai', 'email', 'password', 'id_role', 'status'];
+    protected $fillable = [
+        'id_pegawai', 
+        'email', 'password', 'id_role', 'status'];
 
     /**
      * The attributes that should be hidden for serialization.

@@ -22,13 +22,13 @@ class Cuti extends Model
         'keterangan',
     ];
 
-    public function jenisCuti()
-    {
-        return $this->belongsTo(JenisCuti::class, 'id_jenis_cuti', 'id_jenis_cuti');
-    }
-
     public function pegawai()
     {
-        return $this->belongsTo(Pegawai::class, 'id_pegawai', 'id_pegawai');
+        return $this->belongsTo(Pegawai::class, 'id_pegawai');
+    }
+
+    public function jenisCuti()
+    {
+        return $this->belongsTo(JenisCuti::class, 'id_jenis_cuti');
     }
 }

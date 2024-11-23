@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 class JenisCuti extends Model
 {
     protected $table = 'tb_jenis_cuti';
@@ -15,6 +14,8 @@ class JenisCuti extends Model
         'kategori',
         'jumlah_hari_diizinkan'
     ];
+
+    public $timestamps = false; // Menonaktifkan timestamps
 
     public function cuti()
     {

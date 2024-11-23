@@ -66,6 +66,9 @@ class Kernel extends HttpKernel
         'jwt.auth' => \App\Http\Middleware\JwtMiddleware::class,
         // 'jwt.refresh' => \Tymon\JWTAuth\Http\Middleware\RefreshToken::class,
         'role' => \App\Http\Middleware\CheckRole::class,
-        'auth.jwt' => \Tymon\JWTAuth\Http\Middleware\Authenticate::class,
+        // 'auth.jwt' => \Tymon\JWTAuth\Http\Middleware\Authenticate::class,
+        // 'auth' => \App\Http\Middleware\AuthMiddleware::class,
+        'cache.response' => \App\Http\Middleware\CacheResponse::class,
+
     ];
 }

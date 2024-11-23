@@ -1,5 +1,5 @@
 <?php
-
+// app/Models/KomponenKpi.php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,7 +16,9 @@ class KomponenKpi extends Model
     protected $fillable = [
         'id_divisi',
         'nama_indikator',
-        'bobot'
+        'bobot',
+        'target',
+        'ukuran'
     ];
 
     protected $dates = [

@@ -37,6 +37,12 @@ class Pegawai extends Model
         'tanggal_diperbarui',
     ];
 
+    // Relasi dengan User jika diperlukan
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user', 'id');
+    }
+
     // Relasi dengan Jabatan
     public function jabatan()
     {
@@ -47,5 +53,11 @@ class Pegawai extends Model
     public function divisi()
     {
         return $this->belongsTo(Divisi::class, 'id_divisi', 'id_divisi');
+    }
+
+    // Relasi dengan Penilaian Kinerja
+    public function penilaianKinerja()
+    {
+        return $this->hasMany(PenilaianKinerja::class, 'id_pegawai', 'id_pegawai');
     }
 }

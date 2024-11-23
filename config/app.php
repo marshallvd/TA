@@ -53,6 +53,7 @@ return [
     | your application so that it is used when running Artisan tasks.
     |
     */
+    'api_url' => env('API_BASE_URL', 'http://localhost:8000'),
 
     'url' => env('APP_URL', 'http://localhost'),
 

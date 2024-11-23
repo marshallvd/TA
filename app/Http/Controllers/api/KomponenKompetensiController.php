@@ -19,6 +19,7 @@ class KomponenKompetensiController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nama_kompetensi' => 'required|string|max:100',
+            'perilaku_utama' => 'required|string',
             'bobot' => 'required|numeric|between:0,100',
         ]);
 
@@ -27,27 +28,34 @@ class KomponenKompetensiController extends Controller
         }
 
         $komponenKompetensi = KomponenKompetensi::create($request->all());
-        return response()->json(['data' => $komponenKompetensi, 'message' => 'Komponen kompetensi berhasil ditambahkan'], 201);
+        return response()->json([
+            'data' => $komponenKompetensi,
+            'message' => 'Komponen kompetensi berhasil ditambahkan'
+        ], 201);
     }
 
     public function show($id)
     {
         $komponenKompetensi = KomponenKompetensi::find($id);
+        
         if (!$komponenKompetensi) {
             return response()->json(['message' => 'Komponen kompetensi tidak ditemukan'], 404);
         }
+
         return response()->json(['data' => $komponenKompetensi], 200);
     }
 
     public function update(Request $request, $id)
     {
         $komponenKompetensi = KomponenKompetensi::find($id);
+
         if (!$komponenKompetensi) {
             return response()->json(['message' => 'Komponen kompetensi tidak ditemukan'], 404);
         }
 
         $validator = Validator::make($request->all(), [
             'nama_kompetensi' => 'required|string|max:100',
+            'perilaku_utama' => 'required|string',
             'bobot' => 'required|numeric|between:0,100',
         ]);
 
@@ -56,12 +64,16 @@ class KomponenKompetensiController extends Controller
         }
 
         $komponenKompetensi->update($request->all());
-        return response()->json(['data' => $komponenKompetensi, 'message' => 'Komponen kompetensi berhasil diperbarui'], 200);
+        return response()->json([
+            'data' => $komponenKompetensi,
+            'message' => 'Komponen kompetensi berhasil diperbarui'
+        ], 200);
     }
 
     public function destroy($id)
     {
         $komponenKompetensi = KomponenKompetensi::find($id);
+        
         if (!$komponenKompetensi) {
             return response()->json(['message' => 'Komponen kompetensi tidak ditemukan'], 404);
         }
