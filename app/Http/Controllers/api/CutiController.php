@@ -20,11 +20,15 @@ class CutiController extends Controller
         DB::beginTransaction();
 
         $request->validate([
+            'id_pegawai' => 'required|exists:tb_pegawai,id_pegawai', // Tambahkan validasi id_pegawai
             'id_jenis_cuti' => 'required|exists:tb_jenis_cuti,id_jenis_cuti',
             'tanggal_mulai' => 'required|date',
             'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
             'alasan' => 'required|string',
         ]);
+
+        // Gunakan id_pegawai dari request, bukan dari Auth
+        $idPegawai = $request->id_pegawai;
 
         // Ambil data jenis cuti
         $jenisCuti = JenisCuti::findOrFail($request->id_jenis_cuti);
@@ -35,7 +39,7 @@ class CutiController extends Controller
         $jumlahHari = $tanggalMulai->diff($tanggalSelesai)->days + 1;
 
         // Cek jatah cuti berdasarkan jenis
-        $jatahCuti = JatahCuti::where('id_pegawai', Auth::id())
+        $jatahCuti = JatahCuti::where('id_pegawai', $idPegawai)
             ->where('tahun', date('Y'))
             ->firstOrFail();
 
@@ -65,7 +69,7 @@ class CutiController extends Controller
 
         // Buat pengajuan cuti
         $cuti = Cuti::create([
-            'id_pegawai' => Auth::id(),
+            'id_pegawai' => $idPegawai, // Gunakan id_pegawai dari request
             'id_jenis_cuti' => $request->id_jenis_cuti,
             'tanggal_mulai' => $request->tanggal_mulai,
             'tanggal_selesai' => $request->tanggal_selesai,

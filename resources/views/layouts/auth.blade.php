@@ -3,10 +3,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>HRMS - @yield('title')</title>
-    
+    <title>HRMS SEB - @yield('title')</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}" />
+    <link rel="shortcut icon" href="{{ asset('assets/images/logo seb.png') }}" />
+
     
     <!-- Library / Plugin Css Build -->
     <link rel="stylesheet" href="{{ asset('assets/css/core/libs.min.css') }}" />
@@ -35,7 +36,7 @@
             </div>
         </section>
     </div>
-    
+    @stack('scripts')
     <!-- Library Bundle Script -->
     <script src="{{ asset('assets/js/core/libs.min.js') }}"></script>
     

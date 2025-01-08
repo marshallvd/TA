@@ -6,8 +6,23 @@
 
 @section('content')
 <div class="container-fluid content-inner mt-n5 py-0">
-    <div class="row justify-content-center">
-        <div class="col-xl-9 col-lg-8">
+    {{-- Header Card --}}
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <b><h2 class="card-title mb-1">Manajemen Komponen KPI</h2></b>
+                    <p class="card-text text-muted">Human Resource Management System SEB</p>
+                </div>
+                <div>
+                    <i class="bi bi-person-gear text-primary" style="font-size: 3rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <div class="header-title">
@@ -16,33 +31,128 @@
                 </div>
                 <div class="card-body">
                     <div class="new-user-info">
-                        <form id="kpiForm">
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label class="form-label">Divisi:</label>
-                                    <select class="form-control" name="id_divisi" id="divisiSelect" required>
-                                        <option value="">Pilih Divisi</option>
-                                    </select>
+                        <form id="komponenKPIForm" class="needs-validation" novalidate>
+                            <input type="hidden" id="kpiId" name="id_komponen_kpi" value="{{ request('id') }}">
+                            
+                            <div class="row g-4">
+                                <!-- Divisi Selection -->
+                                <div class="col-md-6">
+                                    <div class="form-group position-relative">
+                                        <label class="form-label fw-bold" for="divisiSelect">
+                                            <i class="bi bi-building me-1"></i>Divisi
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <select class="form-select form-select-lg shadow-none border-2" 
+                                                id="divisiSelect" 
+                                                name="id_divisi" 
+                                                required>
+                                            <option value="" disabled selected>Pilih Divisi</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Divisi tidak boleh kosong
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label class="form-label">Bobot (%):</label>
-                                    <input type="number" class="form-control" name="bobot" required min="0" max="100">
+
+                                <!-- Bobot Input -->
+                                <div class="col-md-6">
+                                    <div class="form-group position-relative">
+                                        <label class="form-label fw-bold" for="bobot">
+                                            <i class="bi bi-percent me-1"></i>Bobot
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="input-group">
+                                            <input type="number" 
+                                                   class="form-control form-control-lg shadow-none border-2" 
+                                                   id="bobot" 
+                                                   name="bobot" 
+                                                   required 
+                                                   min="0" 
+                                                   max="100"
+                                                   placeholder="Contoh: 25">
+                                            <span class="input-group-text bg-light">%</span>
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Bobot harus di antara 0 dan 100
+                                        </div>
+                                        <small class="text-muted"><i class="bi bi-info-circle me-1"></i>Bobot harus di antara 0 dan 100</small>
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-12">
-                                    <label class="form-label">Nama Indikator:</label>
-                                    <input type="text" class="form-control" name="nama_indikator" required maxlength="100">
+
+                                <!-- Nama Indikator Input -->
+                                <div class="col-12">
+                                    <div class="form-group position-relative">
+                                        <label class="form-label fw-bold" for="nama_indikator">
+                                            <i class="bi bi-tag me-1"></i>Nama Indikator
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" 
+                                               class="form-control form-control-lg shadow-none border-2" 
+                                               id="nama_indikator" 
+                                               name="nama_indikator" 
+                                               required 
+                                               maxlength="100"
+                                               placeholder="Masukkan nama indikator">
+                                        <div class="invalid-feedback">
+                                            Nama indikator tidak boleh kosong
+                                        </div>
+                                        <small class="text-muted"><i class="bi bi-info-circle me-1"></i>Maksimal 100 karakter</small>
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label class="form-label">Target:</label>
-                                    <input type="text" class="form-control" name="target" required>
+
+                                <!-- Target Input -->
+                                <div class="col-md-6">
+                                    <div class="form-group position-relative">
+                                        <label class="form-label fw-bold" for="target">
+                                            <i class="bi bi-bullseye me-1"></i>Target
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" 
+                                               class="form-control form-control-lg shadow-none border-2" 
+                                               id="target" 
+                                               name="target" 
+                                               required
+                                               placeholder="Masukkan target">
+                                        <div class="invalid-feedback">
+                                            Target tidak boleh kosong
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label class="form-label">Ukuran:</label>
-                                    <input type="text" class="form-control" name="ukuran" required>
+
+                                <!-- Ukuran Input -->
+                                <div class="col-md-6">
+                                    <div class="form-group position-relative">
+                                        <label class="form-label fw-bold" for="ukuran">
+                                            <i class="bi bi-rulers me-1"></i>Ukuran
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" 
+                                               class="form-control form-control-lg shadow-none border-2" 
+                                               id="ukuran" 
+                                               name="ukuran" 
+                                               required
+                                               placeholder="Masukkan ukuran">
+                                        <div class="invalid-feedback">
+                                            Ukuran tidak boleh kosong
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary mt-3">Simpan Komponen KPI</button>
-                            <a href="{{ route('komponen-kpi.index') }}" class="btn btn-secondary mt-3">Kembali</a>
+
+                            <!-- Action Buttons -->
+                            <div class="row mt-5">
+                                <div class="col-12 d-flex justify-content-end gap-2">
+                                    <a href="{{ route('komponen-kpi.index') }}" class="btn btn-danger me-2">
+                                        <i class="bi bi-arrow-left me-2"></i>Kembali
+                                    </a>
+                                    <button type="button" id="resetButton" class="btn btn-warning me-2">
+                                        <i class="bi bi-arrow-clockwise me-2"></i>Reset
+                                    </button>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="bi bi-save me-2"></i>Update
+                                    </button>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -50,30 +160,36 @@
         </div>
     </div>
 </div>
+@endsection
+
+@push('css')
+<style>
+    .form-label {
+        font-weight: 500;
+    }
+    
+    .invalid-feedback {
+        font-size: 0.875em;
+    }
+    
+    .was-validated .form-control:invalid,
+    .form-control.is-invalid {
+        border-color: #dc3545;
+    }
+</style>
+@endpush
 
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const token = localStorage.getItem('token');
+    const komponenKPIForm = document.getElementById('komponenKPIForm');
+    const resetButton = document.getElementById('resetButton');
     const divisiSelect = document.getElementById('divisiSelect');
-    const kpiForm = document.getElementById('kpiForm');
-
-    // Check token
-    if (!token) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Authentication Error',
-            text: 'Token tidak ditemukan. Silakan login kembali.'
-        }).then(() => {
-            window.location.href = '/login';
-        });
-        return;
-    }
 
     // Fetch divisi options
     fetch('http://127.0.0.1:8000/api/divisi', {
         headers: {
-            'Authorization': `Bearer ${token}`,
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Accept': 'application/json'
         }
     })
@@ -100,83 +216,102 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Form submission
-    kpiForm.addEventListener('submit', function(e) {
+    // Reset button functionality
+    resetButton.addEventListener('click', function() {
+        komponenKPIForm.reset();
+        komponenKPIForm.classList.remove('was-validated');
+    });
+
+    // Form validation and submission
+    komponenKPIForm.addEventListener('submit', async function(e) {
         e.preventDefault();
 
-        const formData = new FormData(this);
-        const data = Object.fromEntries(formData.entries());
-
-        // Validate bobot
-        const bobot = parseFloat(data.bobot);
-        if (bobot < 0 || bobot > 100) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Validasi Error',
-                text: 'Bobot harus berada di antara 0 dan 100'
-            });
+        // Basic validation
+        if (!this. checkValidity()) {
+            e.stopPropagation();
+            this.classList.add('was-validated');
             return;
         }
 
-        // Show loading
-        Swal.fire({
-            title: 'Mohon Tunggu',
-            text: 'Sedang menyimpan data...',
-            allowOutsideClick: false,
-            didOpen: () => {
-                Swal.showLoading();
-            }
-        });
+        const formData = new FormData(this);
+        const data = {
+            id_divisi: formData.get('id_divisi').trim(),
+            bobot: formData.get('bobot').trim(),
+            nama_indikator: formData.get('nama_indikator').trim(),
+            target: formData.get('target').trim(),
+            ukuran: formData.get('ukuran').trim()
+        };
 
-        fetch('http://127.0.0.1:8000/api/komponen-kpi', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(result => {
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: 'Data KPI berhasil disimpan',
-                showConfirmButton: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = '{{ route("komponen-kpi.index") }}';
+        try {
+            // Show loading state
+            const loadingAlert = Swal.fire({
+                title: 'Mohon Tunggu',
+                text: 'Sedang menyimpan data...',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
                 }
             });
-        })
-        .catch(error => {
+
+            // Send data to API
+            const response = await fetch('http://127.0.0.1:8000/api/komponen-kpi', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            // Close loading alert
+            await loadingAlert.close();
+
+            // Handle response
+            const responseData = await response.json();
+
+            if (!response.ok) {
+                // Validation errors
+                if (responseData.errors) {
+                    Object.keys(responseData.errors).forEach(key => {
+                        const inputElement = document.getElementById(key);
+                        if (inputElement) {
+                            inputElement.classList.add('is-invalid');
+                            const feedbackElement = inputElement.nextElementSibling;
+                            if (feedbackElement && feedbackElement.classList.contains('invalid-feedback')) {
+                                feedbackElement.textContent = responseData.errors[key][0];
+                            }
+                        }
+                    });
+
+                    throw new Error(responseData.message || 'Terjadi kesalahan validasi');
+                }
+
+                throw new Error(responseData.message || 'Terjadi kesalahan saat menyimpan data');
+            }
+
+            // Show success message
+            await Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'Komponen KPI berhasil ditambahkan',
+                showConfirmButton: true
+            }).then(() => {
+                window.location.href = '{{ route("komponen-kpi.index") }}';
+            });
+
+        } catch (error) {
             console.error('Error:', error);
-            Swal.fire({
+            await Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'Terjadi kesalahan saat menyimpan data: ' + error.message
-            });
-        });
-    });
-
-    // Add global fetch error handler
-    window.addEventListener('unhandledrejection', function(event) {
-        if (event.reason && event.reason.name === 'TypeError') {
-            console.error('Network error occurred:', event.reason);
-            Swal.fire({
-                icon: 'error',
-                title: 'Network Error',
-                text: 'Terjadi kesalahan jaringan. Silakan coba lagi.'
+                text: error.message || 'Terjadi kesalahan saat menyimpan data',
+                confirmButtonText: 'OK'
             });
         }
     });
 });
 </script>
 @endpush
-@endsection

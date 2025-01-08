@@ -8,7 +8,20 @@
 @section('content')
 
 <div class="container-fluid content-inner mt-n5 py-0">
-    <div>
+        {{-- Header Card --}}
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <b><h2 class="card-title mb-1">Manajemen Data Pegawai</h2></b>
+                        <p class="card-text text-muted">Human Resource Management System SEB</p>
+                    </div>
+                    <div>
+                        <i class="bi bi-person-lines-fill text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
@@ -19,7 +32,7 @@
                         <div>
                             <div>
                                 <button type="button" class="btn btn-primary" id="tambahPegawaiBtn">
-                                    <i class="fas fa-plus me-2"></i>Tambah Pegawai
+                                    <i class="bi bi-plus-square me-2"></i>Tambah Pegawai
                                 </button>
                             </div>
                         </div>
@@ -48,7 +61,6 @@
                 </div>
             </div>
         </div>
-    </div>
 </div>
 
 <script>

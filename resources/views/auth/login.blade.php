@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Login')
+@section('title', 'Login Pegawai')
 
 @section('content')
 <div class="col-md-6">
@@ -8,7 +8,7 @@
         <div class="col-md-10">
             <div class="card card-transparent shadow-none d-flex justify-content-center mb-0 auth-card">
                 <div class="card-body">
-                    <a href="{{ route('dashboard.index') }}" class="navbar-brand d-flex align-items-center mb-3">
+                    <a href="{{ route('landing.index') }}" class="navbar-brand d-flex align-items-center mb-3">
                         <div class="logo-main">
                             <div class="logo-normal">
                                 <img src="{{ asset('assets/images/logo seb.png') }}" alt="Logo HRMS SEB" class="icon-30">
@@ -19,8 +19,8 @@
                         </div>
                         <h4 class="logo-title ms-3">HRMS SEB</h4>
                     </a>
-                    <h2 class="mb-2 text-center">Sign In</h2>
-                    <p class="text-center">Tunggu apalagi? Mari kita masuk.</p>
+                    <h2 class="mb-2 text-center">Pegawai</h2>
+                    <p class="text-center">Selamat datang, pegawai! Masuk untuk mengelola tugas dan akses informasi penting.</p>
                     
                     <form id="loginForm" method="POST" action="javascript:void(0);">
                         @csrf
@@ -47,15 +47,18 @@
                         <div class="d-flex justify-content-center">
                             <button type="submit" class="btn btn-primary">Sign In</button>
                         </div>
-                        <p class="mt-3 text-center">
+                        {{-- <p class="mt-3 text-center">
                             Don't have an account? <a href="{{ route('register') }}" class="text-underline">Click here to sign up.</a>
-                        </p>
+                        </p> --}}
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+@endsection
+@push('scripts')
+    
 
 <!-- SweetAlert2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -100,9 +103,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Simpan token dan data pengguna
             localStorage.setItem('token', responseData.authorization.token);
-            localStorage.setItem('user_data', JSON.stringify(responseData.user)); // Simpan data pengguna
+            localStorage.setItem('user_data', JSON.stringify(responseData.user));
 
-            // Beri tahu pengguna bahwa login berhasil
+            // Redirect berdasarkan role
+            let dashboardRoute = '/dashboard'; // Default route
+            switch (responseData.user.id_role) {
+                case 1: // Admin
+                    dashboardRoute = '/dashboard/admin';
+                    break;
+                case 2: // HRD
+                    dashboardRoute = '/dashboard/hrd';
+                    break;
+                case 3: // Pegawai
+                    dashboardRoute = '/dashboard/pegawai';
+                    break;
+            }
+
             Swal.fire({
                 icon: 'success',
                 title: 'Login Berhasil',
@@ -110,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 showConfirmButton: false,
                 timer: 1000
             }).then(() => {
-                window.location.href = '/dashboard'; // Redirect ke dashboard
+                window.location.href = dashboardRoute;
             });
         } catch (error) {
             Swal.fire({
@@ -124,4 +140,4 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 
-@endsection
+@endpush

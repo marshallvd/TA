@@ -18,6 +18,7 @@ class HasilSeleksi extends Model
     protected $fillable = [
         'id_pelamar',
         'id_lowongan_pekerjaan',
+        'id_wawancara', 
         'status',
         'catatan'
     ];
@@ -30,5 +31,13 @@ class HasilSeleksi extends Model
     public function lowonganPekerjaan()
     {
         return $this->belongsTo(LowonganPekerjaan::class, 'id_lowongan_pekerjaan', 'id_lowongan_pekerjaan');
+    }
+    public function wawancara()
+    {
+        return $this->belongsTo(Wawancara::class, 'id_wawancara', 'id_wawancara');
+    }
+    public function lamaran()
+    {
+        return $this->belongsTo(LamaranPekerjaan::class, 'id_lamaran_pekerjaan');
     }
 }

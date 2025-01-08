@@ -7,41 +7,22 @@
 
 @section('content')
 <div class="container-fluid content-inner mt-n5 py-0">
-    <div class="row justify-content-center">
-        {{-- <div class="col-xl-3 col-lg-4">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between">
-                    <div class="header-title">
-                        <h4 class="card-title">Upload Foto</h4>
-                    </div>
+    {{-- Header Card --}}
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <b><h2 class="card-title mb-1">Manajemen Data Pegawai</h2></b>
+                    <p class="card-text text-muted">Human Resource Management System SEB</p>
                 </div>
-                <div class="card-body">
-                    <form id="photoForm">
-                        <div class="form-group">
-                            <div class="profile-img-edit position-relative">
-                                <img src="{{ asset('assets/images/avatars/01.png') }}" alt="profile-pic" id="preview-photo" class="profile-pic rounded avatar-100">
-                                <div class="upload-icone bg-primary">
-                                    <svg class="upload-button icon-14" width="14" viewBox="0 0 24 24">
-                                        <path fill="#ffffff" d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z"/>
-                                    </svg>
-                                    <input class="file-upload" type="file" accept="image/*" id="photo" name="foto">
-                                </div>
-                            </div>
-                            <div class="img-extension mt-3">
-                                <div class="d-inline-block align-items-center">
-                                    <span>Hanya</span>
-                                    <a href="javascript:void();">.jpg</a>
-                                    <a href="javascript:void();">.png</a>
-                                    <a href="javascript:void();">.jpeg</a>
-                                    <span>yang diizinkan</span>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                <div>
+                    <i class="bi bi-person-lines-fill text-primary" style="font-size: 3rem;"></i>
                 </div>
             </div>
-        </div> --}}
-        <div class="col-xl-9 col-lg-8">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <div class="header-title">
@@ -134,9 +115,19 @@
                                     </select>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary mt-3">Simpan Data Pegawai</button>
-                            <a type="button" class="btn btn-secondary mt-3" href="{{ route('pegawai.index') }}">Tutup</a>
-
+                            <div class="row mt-4">
+                                <div class="col-12 text-end">
+                                    <a href="{{ route('pegawai.index') }}" class="btn btn-danger me-2">
+                                        <i class="bi bi-arrow-left me-2"></i>Kembali
+                                    </a>
+                                    <button type="button" id="resetButton" class="btn btn-warning me-2">
+                                        <i class="bi bi-arrow-clockwise me-2"></i>Reset
+                                    </button>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="bi bi-save me-2"></i>Simpan
+                                    </button>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -150,21 +141,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const token = localStorage.getItem('token');
     const divisiSelect = document.getElementById('divisiSelect');
     const jabatanSelect = document.getElementById('jabatanSelect');
-    const photoInput = document.getElementById('photo');
-    const previewPhoto = document.getElementById('preview-photo');
     const pegawaiForm = document.getElementById('pegawaiForm');
-
-    // Preview foto yang dipilih
-    photoInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                previewPhoto.src = e.target.result;
-            }
-            reader.readAsDataURL(file);
-        }
-    });
+    const resetButton = document.getElementById('resetButton');
 
     // Fungsi untuk mengambil data divisi
     async function fetchDivisi() {
@@ -190,7 +168,12 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         } catch (error) {
             console.error('Error:', error);
-            alert('Gagal mengambil data divisi');
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Gagal mengambil data divisi',
+                confirmButtonText: 'OK'
+            });
         }
     }
 
@@ -224,14 +207,18 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         } catch (error) {
             console.error('Error:', error);
-            alert('Gagal mengambil data jabatan');
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Gagal mengambil data jabatan',
+                confirmButtonText: 'OK'
+            });
         }
     }
 
     // Event listener untuk perubahan divisi
     divisiSelect.addEventListener('change', function() {
         const divisiId = this.value;
-        console.log('Selected divisi:', divisiId);
         if (divisiId) {
             fetchJabatan(divisiId);
         } else {
@@ -240,13 +227,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Event listener untuk reset button
+    resetButton.addEventListener('click', function() {
+        pegawaiForm.reset();
+        jabatanSelect.innerHTML = '<option value="">Pilih Jabatan</option>';
+        jabatanSelect.disabled = true;
+    });
+
     // Handle form submission
     pegawaiForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
         try {
             const formData = new FormData(this);
-            formData.append('foto', photoInput.files[0]);
             
             const response = await fetch('http://127.0.0.1:8000/api/pegawai', {
                 method: 'POST',
@@ -257,9 +250,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: formData
             });
             
-            if (!response.ok) throw new Error('Failed to save pegawai');
-            
             const result = await response.json();
+            if (!response.ok) {
+                console.error('Error Response:', result);
+                throw new Error(result.message || 'Failed to save pegawai');
+            }
             
             Swal.fire({
                 icon: 'success',
@@ -268,14 +263,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 showConfirmButton: false,
                 timer: 1500
             }).then(() => {
-                window.location.href = '/pegawai'; // Redirect ke halaman list pegawai
+                window.location.href = '/pegawai';
             });
         } catch (error) {
             console.error('Error:', error);
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Gagal menyimpan data pegawai'
+                text: error.message || 'Gagal menyimpan data pegawai'
             });
         }
     });

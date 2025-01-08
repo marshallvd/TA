@@ -332,43 +332,31 @@ class GajiController extends Controller
     public function getGajiStatus(Request $request)
     {
         try {
-            \Log::info('Memulai getGajiStatus');
+            $periode = $request->query('periode', Carbon::now()->format('Y-m'));
             
-            $periode = $request->query('periode');
-            \Log::info('Periode: ' . $periode);
-            
-            if (!$periode) {
-                $periode = Carbon::now()->format('Y-m');
-            }
-    
             list($tahun, $bulan) = explode('-', $periode);
-            \Log::info("Tahun: $tahun, Bulan: $bulan");
-    
-            // Ambil semua pegawai
-            $pegawai = Pegawai::with(['jabatan', 'penilaianKinerja' => function($query) use ($tahun) {
-                $query->where('periode_penilaian', 'like', $tahun . '%')
+            
+            $pegawai = Pegawai::with(['jabatan', 'penilaianKinerja' => function($query) use ($periode) {
+                $query->where('periode_penilaian', $periode)
                     ->orderBy('tanggal_dibuat', 'desc');
             }])
             ->get();
-    
-            \Log::info('Pegawai ditemukan: ' . $pegawai->count());
-    
-            if ($pegawai->isEmpty()) {
-                \Log::warning('Tidak ada pegawai ditemukan.');
-            }
-    
-            $result = $pegawai->map(function ($p) use ($bulan, $tahun) {
+            
+            $result = $pegawai->map(function ($p) use ($bulan, $tahun, $periode) {
+                // Cari penilaian kinerja yang spesifik untuk periode ini
                 $penilaian = $p->penilaianKinerja->first();
+                
                 $gaji = Gaji::where('id_pegawai', $p->id_pegawai)
                     ->where('periode_bulan', $bulan)
                     ->where('periode_tahun', $tahun)
                     ->first();
-    
+                
                 return [
                     'id_pegawai' => $p->id_pegawai,
                     'nama_lengkap' => $p->nama_lengkap,
-                    'periode_gaji' => $tahun . '-' . str_pad($bulan, 2, '0', STR_PAD_LEFT),
-                    'status_penilaian' => !is_null($penilaian),
+                    'periode_gaji' => $periode,
+                    // Pastikan penilaian benar-benar ada untuk periode yang diminta
+                    'status_penilaian' => $penilaian !== null && $penilaian->periode_penilaian === $periode,
                     'id_gaji' => $gaji ? $gaji->id_gaji : null,
                     'jumlah_kehadiran' => $gaji ? $gaji->jumlah_kehadiran : null,
                     'jumlah_hari_lembur' => $gaji ? $gaji->jumlah_hari_lembur : null,
@@ -391,4 +379,23 @@ class GajiController extends Controller
             ], 500);
         }
     }
+
+    public function pribadi()
+{
+    // Dapatkan user yang sedang login
+    $user = Auth::user();
+
+    // Cari pegawai berdasarkan user_id
+    $pegawai = Pegawai::where('user_id', $user->id)->first();
+
+    if (!$pegawai) {
+        return redirect()->back()->with('error', 'Data pegawai tidak ditemukan');
+    }
+
+    // Kirim ID pegawai ke view
+    return view('penilaian_kinerja.pribadi', [
+        'id_pegawai' => $pegawai->id_pegawai
+    ]);
+}
+
 }

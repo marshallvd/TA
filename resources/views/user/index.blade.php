@@ -8,45 +8,51 @@
 @section('content')
 
 <div class="container-fluid content-inner mt-n5 py-0">
-    <div>
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between">
-                        <div class="header-title">
-                            <h4 class="card-title">List User Pegawai</h4>
-                        </div>
-                        {{-- <div>
-                            <div>
-                                <button type="button" class="btn btn-primary" id="tambahUserBtn">
-                                    <i class="fas fa-plus me-2"></i>Tambah User
-                                </button>
-                            </div>
-                        </div> --}}
+    {{-- Header Card --}}
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <b><h2 class="card-title mb-1">Manajemen User Pegawai</h2></b>
+                    <p class="card-text text-muted">Human Resource Management System SEB</p>
+                </div>
+                <div>
+                    <i class="bi bi-person-vcard text-primary" style="font-size: 3rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <div class="header-title">
+                        <h4 class="card-title">List User Pegawai</h4>
                     </div>
-                    <div class="card-body px-0">
-                        <div class="table-responsive">
-                            <table id="user-list-table" class="table table-striped" style="width:100%">
-                                <thead>
-                                    <tr class="ligth">
-                                        <th><b>No</b></th>
-                                        <th><b>Nama Pegawai</b></th>
-                                        <th><b>Email</b></th>
-                                        <th><b>Role</b></th>
-                                        <th><b>Status</b></th>
-                                        <th style="min-width: 100px"><b>Action</b></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="user-table-body">
-                                    <!-- Data User akan dimasukkan di sini -->
-                                </tbody>
-                            </table>
-                        </div>
+                </div>
+                <div class="card-body px-0">
+                    <div class="table-responsive">
+                        <table id="user-list-table" class="table table-striped" style="width:100%">
+                            <thead>
+                                <tr class="ligth">
+                                    <th><b>No</b></th>
+                                    <th><b>Nama Pegawai</b></th>
+                                    <th><b>Email</b></th>
+                                    <th><b>Role</b></th>
+                                    <th><b>Status</b></th>
+                                    <th style="min-width: 100px"><b>Action</b></th>
+                                </tr>
+                            </thead>
+                            <tbody id="user-table-body">
+                                <!-- Data User akan dimasukkan di sini -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 
 <script>

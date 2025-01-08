@@ -6,6 +6,20 @@ Manajemen Komponen Kompetensi
 
 @section('content')
 <div class="container-fluid content-inner mt-n5 py-0">
+    {{-- Header Card --}}
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <b><h2 class="card-title mb-1">Manajemen Komponen Kompetensi</h2></b>
+                    <p class="card-text text-muted">Human Resource Management System SEB</p>
+                </div>
+                <div>
+                    <i class="bi bi-person-gear text-primary" style="font-size: 3rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -15,20 +29,20 @@ Manajemen Komponen Kompetensi
                     </div>
                     <div>
                         <a href="{{ route('komponen-kompetensi.create') }}" class="btn btn-primary">
-                            <i class="fas fa-plus me-2"></i>Tambah Komponen Kompetensi
+                            <i class="bi bi-plus-square me-2"></i>Tambah Komponen Kompetensi
                         </a>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="kompetensi-table" class="table table-striped">
+                        <table id="kompetensi-table" class="table table-striped"style="width:100%">
                             <thead>
                                 <tr>
-                                    <th width="5%">No</th>
-                                    <th width="30%">Nama Kompetensi</th>
-                                    <th width="35%">Perilaku Utama</th>
-                                    <th width="10%">Bobot</th>
-                                    <th width="20%">Aksi</th>
+                                    <th >No</th>
+                                    <th >Nama Kompetensi</th>
+                                    <th >Perilaku Utama</th>
+                                    <th >Bobot</th>
+                                    <th >Aksi</th>
                                 </tr>
                             </thead>
                         </table>

@@ -19,7 +19,7 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nama_role' => 'required|string|in:admin,hrd,pegawai',
+            'nama_role' => 'required|string|max:50|unique:roles,nama_role', // diubah
         ]);
 
         if ($validator->fails()) {
@@ -47,7 +47,7 @@ class RoleController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'nama_role' => 'required|string|in:admin,hrd,pegawai',
+            'nama_role' => 'required|string|max:50|unique:roles,nama_role,'.$id.',id', // diubah
         ]);
 
         if ($validator->fails()) {

@@ -6,8 +6,22 @@
 
 @section('content')
 <div class="container-fluid content-inner mt-n5 py-0">
-    <div class="row justify-content-center">
-        <div class="col-xl-9 col-lg-8">
+    {{-- Header Card --}}
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <b><h2 class="card-title mb-1">Manajemen Jenis Cuti</h2></b>
+                    <p class="card-text text-muted">Human Resource Management System SEB</p>
+                </div>
+                <div>
+                    <i class="bi bi-calendar-range text-primary" style="font-size: 3rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <div class="header-title">
@@ -16,8 +30,7 @@
                 </div>
                 <div class="card-body">
                     <div class="new-user-info">
-                        <form id="jenisCutiForm" class="needs-validation" novalidate method="POST" action="{{ route('jenis_cuti.store') }}">
-                            @csrf
+                        <form id="jenisCutiForm" class="needs-validation" novalidate>
                             <div class="row">
                                 <div class="form-group col-md-12 mb-3">
                                     <label class="form-label" for="nama_jenis_cuti">Nama Jenis Cuti <span class="text-danger">*</span></label>
@@ -62,15 +75,18 @@
                                 </div>
                             </div>
 
-                            <div class="d-flex gap-2 mt-3">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-save me-1"></i>
-                                    Simpan Jenis Cuti
-                                </button>
-                                <a href="{{ route('jenis_cuti.index') }}" class="btn btn-secondary">
-                                    <i class="fas fa-arrow-left me-1"></i>
-                                    Kembali
-                                </a>
+                            <div class="row mt-4">
+                                <div class="col-12 text-end">
+                                    <a href="{{ route('jenis_cuti.index') }}" class="btn btn-danger me-2">
+                                        <i class="bi bi-arrow-left me-2"></i>Kembali
+                                    </a>
+                                    <button type="button" id="resetButton" class="btn btn-warning me-2">
+                                        <i class="bi bi-arrow-clockwise me-2"></i>Reset
+                                    </button>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="bi bi-save me-2"></i>Simpan
+                                    </button>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -102,6 +118,13 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const jenisCutiForm = document.getElementById('jenisCutiForm');
+    const resetButton = document.getElementById('resetButton');
+
+    // Reset button functionality
+    resetButton.addEventListener('click', function() {
+        jenisCutiForm.reset();
+        jenisCutiForm.classList.remove('was-validated');
+    });
 
     // Form validation and submission
     jenisCutiForm.addEventListener('submit', async function(e) {
@@ -157,7 +180,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 icon: 'success',
                 title: 'Berhasil!',
                 text: 'Jenis Cuti berhasil ditambahkan',
-                allowOutsideClick: false
+                showConfirmButton: false,
+                timer: 1500
             });
 
             // Redirect back to index
@@ -169,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 icon: 'error',
                 title: 'Error',
                 text: error.message || 'Terjadi kesalahan saat menyimpan data',
-                allowOutsideClick: false
+                confirmButtonText: 'OK'
             });
         }
     });

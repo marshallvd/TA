@@ -17,6 +17,22 @@
                         </div>
                     </div>
                     <div class="card-body">
+                        <div class="mb-3">
+                            <div class="d-flex flex-wrap gap-3">
+                                <div class="d-flex align-items-center">
+                                    <div style="width: 15px; height: 15px; background-color: #28a745; margin-right: 5px;"></div>
+                                    <span>Cuti Umum (Sakit/Upacara Keagamaan)</span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <div style="width: 15px; height: 15px; background-color: #007bff; margin-right: 5px;"></div>
+                                    <span>Cuti Menikah</span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <div style="width: 15px; height: 15px; background-color: #dc3545; margin-right: 5px;"></div>
+                                    <span>Cuti Melahirkan</span>
+                                </div>
+                            </div>
+                        </div>
                         <div id="calendar1" class="calendar-s"></div>
                     </div>
                 </div>
@@ -28,6 +44,41 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const calendarEl = document.getElementById('calendar1');
+
+    // Fungsi untuk mendapatkan warna berdasarkan jenis cuti
+    function getColorByLeaveType(jenisCuti) {
+        // Ubah jenis cuti menjadi lowercase untuk perbandingan yang lebih aman
+        const jenisCutiLower = jenisCuti.toLowerCase();
+        
+        // Log untuk debugging
+        console.log('Jenis Cuti yang diterima:', jenisCuti);
+        
+        if (jenisCutiLower.includes('umum') || jenisCutiLower.includes('sakit') || jenisCutiLower.includes('keagamaan')) {
+            return {
+                backgroundColor: '#28a745',
+                borderColor: '#28a745'
+            };
+        }
+        if (jenisCutiLower.includes('nikah') || jenisCutiLower.includes('menikah')) {
+            return {
+                backgroundColor: '#007bff',
+                borderColor: '#007bff'
+            };
+        }
+        if (jenisCutiLower.includes('melahirkan') || jenisCutiLower.includes('lahir')) {
+            return {
+                backgroundColor: '#dc3545',
+                borderColor: '#dc3545'
+            };
+        }
+
+        // Log jika tidak ada yang cocok
+        console.log('Tidak ada warna yang cocok untuk:', jenisCuti);
+        return {
+            backgroundColor: '#6c757d',
+            borderColor: '#6c757d'
+        };
+    }
 
     // Fungsi helper untuk menambah hari
     function addDays(date, days) {
@@ -41,6 +92,28 @@ document.addEventListener('DOMContentLoaded', function() {
         const date = new Date(dateStr);
         const options = { day: '2-digit', month: 'long', year: 'numeric' };
         return date.toLocaleDateString('id-ID', options);
+    }
+
+    // Fungsi untuk mengambil detail pegawai
+    async function fetchPegawaiDetail(idPegawai) {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/pegawai/${idPegawai}`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Gagal mengambil data pegawai');
+            }
+
+            const data = await response.json();
+            return data.data;
+        } catch (error) {
+            console.error('Error fetching employee details:', error);
+            return null;
+        }
     }
 
     // Initialize the calendar
@@ -67,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 title: info.event.title,
                 html: `
                     <div class="text-left">
-                        <p><strong>ID Pegawai:</strong> ${info.event.extendedProps.id_pegawai}</p>
+                        <p><strong>Nama Pegawai:</strong> ${info.event.extendedProps.nama_lengkap}</p>
                         <p><strong>Jenis Cuti:</strong> ${info.event.extendedProps.jenis_cuti}</p>
                         <p><strong>Tanggal Mulai:</strong> ${formatDate(info.event.start)}</p>
                         <p><strong>Tanggal Selesai:</strong> ${formatDate(info.event.extendedProps.tanggal_selesai)}</p>
@@ -106,32 +179,44 @@ document.addEventListener('DOMContentLoaded', function() {
             calendar.removeAllEvents();
 
             // Add events from the fetched data
-            data.forEach(cuti => {
+            for (const cuti of data) {
                 // Skip if not approved or missing required fields
                 if (
                     !cuti.tanggal_mulai || 
                     !cuti.tanggal_selesai || 
                     (cuti.status || '').toLowerCase() !== 'disetujui'
                 ) {
-                    return;
+                    continue;
                 }
 
+                // Fetch employee details
+                const pegawaiDetail = await fetchPegawaiDetail(cuti.id_pegawai);
+                const namaLengkap = pegawaiDetail ? pegawaiDetail.nama_lengkap : 'Nama tidak ditemukan';
+                
+                // Log untuk debugging
+                console.log('Data Cuti:', cuti);
+                console.log('Jenis Cuti dari API:', cuti.jenis_cuti);
+                
                 const jenisCutiName = cuti.jenis_cuti?.nama_jenis_cuti || 'Tidak Diketahui';
                 
+                // Get color based on leave type
+                const eventColor = getColorByLeaveType(jenisCutiName);
+                
                 calendar.addEvent({
-                    title: `ID Pegawai: ${cuti.id_pegawai} - ${jenisCutiName}`,
+                    title: `${namaLengkap} - ${jenisCutiName}`,
                     start: cuti.tanggal_mulai,
                     end: addDays(cuti.tanggal_selesai, 1),
-                    backgroundColor: '#28a745', // Warna hijau untuk cuti yang disetujui
-                    borderColor: '#28a745',
+                    backgroundColor: eventColor.backgroundColor,
+                    borderColor: eventColor.borderColor,
                     extendedProps: {
                         id_pegawai: cuti.id_pegawai,
+                        nama_lengkap: namaLengkap,
                         jenis_cuti: jenisCutiName,
                         alasan: cuti.alasan,
                         tanggal_selesai: cuti.tanggal_selesai
                     }
                 });
-            });
+            }
         } catch (error) {
             console.error('Error fetching leave data:', error);
             Swal.fire({

@@ -15,6 +15,7 @@ class Divisi extends Model
 
     protected $fillable = [
         'nama_divisi',
+        
     ];
 
     // Relasi dengan Jabatan jika diperlukan

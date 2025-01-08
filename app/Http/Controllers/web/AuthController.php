@@ -22,26 +22,34 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required|string|min:8',
         ]);
-
+    
         try {
-            Log::info('Attempting to log in with email: ' . $request->email);
             $response = Http::timeout(10)->post($this->apiUrl . '/auth/login', [
                 'email' => $request->email,
                 'password' => $request->password,
             ]);
-            Log::info('Response received: ', $response->json());
-
+    
             $responseData = $response->json();
-
+    
             if ($response->successful() && isset($responseData['authorization']['token'])) {
                 session(['token' => $responseData['authorization']['token']]);
-                session(['user' => $responseData['user']]); // Simpan data user jika ada
-                return redirect()->route('dashboard.index');
+                session(['user' => $responseData['user']]); 
+    
+                // Routing berdasarkan id_role
+                switch ($responseData['user']['id_role']) {
+                    case 1: // Admin
+                        return redirect()->route('dashboard.admin');
+                    case 2: // HRD
+                        return redirect()->route('dashboard.hrd');
+                    case 3: // Pegawai
+                        return redirect()->route('dashboard.pegawai');
+                    default:
+                        return redirect()->route('dashboard.index');
+                }
             } else {
                 throw new \Exception($responseData['error'] ?? 'Login failed. Please try again.');
             }
         } catch (\Exception $e) {
-            Log::error('Login error: ' . $e->getMessage());
             return back()->withErrors(['email' => $e->getMessage()]);
         }
     }

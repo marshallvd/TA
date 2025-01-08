@@ -21,14 +21,38 @@ class JabatanController extends Controller
         $validator = Validator::make($request->all(), [
             'nama_jabatan' => 'required|string|max:100',
             'id_divisi' => 'required|exists:tb_divisi,id_divisi',
+            'gaji_pokok' => 'required|numeric|min:0',
+            'tarif_lembur_per_hari' => 'required|numeric|min:0'
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
-
+    
         $jabatan = Jabatan::create($request->all());
         return response()->json($jabatan, 201);
+    }
+    
+    public function update(Request $request, $id)
+    {
+        $jabatan = Jabatan::find($id);
+        if (!$jabatan) {
+            return response()->json(['message' => 'Jabatan not found'], 404);
+        }
+    
+        $validator = Validator::make($request->all(), [
+            'nama_jabatan' => 'required|string|max:100',
+            'id_divisi' => 'required|exists:tb_divisi,id_divisi',
+            'gaji_pokok' => 'required|numeric|min:0',
+            'tarif_lembur_per_hari' => 'required|numeric|min:0'
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+    
+        $jabatan->update($request->all());
+        return response()->json($jabatan);
     }
 
     public function show($id)
@@ -40,25 +64,25 @@ class JabatanController extends Controller
         return response()->json($jabatan);
     }
 
-    public function update(Request $request, $id)
-    {
-        $jabatan = Jabatan::find($id);
-        if (!$jabatan) {
-            return response()->json(['message' => 'Jabatan not found'], 404);
-        }
+    // public function update(Request $request, $id)
+    // {
+    //     $jabatan = Jabatan::find($id);
+    //     if (!$jabatan) {
+    //         return response()->json(['message' => 'Jabatan not found'], 404);
+    //     }
 
-        $validator = Validator::make($request->all(), [
-            'nama_jabatan' => 'required|string|max:100',
-            'id_divisi' => 'required|exists:tb_divisi,id_divisi',
-        ]);
+    //     $validator = Validator::make($request->all(), [
+    //         'nama_jabatan' => 'required|string|max:100',
+    //         'id_divisi' => 'required|exists:tb_divisi,id_divisi',
+    //     ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
+    //     if ($validator->fails()) {
+    //         return response()->json($validator->errors(), 400);
+    //     }
 
-        $jabatan->update($request->all());
-        return response()->json($jabatan);
-    }
+    //     $jabatan->update($request->all());
+    //     return response()->json($jabatan);
+    // }
 
     public function destroy($id)
     {
@@ -70,4 +94,12 @@ class JabatanController extends Controller
         $jabatan->delete();
         return response()->json(['message' => 'Jabatan deleted successfully']);
     }
+
+
+// JabatanController
+public function getByDivisi($id_divisi)
+{
+    $jabatan = Jabatan::where('id_divisi', $id_divisi)->get();
+    return response()->json($jabatan);
+}
 }

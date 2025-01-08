@@ -6,8 +6,22 @@
 
 @section('content')
 <div class="container-fluid content-inner mt-n5 py-0">
-    <div class="row justify-content-center">
-        <div class="col-xl-9 col-lg-8">
+    {{-- Header Card --}}
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <b><h2 class="card-title mb-1">Manajemen Jenis Cuti</h2></b>
+                    <p class="card-text text-muted">Human Resource Management System SEB</p>
+                </div>
+                <div>
+                    <i class="bi bi-calendar-range text-primary" style="font-size: 3rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <div class="header-title">
@@ -67,15 +81,18 @@
                                 </div>
                             </div>
 
-                            <div class="d-flex gap-2 mt-3">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-save me-1"></i>
-                                    Simpan Jenis Cuti
-                                </button>
-                                <a href="{{ route('jenis_cuti.index') }}" class="btn btn-secondary">
-                                    <i class="fas fa-arrow-left me-1"></i>
-                                    Kembali
-                                </a>
+                            <div class="row mt-4">
+                                <div class="col-12 text-end">
+                                    <a href="{{ route('jenis_cuti.index') }}" class="btn btn-danger me-2">
+                                        <i class="bi bi-arrow-left me-2"></i>Kembali
+                                    </a>
+                                    <button type="button" id="resetButton" class="btn btn-warning me-2">
+                                        <i class="bi bi-arrow-clockwise me-2"></i>Reset
+                                    </button>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="bi bi-save me-2"></i>Simpan
+                                    </button>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -108,6 +125,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     const jenisCutiForm = document.getElementById('jenisCutiForm');
     const jenisCutiId = document.getElementById('jenisCutiId').value;
+    const resetButton = document.getElementById('resetButton');
+    let originalData = {};
 
     // Fetch the existing data
     async function fetchJenisCuti() {
@@ -124,10 +143,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const data = await response.json();
+        originalData = data;
         document.getElementById('nama_jenis_cuti').value = data.nama_jenis_cuti;
         document.getElementById('kategori').value = data.kategori;
         document.getElementById('jumlah_hari_diizinkan').value = data.jumlah_hari_diizinkan;
     }
+
+    // Reset button functionality
+    resetButton.addEventListener('click', function() {
+        document.getElementById('nama_jenis_cuti').value = originalData.nama_jenis_cuti;
+        document.getElementById('kategori').value = originalData.kategori;
+        document.getElementById('jumlah_hari_diizinkan').value = originalData.jumlah_hari_diizinkan;
+        jenisCutiForm.classList.remove('was-validated');
+    });
 
     // Form validation and submission
     jenisCutiForm.addEventListener('submit', async function(e) {
@@ -162,14 +190,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Send data to API
             const response = await fetch(`{{ url('api/jenis-cuti') }}/${jenisCutiId}`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
 
             if (!response.ok) {
                 throw new Error('Terjadi kesalahan saat menyimpan data');
@@ -183,7 +211,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 icon: 'success',
                 title: 'Berhasil!',
                 text: 'Jenis Cuti berhasil diperbarui',
-                allowOutsideClick: false
+                showConfirmButton: false,
+                timer: 1500
             });
 
             // Redirect back to index
@@ -195,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 icon: 'error',
                 title: 'Error',
                 text: error.message || 'Terjadi kesalahan saat menyimpan data',
-                allowOutsideClick: false
+                confirmButtonText: 'OK'
             });
         }
     });
@@ -207,7 +236,7 @@ document.addEventListener('DOMContentLoaded', function() {
             icon: 'error',
             title: 'Error',
             text: 'Gagal mengambil data jenis cuti',
-            allowOutsideClick: false
+            confirmButtonText: 'OK'
         });
     });
 });

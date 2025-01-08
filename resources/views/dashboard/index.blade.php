@@ -1,528 +1,644 @@
-@extends('layouts.app')
+
 @extends('layouts.master')
 
-@section('title')
-   Dashboard
-@endsection
+@section('title', 'Dashboard')
+
 @section('content')
+{{-- <div class="conatiner-fluid content-inner mt-n5 py-0">
+    <div class="row">
+        <!-- Slider Insights -->
+        <div class="col-md-12 col-lg-12">
+            <div class="row row-cols-1">
+                <div class="overflow-hidden d-slider1 ">
+                    <ul class="p-0 m-0 mb-2 swiper-wrapper list-inline">
+                        <li class="swiper-slide card card-slide" data-aos="fade-up" data-aos-delay="700">
+                            <div class="card-body">
+                                <div class="progress-widget">
+                                    <div id="circle-progress-01" class="text-center circle-progress-01 circle-progress circle-progress-primary" data-min-value="0" data-max-value="100" data-value="90" data-type="percent">
+                                        <svg class="card-slie-arrow icon-24" width="24" viewBox="0 0 24 24">
+                                            <path fill="currentColor" d="M5,17.59L15.59,7H9V5H19V15H17V8.41L6.41,19L5,17.59Z" />
+                                        </svg>
+                                    </div>
+                                    <div class="progress-detail">
+                                        <p class="mb-2">Total Pegawai</p>
+                                        <h4 id="total-pegawai" class="counter">0</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="swiper-slide card card-slide" data-aos="fade-up" data-aos-delay="800">
+                            <div class="card-body">
+                                <div class="progress-widget">
+                                    <div id="circle-progress-02" class="text-center circle-progress-01 circle-progress circle-progress-info" data-min-value="0" data-max-value="100" data-value="80" data-type="percent">
+                                        <svg class="card-slie-arrow icon-24" width="24" viewBox="0 0 24 24">
+                                            <path fill="currentColor" d="M19,6.41L17.59,5L7,15.59V9H5V19H15V17H8.41L19,6.41Z" />
+                                        </svg>
+                                    </div>
+                                    <div class="progress-detail">
+                                        <p class="mb-2">Pegawai Aktif</p>
+                                        <h4 id="pegawai-aktif" class="counter">0</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="swiper-slide card card-slide" data-aos="fade-up" data-aos-delay="900">
+                            <div class="card-body">
+                                <div class="progress-widget">
+                                    <div id="circle-progress-03" class="text-center circle-progress-01 circle-progress circle-progress-primary" data-min-value="0" data-max-value="100" data-value="70" data-type="percent">
+                                        <svg class="card-slie-arrow icon-24" width="24" viewBox="0 0 24 24">
+                                            <path fill="currentColor" d="M19,6.41L17.59,5L7,15.59V9H5V19H15V17H8.41L19,6.41Z" />
+                                        </svg>
+                                    </div>
+                                    <div class="progress-detail">
+                                        <p class="mb-2">User Aktif</p>
+                                        <h4 id="user-aktif" class="counter">0</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="swiper-slide card card-slide" data-aos="fade-up" data-aos-delay="1000">
+                            <div class="card-body">
+                                <div class="progress-widget">
+                                    <div id="circle-progress-04" class="text-center circle-progress-01 circle-progress circle-progress-info" data-min-value="0" data-max-value="100" data-value="60" data-type="percent">
+                                        <svg class="card-slie-arrow icon-24" width="24" viewBox="0 0 24 24">
+                                            <path fill="currentColor" d="M5,17.59L15.59,7H9V5H19V15H17V8.41L6.41,19L5,17.59Z" />
+                                        </svg>
+                                    </div>
+                                    <div class="progress-detail">
+                                        <p class="mb-2">Divisi Terbanyak</p>
+                                        <h4 id="divisi-terbanyak" class="counter">-</h4>
+                                        <small id="divisi-terbanyak-jumlah">0 Pegawai</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="swiper-button swiper-button-next"></div>
+                    <div class="swiper-button swiper-button-prev"></div>
+                </div>
+            </div>
+        </div>
 
+        <!-- Grafik & Tabel -->
+        <div class="col-md-12 col-lg-8">
+         <div class="row">
+             <!-- Komposisi Pegawai per Divisi -->
+             <div class="col-md-12 col-xl-6">
+                 <div class="card" data-aos="fade-up" data-aos-delay="900">
+                     <div class="flex-wrap card-header d-flex justify-content-between">
+                         <div class="header-title">
+                             <h4 class="card-title">Komposisi Pegawai per Divisi</h4>            
+                         </div>
+                         <div class="dropdown">
+                             <a href="#" class="text-gray dropdown-toggle" id="divisiDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                 Filter
+                             </a>
+                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="divisiDropdown">
+                                 <li><a class="dropdown-item" href="#">Bulan Ini</a></li>
+                                 <li><a class="dropdown-item" href="#">Tahun Ini</a></li>
+                             </ul>
+                         </div>
+                     </div>
+                     <div class="card-body">
+                         <div class="flex-wrap d-flex align-items-center justify-content-between">
+                             <div id="divisi-chart" class="col-md-12 col-lg-12" style="height: 500px;"></div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
 
-<div class="conatiner-fluid content-inner mt-n5 py-0">
-<div class="row">
-   <div class="col-md-12 col-lg-12">
-      <div class="row row-cols-1">
-         <div class="overflow-hidden d-slider1 ">
-            <ul  class="p-0 m-0 mb-2 swiper-wrapper list-inline">
-               <li class="swiper-slide card card-slide" data-aos="fade-up" data-aos-delay="700">
-                  <div class="card-body">
-                     <div class="progress-widget">
-                        <div id="circle-progress-01" class="text-center circle-progress-01 circle-progress circle-progress-primary" data-min-value="0" data-max-value="100" data-value="90" data-type="percent">
-                           <svg class="card-slie-arrow icon-24" width="24"  viewBox="0 0 24 24">
-                              <path fill="currentColor" d="M5,17.59L15.59,7H9V5H19V15H17V8.41L6.41,19L5,17.59Z" />
-                           </svg>
-                        </div>
-                        <div class="progress-detail">
-                           <p  class="mb-2">Total Pegawai</p>
-                           <h4 class="counter">50 Orang</h4>
-                        </div>
+             <!-- Komposisi Pegawai per Jabatan -->
+             <div class="col-md-12 col-xl-6">
+                 <div class="card" data-aos="fade-up" data-aos-delay="1000">
+                     <div class="flex-wrap card-header d-flex justify-content-between">
+                         <div class="header-title">
+                             <h4 class="card-title">Komposisi Jabatan</h4>
+                         </div>
+                         <div class="dropdown">
+                             <a href="#" class="text-gray dropdown-toggle" id="jabatanDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                 Filter
+                             </a>
+                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="jabatanDropdown">
+                                 <li><a class="dropdown-item" href="#">Bulan Ini</a></li>
+                                 <li><a class="dropdown-item" href="#">Tahun Ini</a></li>
+                             </ul>
+                         </div>
                      </div>
-                  </div>
-               </li>
-               <li class="swiper-slide card card-slide" data-aos="fade-up" data-aos-delay="800">
-                  <div class="card-body">
-                     <div class="progress-widget">
-                        <div id="circle-progress-02" class="text-center circle-progress-01 circle-progress circle-progress-info" data-min-value="0" data-max-value="100" data-value="80" data-type="percent">
-                           <svg class="card-slie-arrow icon-24" width="24" viewBox="0 0 24 24">
-                              <path fill="currentColor" d="M19,6.41L17.59,5L7,15.59V9H5V19H15V17H8.41L19,6.41Z" />
-                           </svg>
-                        </div>
-                        <div class="progress-detail">
-                           <p  class="mb-2">User Aktif</p>
-                           <h4 class="counter">48 Akun</h4>
-                        </div>
+                     <div class="card-body">
+                         <div class="flex-wrap d-flex align-items-center justify-content-between">
+                             <div id="jabatan-chart" class="col-md-12 col-lg-12" style="height: 500px;"></div>
+                         </div>
                      </div>
-                  </div>
-               </li>
-               <li class="swiper-slide card card-slide" data-aos="fade-up" data-aos-delay="900">
-                  <div class="card-body">
-                     <div class="progress-widget">
-                        <div id="circle-progress-03" class="text-center circle-progress-01 circle-progress circle-progress-primary" data-min-value="0" data-max-value="100" data-value="70" data-type="percent">
-                           <svg class="card-slie-arrow icon-24" width="24" viewBox="0 0 24 24">
-                              <path fill="currentColor" d="M19,6.41L17.59,5L7,15.59V9H5V19H15V17H8.41L19,6.41Z" />
-                           </svg>
-                        </div>
-                        <div class="progress-detail">
-                           <p  class="mb-2">User Tidak Aktif</p>
-                           <h4 class="counter">2 Akun</h4>
-                        </div>
+                 </div>
+             </div>
+
+             <!-- Ringkasan Pegawai -->
+             <div class="col-md-12 col-lg-12">
+                 <div class="overflow-hidden card" data-aos="fade-up" data-aos-delay="600">
+                     <div class="flex-wrap card-header d-flex justify-content-between">
+                         <div class="header-title">
+                             <h4 class="mb-2 card-title">Ringkasan Pegawai</h4>
+                         </div>
                      </div>
-                  </div>
-               </li>
-               <li class="swiper-slide card card-slide" data-aos="fade-up" data-aos-delay="1000">
-                  <div class="card-body">
-                     <div class="progress-widget">
-                        <div id="circle-progress-04" class="text-center circle-progress-01 circle-progress circle-progress-info" data-min-value="0" data-max-value="100" data-value="60" data-type="percent">
-                           <svg class="card-slie-arrow icon-24" width="24px"  viewBox="0 0 24 24">
-                              <path fill="currentColor" d="M5,17.59L15.59,7H9V5H19V15H17V8.41L6.41,19L5,17.59Z" />
-                           </svg>
-                        </div>
-                        <div class="progress-detail">
-                           <p  class="mb-2">Total Pelamar</p>
-                           <h4 class="counter">20 Orang</h4>
-                        </div>
+                     <div class="p-0 card-body">
+                         <div class="mt-4 table-responsive">
+                             <table id="pegawai-summary" class="table mb-0 table-striped">
+                                 <thead>
+                                     <tr>
+                                         <th>Nama Pegawai</th>
+                                         <th>Jabatan</th>
+                                         <th>Divisi</th>
+                                         <th>Tanggal Masuk</th>
+                                         <th>Status</th>
+                                     </tr>
+                                 </thead>
+                                 <tbody id="pegawai-summary-body">
+                                     <!-- Rows will be populated here -->
+                                 </tbody>
+                             </table>
+                             <nav>
+                                 <ul id="pagination" class="pagination justify-content-center">
+                                     <!-- Pagination will be populated here -->
+                                 </ul>
+                             </nav>
+                         </div>
                      </div>
-                  </div>
-               </li>
-               
-            </ul>
-            <div class="swiper-button swiper-button-next"></div>
-            <div class="swiper-button swiper-button-prev"></div>
+                 </div>
+             </div>
          </div>
-      </div>
-   </div>
-   <div class="col-md-12 col-lg-8">
-      <div class="row">
-         {{-- <div class="col-md-12">
-            <div class="card" data-aos="fade-up" data-aos-delay="800">
-               <div class="flex-wrap card-header d-flex justify-content-between align-items-center">
-                  <div class="header-title">
-                     <h4 class="card-title">$855.8K</h4>
-                     <p class="mb-0">Gross Sales</p>          
-                  </div>
-                  <div class="d-flex align-items-center align-self-center">
-                     <div class="d-flex align-items-center text-primary">
-                        <svg class="icon-12" xmlns="http://www.w3.org/2000/svg" width="12" viewBox="0 0 24 24" fill="currentColor">
-                           <g>
-                              <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
-                           </g>
-                        </svg>
-                        <div class="ms-2">
-                           <span class="text-gray">Sales</span>
-                        </div>
-                     </div>
-                     <div class="d-flex align-items-center ms-3 text-info">
-                        <svg class="icon-12" xmlns="http://www.w3.org/2000/svg" width="12" viewBox="0 0 24 24" fill="currentColor">
-                           <g>
-                              <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
-                           </g>
-                        </svg>
-                        <div class="ms-2">
-                           <span class="text-gray">Cost</span>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="dropdown">
-                     <a href="#" class="text-gray dropdown-toggle" id="dropdownMenuButton22" data-bs-toggle="dropdown" aria-expanded="false">
-                     This Week
-                     </a>
-                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton22">
-                        <li><a class="dropdown-item" href="#">This Week</a></li>
-                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                        <li><a class="dropdown-item" href="#">This Year</a></li>
-                     </ul>
-                  </div>
-               </div>
-               <div class="card-body">
-                  <div id="d-main" class="d-main"></div>
-               </div>
-            </div>
-         </div> --}}
-         <div class="col-md-12 col-xl-6">
-            <div class="card" data-aos="fade-up" data-aos-delay="900">
-               <div class="flex-wrap card-header d-flex justify-content-between">
-                  <div class="header-title">
-                     <h4 class="card-title">Komposisi</h4>            
-                  </div>   
-                  <div class="dropdown">
-                     <a href="#" class="text-gray dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                        This Week
-                     </a>
-                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" href="#">This Week</a></li>
-                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                        <li><a class="dropdown-item" href="#">This Year</a></li>
-                     </ul>
-                  </div>
-               </div>
-               <div class="card-body">
-                  <div class="flex-wrap d-flex align-items-center justify-content-between">
-                     <div id="myChart" class="col-md-8 col-lg-8 myChart"></div>
-                     <div class="d-grid gap col-md-4 col-lg-4">
-                        <div class="d-flex align-items-start">
-                           <svg class="mt-2 icon-14" xmlns="http://www.w3.org/2000/svg" width="14" viewBox="0 0 24 24" fill="#3a57e8">
-                              <g>
-                                 <circle cx="12" cy="12" r="8" fill="#3a57e8"></circle>
-                              </g>
-                           </svg>
-                           <div class="ms-3">
-                              <span class="text-gray">Fashion</span>
-                              <h6> 251K</h6>
-                           </div>
-                        </div>
-                        <div class="d-flex align-items-start">
-                           <svg class="mt-2 icon-14" xmlns="http://www.w3.org/2000/svg" width="14" viewBox="0 0 24 24" fill="#4bc7d2">
-                              <g>
-                                 <circle cx="12" cy="12" r="8" fill="#4bc7d2"></circle>
-                              </g>
-                           </svg>
-                           <div class="ms-3">
-                              <span class="text-gray">Accessories</span>
-                              <h6>176K</h6>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
-         <div class="col-md-12 col-xl-6">
-            <div class="card" data-aos="fade-up" data-aos-delay="1000">
-               <div class="flex-wrap card-header d-flex justify-content-between">
-                  <div class="header-title">
-                     <h4 class="card-title">Conversions</h4>            
-                  </div>
-                  <div class="dropdown">
-                     <a href="#" class="text-gray dropdown-toggle" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">
-                        This Week
-                     </a>
-                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton3">
-                        <li><a class="dropdown-item" href="#">This Week</a></li>
-                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                        <li><a class="dropdown-item" href="#">This Year</a></li>
-                     </ul>
-                  </div>
-               </div>
-               <div class="card-body">
-                  <div id="d-activity" class="d-activity"></div>
-               </div>
-            </div>
-         </div>         
-         <div class="col-md-12 col-lg-12">
-            <div class="overflow-hidden card" data-aos="fade-up" data-aos-delay="600">
-               <div class="flex-wrap card-header d-flex justify-content-between">
-                  <div class="header-title">
-                     <h4 class="mb-2 card-title">Enterprise Clients</h4>
-                     <p class="mb-0">
-                        <svg class ="me-2 text-primary icon-24" width="24"  viewBox="0 0 24 24">
-                           <path fill="currentColor" d="M13,20H11V8L5.5,13.5L4.08,12.08L12,4.16L19.92,12.08L18.5,13.5L13,8V20Z" />
-                        </svg>
-                        15 new acquired this month
-                     </p>            
-                  </div>
-               </div>
-               <div class="p-0 card-body">
-                  <div class="mt-4 table-responsive">
-                     <table id="basic-table" class="table mb-0 table-striped" role="grid">
-                        <thead>
-                           <tr>
-                              <th>COMPANIES</th>
-                              <th>CONTACTS</th>
-                              <th>ORDER</th>
-                              <th>COMPLETION</th>
-                           </tr>
-                        </thead>
-                        <tbody>
-                           <tr>
-                              <td>
-                                 <div class="d-flex align-items-center">
-                                    <img class="rounded bg-soft-primary img-fluid avatar-40 me-3" src="../assets/images/shapes/01.png" alt="profile">
-                                    <h6>Addidis Sportwear</h6>
-                                 </div>
-                              </td>
-                              <td>
-                                 <div class="iq-media-group iq-media-group-1">
-                                    <a href="#" class="iq-media-1">
-                                       <div class="icon iq-icon-box-3 rounded-pill">SP</div>
-                                    </a>
-                                    <a href="#" class="iq-media-1">
-                                       <div class="icon iq-icon-box-3 rounded-pill">PP</div>
-                                    </a>
-                                    <a href="#" class="iq-media-1">
-                                       <div class="icon iq-icon-box-3 rounded-pill">MM</div>
-                                    </a>
-                                 </div>
-                              </td>
-                              <td>$14,000</td>
-                              <td>
-                                 <div class="mb-2 d-flex align-items-center">
-                                    <h6>60%</h6>
-                                 </div>
-                                 <div class="shadow-none progress bg-soft-primary w-100" style="height: 4px">
-                                    <div class="progress-bar bg-primary" data-toggle="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax=" 100"></div>
-                                 </div>
-                              </td>
-                           </tr>
-                           <tr>
-                              <td>
-                                 <div class="d-flex align-items-center">
-                                    <img class="rounded bg-soft-primary img-fluid avatar-40 me-3" src="../assets/images/shapes/05.png" alt="profile">
-                                    <h6>Netflixer Platforms</h6>
-                                 </div>
-                              </td>
-                              <td>
-                                 <div class="iq-media-group iq-media-group-1">
-                                    <a href="#" class="iq-media-1">
-                                       <div class="icon iq-icon-box-3 rounded-pill">SP</div>
-                                    </a>
-                                    <a href="#" class="iq-media-1">
-                                       <div class="icon iq-icon-box-3 rounded-pill">PP</div>
-                                    </a>
-                                 </div>
-                              </td>
-                              <td>$30,000</td>
-                              <td>
-                                 <div class="mb-2 d-flex align-items-center">
-                                    <h6>25%</h6>
-                                 </div>
-                                 <div class="shadow-none progress bg-soft-primary w-100" style="height: 4px">
-                                    <div class="progress-bar bg-primary" data-toggle="progress-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                 </div>
-                              </td>
-                           </tr>
-                           <tr>
-                              <td>
-                                 <div class="d-flex align-items-center">
-                                    <img class="rounded bg-soft-primary img-fluid avatar-40 me-3" src="../assets/images/shapes/02.png" alt="profile">
-                                    <h6>Shopifi Stores</h6>
-                                 </div>
-                              </td>
-                              <td>                                 
-                                 <div class="iq-media-group iq-media-group-1">
-                                    <a href="#" class="iq-media-1">
-                                       <div class="icon iq-icon-box-3 rounded-pill">PP</div>
-                                    </a>
-                                    <a href="#" class="iq-media-1">
-                                       <div class="icon iq-icon-box-3 rounded-pill">TP</div>
-                                    </a>
-                                 </div>
-                              </td>
-                              <td>$8,500</td>
-                              <td>
-                                 <div class="mb-2 d-flex align-items-center">
-                                    <h6>100%</h6>
-                                 </div>
-                                 <div class="shadow-none progress bg-soft-success w-100" style="height: 4px">
-                                    <div class="progress-bar bg-success" data-toggle="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                 </div>
-                              </td>
-                           </tr>
-                           <tr>
-                              <td>
-                                 <div class="d-flex align-items-center">
-                                    <img class="rounded bg-soft-primary img-fluid avatar-40 me-3" src="../assets/images/shapes/03.png" alt="profile">
-                                    <h6>Bootstrap Technologies</h6>
-                                 </div>
-                              </td>
-                              <td>
-                                 <div class="iq-media-group iq-media-group-1">
-                                    <a href="#" class="iq-media-1">
-                                       <div class="icon iq-icon-box-3 rounded-pill">SP</div>
-                                    </a>
-                                    <a href="#" class="iq-media-1">
-                                       <div class="icon iq-icon-box-3 rounded-pill">PP</div>
-                                    </a>
-                                    <a href="#" class="iq-media-1">
-                                       <div class="icon iq-icon-box-3 rounded-pill">MM</div>
-                                    </a>
-                                    <a href="#" class="iq-media-1">
-                                       <div class="icon iq-icon-box-3 rounded-pill">TP</div>
-                                    </a>
-                                 </div>
-                              </td>
-                              <td>$20,500</td>
-                              <td>
-                                 <div class="mb-2 d-flex align-items-center">
-                                    <h6>100%</h6>
-                                 </div>
-                                 <div class="shadow-none progress bg-soft-success w-100" style="height: 4px">
-                                    <div class="progress-bar bg-success" data-toggle="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                 </div>
-                              </td>
-                           </tr>
-                           <tr>
-                              <td>
-                                 <div class="d-flex align-items-center">
-                                    <img class="rounded bg-soft-primary img-fluid avatar-40 me-3" src="../assets/images/shapes/04.png" alt="profile">
-                                    <h6>Community First</h6>
-                                 </div>
-                              </td>
-                              <td>
-                                 <div class="iq-media-group iq -media-group-1">
-                                    <a href="#" class="iq-media-1">
-                                       <div class="icon iq-icon-box-3 rounded-pill">MM</div>
-                                    </a>
-                                 </div>
-                              </td>
-                              <td>$9,800</td>
-                              <td>
-                                 <div class="mb-2 d-flex align-items-center">
-                                    <h6>75%</h6>
-                                 </div>
-                                 <div class="shadow-none progress bg-soft-primary w-100" style="height: 4px">
-                                    <div class="progress-bar bg-primary" data-toggle="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                                 </div>
-                              </td>
-                           </tr>
-                        </tbody>
-                     </table>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-   </div>
-   <div class="col-md-12 col-lg-4">
-      <div class="row">
-         <div class="col-md-12 col-lg-12">
-            <div class="card credit-card-widget" data-aos="fade-up" data-aos-delay="900">
-               <div class="pb-4 border-0 card-header">
-                  <div class="p-4 border border-white rounded primary-gradient-card">
-                     <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                           <h5 class="font-weight-bold">VISA </h5>
-                           <P class="mb-0">PREMIUM ACCOUNT</P>  
-                        </div>
-                        <div class="master-card-content">
-                           <svg class="master-card-1 icon-60" width="60"  viewBox="0 0 24 24">
-                              <path fill="#ffffff" d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
-                           </svg>
-                           <svg class="master-card-2 icon-60" width="60"  viewBox="0 0 24 24">
-                              <path fill="#ffffff" d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
-                           </svg>
-                        </div>
-                     </div>
-                     <div class="my-4">
-                        <div class="card-number">
-                           <span class="fs-5 me-2">5789</span>
-                           <span class="fs-5 me-2">****</span>
-                           <span class="fs-5 me-2">****</span>
-                           <span class="fs-5">2847</span>
-                        </div>
-                     </div>
-                     <div class="mb-2 d-flex align-items-center justify-content-between">
-                        <p class="mb-0">Card holder</p>
-                        <p class="mb-0">Expire Date</p>
-                     </div>
-                     <div class="d-flex align-items-center justify-content-between">
-                        <h6>Mike Smith</h6>
-                        <h6 class="ms-5">06/11</h6>
-                     </div>
-                  </div>
-               </div>
-               <div class="card-body">
-                  <div class="flex-wrap mb-4 d-flex align-itmes-center justify-content-between">
-                     <div class="d-flex align-itmes-center me-0 me-md-4">
-                        <div>
-                           <div class="p-3 mb-2 rounded bg-soft-primary">
-                              <svg class="icon-20"  width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path fill-rule="evenodd" clip-rule="evenodd" d="M16.9303 7C16.9621 6.92913 16.977 6.85189 16.9739 6.77432H17C16.8882 4.10591 14.6849 2 12.0049 2C9.325 2 7.12172 4.10591 7.00989 6.77432C6.9967 6.84898 6.9967 6.92535 7.00989 7H6.93171C5.65022 7 4.28034 7.84597 3.88264  10.1201L3.1049 16.3147C2.46858 20.8629 4.81062 22 7.86853 22H16.1585C19.2075 22 21.4789 20.3535 20.9133 16.3147L20.1444 10.1201C19.676 7.90964 18.3503 7 17.0865 7H16.9303ZM15.4932 7C15.4654 6.92794 15.4506 6.85153 15.4497 6.77432C15.4497 4.85682 13.8899 3.30238 11.9657 3.30238C10.0416 3.30238 8.48184 4.85682 8.48184 6.77432C8.49502 6.84898 8.49502 6.92535 8.48184 7H15.4932ZM9.097 12.1486C8.60889 12.1486 8.21321 11.7413 8.21321 11.2389C8.21321 10.7366 8.60889 10.3293 9.097 10.3293C9.5851 10.3293 9.98079 10.7366 9.98079 11.2389C9.98079 11.7413 9.5851 12.1486 9.097 12.1486ZM14.002 11.2389C14.002 11.7413 14.3977 12.1486 14.8858 12.1486C15.3739 12.1486 15.7696 11.7413 15.7696 11.2389C15.7696 10.7366 15.3739 10.3293 14.8858 10.3293C14.3977 10.3293 14.002 10.7366 14.002 11.2389Z" fill="currentColor"></path>                                            
-                              </svg>
-                           </div>
-                        </div>
-                        <div class="ms-3">
-                           <h5>1153</h5>
-                           <small class="mb-0">Products</small>
-                        </div>
-                     </div>
-                     <div class="d-flex align-itmes-center">
-                        <div>
-                           <div class="p-3 mb-2 rounded bg-soft-info">
-                              <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M14.1213 11.2331H16.8891C17.3088 11.2331 17.6386 10.8861 17.6386 10.4677C17.6386 10.0391 17.3088 9.70236 16.8891 9.70236H14.1213C13.7016 9.70236 13.3719 10.0391 13.3719 10.4677C13.3719 10.8861 13.7016 11.2331 14.1213 11.2331ZM20.1766 5.92749C20.7861 5.92749 21.1858 6.1418 21.5855 6.61123C21.9852 7.08067 22.0551 7.7542 21.9652 8.36549L21.0159 15.06C20.8361 16.3469 19.7569 17.2949 18.4879 17.2949H7.58639C6.25742 17.2949 5.15828 16.255 5.04837 14.908L4.12908 3.7834L2.62026 3.51807C2.22057 3.44664 1.94079 3.04864 2.01073 2.64043C2.08068 2.22305 2.47038 1.94649 2.88006 2.00874L5.2632 2.3751C5.60293 2. 43735 5.85274 2.72207 5.88272 3.06905L6.07257 5.35499C6.10254 5.68257 6.36234 5.92749 6.68209 5.92749H20.1766ZM7.42631 18.9079C6.58697 18.9079 5.9075 19.6018 5.9075 20.459C5.9075 21.3061 6.58697 22 7.42631 22C8.25567 22 8.93514 21.3061 8.93514 20.459C8.93514 19.6018 8.25567 18.9079 7.42631 18.9079ZM18.6676 18.9079C17.8282 18.9079 17.1487 19.6018 17.1487 20.459C17.1487 21.3061 17.8282 22 18.6676 22C19.4969 22 20.1764 21.3061 20.1764 20.459C20.1764 19.6018 19.4969 18.9079 18.6676 18.9079Z" fill="currentColor"></path>                                            
-                              </svg>                                        
-                           </div>
-                        </div>
-                        <div class="ms-3">
-                           <h5>81K</h5>
-                           <small class="mb-0">Order Served</small>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="mb-4">
-                     <div class="flex-wrap d-flex justify-content-between">
-                        <h2 class="mb-2">$405,012,300</h2>
-                        <div>
-                           <span class="badge bg-success rounded-pill">YoY 24%</span>
-                        </div>
-                     </div>
-                     <p class="text-info">Life time sales</p>
-                  </div>
-                  <div class="grid-cols-2 d-grid gap-card">
-                     <button class="p-2 btn btn-primary text-uppercase">SUMMARY</button>
-                     <button class="p-2 btn btn-info text-uppercase">ANALYTICS</button>
-                  </div>
-               </div>
-            </div>
-            
-            <div class="card" data-aos="fade-up" data-aos-delay="500">
-               <div class="text-center card-body d-flex justify-content-around">
-                  <div>
-                     <h2 class="mb-2">750<small>K</small></h2>
-                     <p class="mb-0 text-gray">Website Visitors</p>
-                  </div>
-                  <hr class="hr-vertial">
-                  <div>
-                     <h2 class="mb-2">7,500</h2>
-                     <p class="mb-0 text-gray">New Customers</p>
-                  </div>
-               </div>
-            </div> 
-         </div>
-         <div class="col-md-12 col-lg-12">
-            <div class="card" data-aos="fade-up" data-aos-delay="600">
-               <div class="flex-wrap card-header d-flex justify-content-between">
-                  <div class="header-title">
-                     <h4 class="mb-2 card-title">Activity overview</h4>
-                     <p class="mb-0">
-                        <svg class ="me-2 icon-24" width="24" height="24" viewBox="0 0 24 24">
-                           <path fill="#17904b" d="M13,20H11V8L5.5,13.5L4.08,12.08L12,4.16L19.92,12.08L18.5,13.5L13,8V20Z" />
-                        </svg>
-                        16% this month
-                     </p>
-                  </div>
-               </div>
-               <div class="card-body">
-                  <div class="mb-2  d-flex profile-media align-items-top">
-                     <div class="mt-1 profile-dots-pills border-primary"></div>
-                     <div class="ms-4">
-                        <h6 class="mb-1 "> $2400, Purchase</h6>
-                        <span class="mb-0">11 JUL 8:10 PM</span>
-                     </div>
-                  </div>
-                  <div class="mb-2  d-flex profile-media align-items-top">
-                     <div class="mt-1 profile-dots-pills border-primary"></div>
-                     <div class="ms-4">
-                        <h6 class="mb-1 "> New order #8744152</h6>
-                        <span class="mb-0">11 JUL 11 PM</span>
-                     </div>
-                  </div>
-                  <div class="mb-2  d-flex profile-media align-items-top">
-                     <div class="mt-1 profile-dots-pills border-primary"></div>
-                     <div class="ms-4">
-                        <h6 class="mb-1 ">Affiliate Payout</h6>
-                        <span class="mb-0">11 JUL 7:64 PM</span>
-                     </div>
-                  </div>
-                  <div class="mb-2  d-flex profile-media align-items-top">
-                     <div class="mt-1 profile-dots-pills border-primary"></div>
-                     <div class="ms-4">
-                        <h6 class="mb-1 ">New user added</h6>
-                        <span class="mb-0">11 JUL 1:21 AM</span>
-                     </div>
-                  </div>
-                  <div class="mb-1  d-flex profile-media align-items-top">
-                     <div class="mt-1 profile-dots-pills border-primary"></div>
-                     <div class="ms-4">
-                        <h6 class="mb-1 ">Product added</h6>
-                        <span class="mb-0">11 JUL 4:50 AM</span>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-   </div> 
-</div>
+     </div>
+ </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const token = localStorage.getItem('token');
+    const ITEMS_PER_PAGE = 10;
+    let currentPage = 1;
+    let totalPegawai = [];
+    let divisiData = []; // Store predefined divisi data
+
+    // Predefined Divisi Data
+    const DIVISI_LIST = [
+        {id_divisi: 1, nama_divisi: "Komisaris"},
+        {id_divisi: 2, nama_divisi: "Direksi"},
+        {id_divisi: 3, nama_divisi: "Kredit"},
+        {id_divisi: 4, nama_divisi: "Dana"},
+        {id_divisi: 5, nama_divisi: "Operasional"},
+        {id_divisi: 6, nama_divisi: "Legal"},
+        {id_divisi: 7, nama_divisi: "IT"},
+        {id_divisi: 8, nama_divisi: "SDM"},
+        {id_divisi: 9, nama_divisi: "Umum"},
+        {id_divisi: 10, nama_divisi: "Accounting & Keuangan"},
+        {id_divisi: 11, nama_divisi: "Marketing"},
+        {id_divisi: 12, nama_divisi: "Pengawasan Kredit"},
+        {id_divisi: 13, nama_divisi: "SPI"},
+        {id_divisi: 14, nama_divisi: "Kepatuhan"}
+    ];
+
+    async function fetchDashboardData() {
+        try {
+            const [pegawaiResponse, userResponse] = await Promise.all([
+                fetch('http://127.0.0.1:8000/api/pegawai', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json'
+                    }
+                }),
+                fetch('http://127.0.0.1:8000/api/users', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json'
+                    }
+                })
+            ]);
+
+            const pegawaiData = await pegawaiResponse.json();
+            const userData = await userResponse.json();
+
+            // Comprehensive Statistics Calculation
+            const stats = calculateComprehensiveStats(pegawaiData.data, userData);
+
+            // Update Dashboard Cards
+            updateDashboardCards(stats);
+
+            // Store total pegawai data for pagination
+            totalPegawai = pegawaiData.data;
+
+            // Enhanced Charts with Color Schemes
+            createEnhancedPieCharts(pegawaiData.data);
+
+            // Detailed Summary Table
+            createDetailedPegawaiSummary();
+            createPagination();
+
+        } catch (error) {
+            console.error('Dashboard Data Fetch Error:', error);
+            handleErrorDisplay(error);
+        }
+    }
+
+    function calculateComprehensiveStats(pegawaiData, userData) {
+        const totalPegawaiCount = pegawaiData.length;
+        const aktivPegawai = pegawaiData.filter(p => p.status_kepegawaian === 'aktif').length;
+        const userAktif = userData.filter(u => u.status === 'aktif').length;
+
+        const divisiStats = calculateDivisiStats(pegawaiData);
+        const jabatanStats = calculateJabatanStats(pegawaiData);
+
+        return {
+            totalPegawai: totalPegawaiCount,
+            aktivPegawai: aktivPegawai,
+            userAktif: userAktif,
+            divisiTerbanyak: divisiStats.terbanyak,
+            jabatanTerbanyak: jabatanStats.terbanyak,
+            divisiComposition: divisiStats.composition,
+            jabatanComposition: jabatanStats.composition
+        };
+    }
+
+    function calculateDivisiStats(pegawaiData) {
+        const divisiCount = {};
+        DIVISI_LIST.forEach(divisi => {
+            divisiCount[divisi.nama_divisi] = 0;
+        });
+
+        pegawaiData.forEach(pegawai => {
+            const namaDivisi = pegawai.divisi.nama_divisi;
+            divisiCount[namaDivisi]++;
+        });
+
+        const terbanyak = Object.entries(divisiCount).reduce((a, b) => 
+            b[1] > a[1] ? { nama: b[0], jumlah: b[1] } : a, 
+            { nama: '', jumlah: 0 }
+        );
+
+        return {
+            terbanyak: terbanyak,
+            composition: Object.entries(divisiCount).map(([name, count]) => ({ name, count }))
+        };
+    }
+
+    function calculateJabatanStats(pegawaiData) {
+        const jabatanCount = {};
+        pegawaiData.forEach(pegawai => {
+            const namaJabatan = pegawai.jabatan.nama_jabatan;
+            jabatanCount[namaJabatan] = (jabatanCount[namaJabatan] || 0) + 1;
+        });
+
+        const terbanyak = Object.entries(jabatanCount).reduce((a, b) => 
+            b[1] > a[1] ? { nama: b[0], jumlah: b[1] } : a, 
+            { nama: '', jumlah: 0 }
+        );
+
+        return {
+            terbanyak: terbanyak,
+            composition: Object.entries(jabatanCount).map(([name, count]) => ({ name, count }))
+        };
+    }
+
+    // Add this inside your fetchDashboardData function, replacing the previous card update logic
+function updateDashboardCards(stats) {
+    const cardConfigurations = [
+        {
+            id: 'total-pegawai',
+            title: 'Total Pegawai',
+            value: stats.totalPegawai,
+            icon: 'users',
+            progressClass: 'circle-progress-primary',
+            progressValue: 90,
+            trend: 'up'
+        },
+        {
+            id: 'pegawai-aktif',
+            title: 'Pegawai Aktif',
+            value: stats.aktivPegawai,
+            icon: 'user-check',
+            progressClass: 'circle-progress-info',
+            progressValue: 80,
+            trend: 'up'
+        },
+        {
+            id: 'user-aktif',
+            title: 'User Aktif',
+            value: stats.userAktif,
+            icon: 'monitor',
+            progressClass: 'circle-progress-success',
+            progressValue: 70,
+            trend: 'up'
+        },
+        {
+            id: 'divisi-terbanyak',
+            title: 'Divisi Terbanyak',
+            value: stats.divisiTerbanyak.nama,
+            subValue: `${stats.divisiTerbanyak.jumlah} Pegawai`,
+            icon: 'briefcase',
+            progressClass: 'circle-progress-warning',
+            progressValue: 60,
+            trend: 'neutral'
+        }
+    ];
+
+    const swiper = document.querySelector('.d-slider1 .swiper-wrapper');
+    swiper.innerHTML = ''; // Clear existing slides
+
+    cardConfigurations.forEach(card => {
+        const slideElement = document.createElement('li');
+        slideElement.classList.add('swiper-slide', 'card', 'card-slide');
+        slideElement.setAttribute('data-aos', 'fade-up');
+        slideElement.setAttribute('data-aos-delay', '700');
+
+        slideElement.innerHTML = `
+            <div class="card-body">
+                <div class="progress-widget">
+                    <div id="${card.id}-progress" 
+                         class="text-center circle-progress-01 circle-progress ${card.progressClass}" 
+                         data-min-value="0" 
+                         data-max-value="100" 
+                         data-value="${card.progressValue}" 
+                         data-type="percent">
+                        <svg class="card-slide-arrow icon-24" width="24" viewBox="0 0 24 24">
+                            <path fill="currentColor" 
+                                  d="${getTrendIcon(card.trend)}" />
+                        </svg>
+                    </div>
+                    <div class="progress-detail">
+                        <p class="mb-2">${card.title}</p>
+                        <h4 id="${card.id}" class="counter">${card.value}</h4>
+                        ${card.subValue ? `<small id="${card.id}-sub">${card.subValue}</small>` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+
+        swiper.appendChild(slideElement);
+    });
+
+    // Reinitialize Swiper after dynamically adding slides
+    new Swiper('.d-slider1', {
+        slidesPerView: 4,
+        spaceBetween: 20,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+            320: { slidesPerView: 1 },
+            550: { slidesPerView: 2 },
+            750: { slidesPerView: 3 },
+            1100: { slidesPerView: 4 }
+        }
+    });
+}
+
+// Helper function to get trend icons
+function getTrendIcon(trend) {
+    const trendIcons = {
+        'up': 'M5,17.59L15.59,7H9V5H19V15H17V8.41L6.41,19L5,17.59Z',
+        'down': 'M19,6.41L17.59,5L7,15.59V9H5V19H15V17H8.41L19,6.41Z',
+        'neutral': 'M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2Z'
+    };
+    return trendIcons[trend] || trendIcons['neutral'];
+}
+
+    function createEnhancedPieCharts(pegawaiData) {
+        const colorPalettes = {
+            divisi: [
+                '#3366CC', '#DC3912', '#FF9900', '#109618', 
+                '#990099', '#0099C6', '#DD4477', '#66AA00'
+            ],
+            jabatan: [
+                '#1F77B4', '#FF7F0E', '#2CA02C', '#D62728', 
+                '#9467BD', '#8C564B', '#E377C2', '#7F7F7F'
+            ]
+        };
+
+        const chartConfigurations = [
+            { elementId: 'divisi-chart', type: 'Divisi', palette: colorPalettes.divisi },
+            { elementId: 'jabatan-chart', type: 'Jabatan', palette: colorPalettes.jabatan }
+        ];
+
+        chartConfigurations.forEach(config => {
+            const countData = {};
+            pegawaiData.forEach(pegawai => {
+                const key = config.type === 'Divisi' 
+                    ? pegawai.divisi.nama_divisi 
+                    : pegawai.jabatan.nama_jabatan;
+                countData[key] = (countData[key] || 0) + 1;
+            });
+
+            const chartData = {
+                series: Object.values(countData),
+                labels: Object.keys(countData)
+            };
+
+            const options = {
+                series: chartData.series,
+                labels: chartData.labels,
+                colors: config.palette.slice(0, chartData.series.length),
+                chart: {
+                    type: 'pie',
+                    height: 500,
+                    width: '100%'
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: { width: '100%' },
+                        legend: { position: 'bottom' }
+                    }
+                }],
+                legend: {
+                    position: 'right',
+                    offsetY: 0,
+                    height: 500
+                },
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            labels: {
+                                show: true,
+                                total: { show: true, label: config.type }
+                            }
+                        }
+                    }
+                }
+            };
+
+            const chart = new ApexCharts(
+                document.querySelector(`#${config.elementId}`), 
+                options
+            );
+            chart.render();
+        });
+    }
+
+    function createDetailedPegawaiSummary() {
+        const tableBody = document.getElementById('pegawai-summary-body');
+        tableBody.innerHTML = '';
+
+        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        const endIndex = startIndex + ITEMS_PER_PAGE;
+        const paginatedData = totalPegawai.slice(startIndex, endIndex);
+
+        paginatedData.forEach(pegawai => {
+            const row = document.createElement('tr');
+            row.classList.add('hover:bg-gray-100', 'transition', 'duration-200');
+            row.innerHTML = `
+                <td class="px-4 py-2 font-medium">${pegawai.nama_lengkap}</td>
+                <td class="px-4 py-2">${pegawai.jabatan.nama_jabatan}</td>
+                <td class="px-4 py-2">${pegawai.divisi.nama_divisi}</td>
+                <td class="px-4 py-2">${formatDate(pegawai.tanggal_masuk)}</td>
+                <td class="px-4 py-2">
+                    <span class="badge ${getStatusClass(pegawai.status_kepegawaian)}">
+                        ${pegawai.status_kepegawaian}
+                    </span>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    function formatDate(dateString) {
+        return new Date(dateString).toLocaleDateString('id-ID', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    }
+
+    function getStatusClass(status) {
+        const statusClasses = {
+            'aktif': 'bg-green-100 text-green-800',
+            'tidak aktif': 'bg-red-100 text-red-800',
+            'default': 'bg-gray-100 text-gray-800'
+        };
+        return statusClasses[status.toLowerCase()] || statusClasses['default'];
+    }
+
+    function handleErrorDisplay(error) {
+        const errorContainer = document.createElement('div');
+        errorContainer.classList.add('alert', 'alert-danger');
+        errorContainer.textContent = `Error Loading Dashboard: ${error.message}`;
+        document.body.prepend(errorContainer);
+    }
+
+    function createPagination() {
+    const pagination = document.getElementById('pagination');
+    pagination.innerHTML = ''; // Clear existing pagination
+
+    const totalPages = Math.ceil(totalPegawai.length / ITEMS_PER_PAGE);
+
+    // Pagination Strategy:
+    // 1. Always show first and last page
+    // 2. Show current page and adjacent pages
+    // 3. Use ellipsis (...) for skipped pages
+
+    function createPageButton(pageNum, isActive = false, isDisabled = false) {
+        const li = document.createElement('li');
+        li.classList.add('page-item');
+        
+        if (isActive) li.classList.add('active');
+        if (isDisabled) li.classList.add('disabled');
+
+        const link = document.createElement('a');
+        link.classList.add('page-link');
+        link.href = '#';
+        link.textContent = pageNum;
+
+        if (!isDisabled && !isActive) {
+            link.addEventListener('click', () => {
+                currentPage = pageNum;
+                createPegawaiSummary();
+                createPagination();
+            });
+        }
+
+        li.appendChild(link);
+        return li;
+    }
+
+    function createEllipsis() {
+        const li = document.createElement('li');
+        li.classList.add('page-item', 'disabled');
+        const span = document.createElement('span');
+        span.classList.add('page-link');
+        span.textContent = '...';
+        li.appendChild(span);
+        return li;
+    }
+
+    // Previous button
+    const prevLi = document.createElement('li');
+    prevLi.classList.add('page-item', currentPage === 1 ? 'disabled' : '');
+    const prevLink = document.createElement('a');
+    prevLink.classList.add('page-link');
+    prevLink.href = '#';
+    prevLink.innerHTML = '&laquo;'; // Left arrow
+    prevLink.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            createPegawaiSummary();
+            createPagination();
+        }
+    });
+    prevLi.appendChild(prevLink);
+    pagination.appendChild(prevLi);
+
+    // Intelligent page number generation
+    const generatePageNumbers = () => {
+        const pageNumbers = [];
+
+        // Always show first page
+        if (currentPage > 2) {
+            pagination.appendChild(createPageButton(1));
+            if (currentPage > 3) {
+                pagination.appendChild(createEllipsis());
+            }
+        }
+
+        // Generate range of pages around current page
+        const startPage = Math.max(1, currentPage - 1);
+        const endPage = Math.min(totalPages, currentPage + 1);
+
+        for (let i = startPage; i <= endPage; i++) {
+            pagination.appendChild(createPageButton(i, i === currentPage));
+        }
+
+        // Always show last page
+        if (currentPage < totalPages - 1) {
+            if (currentPage < totalPages - 2) {
+                pagination.appendChild(createEllipsis());
+            }
+            pagination.appendChild(createPageButton(totalPages));
+        }
+    };
+
+    generatePageNumbers();
+
+    // Next button
+    const nextLi = document.createElement('li');
+    nextLi.classList.add('page-item', currentPage === totalPages ? 'disabled' : '');
+    const nextLink = document.createElement('a');
+    nextLink.classList.add('page-link');
+    nextLink.href = '#';
+    nextLink.innerHTML = '&raquo;'; // Right arrow
+    nextLink.addEventListener('click', () => {
+        if (currentPage < totalPages) {
+            currentPage++;
+            createPegawaiSummary();
+            createPagination();
+        }
+    });
+    nextLi.appendChild(nextLink);
+    pagination.appendChild(nextLi);
+
+    // Styling for better visual hierarchy
+    pagination.classList.add('flex', 'items-center', 'justify-center', 'space-x-2');
+}
+
+     fetchDashboardData(); // Call this function to fetch data and populate the dashboard
+ });
+</script> --}}
 @endsection

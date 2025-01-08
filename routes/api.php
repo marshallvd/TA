@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\PenilaianKPIController;
 use App\Http\Controllers\Api\PenilaianKompetensiController;
 use App\Http\Controllers\Api\PenilaianCoreValuesController;
 use App\Http\Controllers\Api\PenilaianKinerjaController;
+use App\Http\Controllers\Api\KomponenGajiController;
 use App\Http\Controllers\Api\GajiController;
 use App\Http\Controllers\Api\CutiController;
 use App\Http\Controllers\Api\JenisCutiController;
@@ -33,15 +34,47 @@ use App\Http\Controllers\Api\AdminLamaranController;
 use App\Http\Controllers\Api\JatahCutiController;
 
 // Route::middleware(['cache.response'])->group(function () {
+// Publik routes (tanpa token)
+Route::prefix('public')->group(function () {
+    Route::get('divisi', [DivisiController::class, 'index']);
+    Route::get('divisi/{id}', [DivisiController::class, 'show']);
+});
+// Route publik untuk detail lamaran
+Route::get('lamaran/{id}', [LamaranController::class, 'show']);
 
+
+// Route publik untuk detail wawancara
+Route::get('/wawancara/{id}', [WawancaraController::class, 'show']);
+
+// Route publik untuk detail hasil seleksi
+Route::get('/hasil-seleksi/{id}', [HasilSeleksiController::class, 'show']);
+
+    Route::apiResource('lowongan', LowonganController::class);
+    Route::get('lowongan/{id}', [LowonganController::class, 'show']);
+    Route::put('/pelamar/{id}', [PelamarController::class, 'update']);
+    // Route::get('/admin/lamaran/{id}', [LamaranController::class, 'showDetail']);
+    Route::get('gaji/pegawai/{id_pegawai}', [GajiController::class, 'searchByPegawai']);
+    // Route::get('/lowongan', [LowonganController::class, 'index']);
+    // Pindahkan di luar group middleware role
+    Route::get('admin/lamaran', [AdminLamaranController::class, 'index']); 
+    // Tambahkan di luar middleware
+    Route::get('public/wawancara', [WawancaraController::class, 'index']);
+    Route::get('public/hasil-seleksi', [HasilSeleksiController::class, 'index']);
+
+    Route::group(['middleware' => ['auth:pelamar']], function () {
+        Route::get('divisi', [DivisiController::class, 'index']);
+        Route::get('jabatan', [JabatanController::class, 'index']);
+        Route::get('wawancara', [WawancaraController::class, 'index']);
+    });
+    
     Route::group([
         'prefix' => 'pelamar',
     ], function () {
         // Auth Pelamar
         Route::post('auth/register', [AuthPelamarController::class, 'register']);
         Route::post('auth/login', [AuthPelamarController::class, 'login']);
-        Route::get('lowongan', [LowonganController::class, 'index']);
-        Route::get('lowongan/{id}', [LowonganController::class, 'show']);
+        // Route::get('lowongan', [LowonganController::class, 'index']);
+        // Route::get('lowongan/{id}', [LowonganController::class, 'show']);
     });
 
     // Employee Auth Routes
@@ -66,11 +99,11 @@ use App\Http\Controllers\Api\JatahCutiController;
     Route::delete('jatah-cuti/{id}', [JatahCutiController::class, 'destroy']);
                 
         Route::get('auth/me', [UserController::class, 'userProfile']);
-        Route::put('cuti/{id}', [CutiController::class, 'update']);
+        Route::get('jabatan/divisi/{id_divisi}', [JabatanController::class, 'getByDivisi']);
 
 
         // Admin & HRD Routes
-        Route::group(['middleware' => ['role:admin,hrd']], function () {
+        Route::group(['middleware' => ['role:admin,hrd,pegawai']], function () {
             // Penilaian Management
             Route::apiResource('penilaian-kpi', PenilaianKPIController::class);
             Route::apiResource('penilaian-kompetensi', PenilaianKompetensiController::class);
@@ -96,15 +129,28 @@ use App\Http\Controllers\Api\JatahCutiController;
             Route::get('/pelamar', [PelamarController::class, 'index']);
             Route::get('/pelamar/{id}', [PelamarController::class, 'show']);
             Route::put('/pelamar/{id}/status', [PelamarController::class, 'updateStatus']);
-
+            Route::delete('pelamar/{id}', [PelamarController::class, 'destroy']);
             // Route untuk statistik
             Route::get('/pelamar/statistics', [PelamarController::class, 'statistics']);
             Route::get('/pelamar/export', [PelamarController::class, 'export']);
+            Route::post('/pelamar', [PelamarController::class, 'store']);
+            Route::put('/pelamar/{id}', [PelamarController::class, 'update']);
 
             // Recruitment Management
             Route::apiResource('wawancara', WawancaraController::class);
+
             Route::apiResource('hasil-seleksi', HasilSeleksiController::class);
-            Route::apiResource('lowongan', LowonganController::class)->except(['index', 'show']);
+
+            Route::put('/api/hasil-seleksi/{id}', [HasilSeleksiController::class, 'update']);
+
+            Route::put('wawancara/{id}/status', [WawancaraController::class, 'updateStatus']);
+            Route::get('/wawancara/prepare-jadwal/{lamaranId}', 
+            [WawancaraController::class, 'prepareJadwal']);
+
+            Route::post('/wawancara/jadwalkan', 
+            [WawancaraController::class, 'jadwalkan']);
+
+            Route::put('cuti/{id}', [CutiController::class, 'update']);
 
             Route::get('cuti/all', [CutiController::class, 'index']); // endpoint khusus admin untuk lihat semua cuti
             Route::put('cuti/{id}/diterima', [CutiController::class, 'diterima']);
@@ -114,24 +160,38 @@ use App\Http\Controllers\Api\JatahCutiController;
 
             Route::get('jatah-cuti/check-jatah-cuti/{idPegawai}', [JatahCutiController::class, 'checkJatahCuti']);
 
+            // Route::get('admin/lamaran', [AdminLamaranController::class, 'index']);
+            Route::get('admin/lamaran/{id}', [AdminLamaranController::class, 'show']);
+            // Route::patch('admin/lamaran/{id}/status', [AdminLamaranController::class, 'updateStatus']);
+            // Route::get('/lamaran/{id}', [AdminLamaranController::class, 'show']);
+            Route::put('admin/lamaran/{id}/status', [AdminLamaranController::class, 'updateStatus']);
+            
         });
 
         // Admin Only Routes
-        Route::group(['middleware' => ['role:admin']], function () {
+        Route::group(['middleware' => ['role:admin,hrd,pegawai']], function () {
             // Master Data Management
             Route::apiResource('users', UserController::class);
             Route::apiResource('divisi', DivisiController::class);
             Route::apiResource('jabatan', JabatanController::class);
             Route::apiResource('role', RoleController::class);
-            Route::apiResource('pegawai', PegawaiController::class);
+            // Route::apiResource('pegawai', PegawaiController::class);
 
+            Route::prefix('pegawai')->group(function () {
+                Route::get('/', [PegawaiController::class, 'index']);
+                Route::post('/', [PegawaiController::class, 'store']);
+                Route::get('/{id}', [PegawaiController::class, 'show']);
+                Route::put('/{id}', [PegawaiController::class, 'update']);
+                Route::delete('/{id}', [PegawaiController::class, 'destroy']);
+            });
             // Performance Components
             Route::apiResource('komponen-kpi', KomponenKpiController::class);
             Route::apiResource('komponen-kompetensi', KomponenKompetensiController::class);
             Route::apiResource('komponen-core-values', KomponenCoreValuesController::class);
             Route::apiResource('jenis-cuti', JenisCutiController::class);
 
-
+            Route::apiResource('komponen-gaji', KomponenGajiController::class);
+            Route::get('komponen-gaji/ jenis/{jenis}', [KomponenGajiController::class, 'getByJenis']);
 
 
             Route::get('/dashboard/stats', [App\Http\Controllers\Api\DashboardController::class, 'getStats']);
@@ -150,7 +210,7 @@ use App\Http\Controllers\Api\JatahCutiController;
         });
 
         // Route yang bisa diakses pegawai (dan admin)
-        Route::group(['middleware' => ['role:admin,pegawai']], function () {
+        Route::group(['middleware' => ['role:admin,hrd,pegawai']], function () {
             Route::get('cuti', [CutiController::class, 'index']); // untuk lihat cuti sendiri
             Route::post('cuti', [CutiController::class, 'store']);
             Route::get('cuti/{id}', [CutiController::class, 'show']);
@@ -168,7 +228,7 @@ use App\Http\Controllers\Api\JatahCutiController;
         Route::apiResource('profile', PelamarController::class)->only(['show', 'update']);
 
         Route::get('lamaran', [LamaranController::class, 'index']);
-        Route::get('lamaran/{id}', [LamaranController::class, 'show']);
+        // Route::get('lamaran/{id}', [LamaranController::class, 'show']);
         Route::post('lamaran', [LamaranController::class, 'store']);
         Route::put('lamaran/{id}', [LamaranController::class, 'update']);
         Route::delete('lamaran/{id}', [LamaranController::class, 'destroy']);

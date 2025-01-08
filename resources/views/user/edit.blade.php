@@ -1,4 +1,3 @@
-@extends('layouts.app')
 @extends('layouts.master')
 
 @section('title')
@@ -7,8 +6,23 @@
 
 @section('content')
 <div class="container-fluid content-inner mt-n5 py-0">
-    <div class="row justify-content-center">
-        <div class="col-xl-9 col-lg-8">
+    {{-- Header Card --}}
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <b><h2 class="card-title mb-1">Manajemen User</h2></b>
+                    <p class="card-text text-muted">Human Resource Management System SEB</p>
+                </div>
+                <div>
+                    <i class="bi bi-pencil-square text-primary" style="font-size: 3rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <div class="header-title">
@@ -21,27 +35,27 @@
                             <input type="hidden" name="_method" value="PUT">
                             <input type="hidden" id="userId" name="id_user">
                             <div class="row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-6 mb-3">
                                     <label class="form-label">Pegawai:</label>
                                     <select class="form-control" name="id_pegawai" id="pegawaiSelect" required>
                                         <option value="">Pilih Pegawai</option>
                                     </select>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-6 mb-3">
                                     <label class="form-label">Role:</label>
                                     <select class="form-control" name="id_role" id="roleSelect" required>
                                         <option value="">Pilih Role</option>
                                     </select>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-6 mb-3">
                                     <label class="form-label">Email:</label>
                                     <input type="email" class="form-control" name="email" required>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-6 mb-3">
                                     <label class="form-label">Password Baru (Kosongkan jika tidak ingin mengubah):</label>
                                     <input type="password" class="form-control" name="password" minlength="8">
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-6 mb-3">
                                     <label class="form-label">Status:</label>
                                     <select class="form-control" name="status" required>
                                         <option value="">Pilih Status</option>
@@ -50,8 +64,19 @@
                                     </select>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary mt-3">Update Data User</button>
-                            <a type="button" class="btn btn-secondary mt-3" href="/user">Tutup</a>
+                            <div class="row mt-3 position-absolute bottom-0 end-0 m-4">
+                                <div class="col-12">
+                                    <a href="/user" class="btn btn-danger me-2">
+                                        <i class="bi bi-arrow-left me-2"></i>Kembali
+                                    </a>
+                                    <button type="reset" class="btn btn-warning me-2">
+                                        <i class="bi bi-arrow-clockwise me-2"></i>Reset
+                                    </button>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="bi bi-save me-2"></i>Simpan
+                                    </button>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -59,7 +84,8 @@
         </div>
     </div>
 </div>
-
+@endsection
+@push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Inisialisasi variabel dan konstanta
@@ -69,6 +95,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const roleSelect = document.getElementById('roleSelect');
     const userForm = document.getElementById('userForm');
     const API_URL = 'http://127.0.0.1:8000/api';
+    let initialUserData = null;
 
     // Fungsi untuk cek token
     function checkToken() {
@@ -123,6 +150,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Handle jika data adalah object atau nested dalam property
         const userData = data.data || data;
 
+        // Simpan data awal
+        initialUserData = {...userData};
+        
         document.getElementById('userId').value = userData.id_user;
         document.querySelector('input[name="email"]').value = userData.email || '';
         document.querySelector('select[name="status"]').value = userData.status || '';
@@ -308,6 +338,40 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }); 
 
+    // Event listener untuk reset button
+    userForm.addEventListener('reset', function(e) {
+        e.preventDefault();
+        if (initialUserData) {
+            // Kembalikan form ke data awal
+            document.getElementById('userId').value = initialUserData.id_user;
+            document.querySelector('input[name="email"]').value = initialUserData.email || '';
+            document.querySelector('select[name="status"]').value = initialUserData.status || '';
+            document.querySelector('input[name="password"]').value = ''; // Reset password field
+            
+            // Reset pegawai dan role ke nilai awal
+            if (initialUserData.id_pegawai) {
+                pegawaiSelect.value = initialUserData.id_pegawai;
+            }
+            if (initialUserData.id_role) {
+                roleSelect.value = initialUserData.id_role;
+            }
+            
+            // Clear any error states
+            const errorElements = document.querySelectorAll('.invalid-feedback');
+            errorElements.forEach(element => element.textContent = '');
+            const inputElements = userForm.querySelectorAll('.form-control');
+            inputElements.forEach(element => element.classList.remove('is-invalid'));
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Form Direset',
+                text: 'Form telah dikembalikan ke data awal',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+    });
+
     // Fungsi helper untuk handle error
     function handleFetchError(error) {
         console.error('Error caught by handler:', error);
@@ -347,4 +411,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 </script>
-@endsection
+@endpush

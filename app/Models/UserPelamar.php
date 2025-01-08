@@ -37,6 +37,26 @@ class UserPelamar extends Authenticatable implements JWTSubject
         'tanggal_diperbarui'
     ];
 
+    // Relasi dengan LamaranPekerjaan
+    public function lamaranPekerjaan()
+    {
+        return $this->hasMany(LamaranPekerjaan::class, 'id_pelamar', 'id_pelamar');
+    }
+
+    // Relasi dengan LowonganPekerjaan melalui LamaranPekerjaan
+    public function lowongan()
+    {
+        return $this->hasManyThrough(
+            LowonganPekerjaan::class, 
+            LamaranPekerjaan::class, 
+            'id_pelamar', // Foreign key pada tabel lamaran_pekerjaan
+            'id_lowongan_pekerjaan', // Foreign key pada tabel lowongan_pekerjaan
+            'id_pelamar', // Local key pada tabel user_pelamar
+            'id_lowongan_pekerjaan' // Local key pada tabel lamaran_pekerjaan
+        );
+    }
+
+    // Implementasi metode dari JWTSubject
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -45,15 +65,5 @@ class UserPelamar extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
-    }
-
-    public function lamaran()
-    {
-        return $this->hasMany(LamaranPekerjaan::class, 'id_pelamar');
-    }
-
-    public function lowongan()
-    {
-        return $this->belongsToMany(LowonganPekerjaan::class, 'tb_lamaran_pekerjaan', 'id_pelamar', 'id_lowongan_pekerjaan');
     }
 }

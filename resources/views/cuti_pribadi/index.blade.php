@@ -7,7 +7,20 @@
 
 @section('content')
 <div class="container-fluid content-inner mt-n5 py-0">
-    <div>
+        {{-- Header Card --}}
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <b><h2 class="card-title mb-1">Manajemen Pengajuan Cuti Pribadi</h2></b>
+                        <p class="card-text text-muted">Human Resource Management System SEB</p>
+                    </div>
+                    <div>
+                        <i class="bi bi-calendar2-week text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
@@ -17,7 +30,7 @@
                         </div>
                         <div>
                             <button type="button" class="btn btn-primary" id="tambahCutiBtn">
-                                <i class="fas fa-plus me-2"></i>Tambah Pengajuan Cuti
+                                <i class="bi bi-plus-square me-2"></i>Tambah Pengajuan Cuti
                             </button>
                         </div>
                     </div>
@@ -42,7 +55,7 @@
                 </div>
             </div>
         </div>
-    </div>
+ 
 </div>
 
 <script>
@@ -51,20 +64,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const baseUrl = 'http://127.0.0.1:8000/api';
     let cutiPribadiTable;
     
-    // Check if token exists
-    if (!token) {
+    // Fungsi untuk menangani error dengan SweetAlert
+    function handleError(title, message) {
         Swal.fire({
             icon: 'error',
-            title: 'Akses Ditolak',
-            text: 'Anda harus login untuk mengakses halaman ini.',
+            title: title,
+            text: message,
             confirmButtonText: 'OK'
-        }).then(() => {
-            window.location.href = '/login';
         });
+    }
+
+    // Cek token keberadaan
+    if (!token) {
+        handleError('Akses Ditolak', 'Anda harus login untuk mengakses halaman ini.');
+        window.location.href = '/login';
         return;
     }
 
-    // Fetch user data first
+    // Fetch user data terlebih dahulu
     fetch(`${baseUrl}/auth/me`, {
         method: 'GET',
         headers: {
@@ -74,15 +91,30 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Failed to fetch user data');
+            throw new Error('Gagal mengambil data pengguna');
         }
         return response.json();
     })
     .then(userData => {
-        // Get pegawai ID from user data - PERBAIKAN DISINI
-        const idPegawai = userData.pegawai.id_pegawai;
+        // DEBUGGING: Tambahkan log detail
+        console.log('======= DEBUG USER DATA =======');
+        console.log('Data Pengguna Lengkap (Stringified):', JSON.stringify(userData, null, 2));
+        console.log('Struktur userData:', Object.keys(userData));
+        console.log('Struktur pegawai:', Object.keys(userData.pegawai || {}));
         
-        // Initialize DataTable with user's ID
+        // PENTING: Pastikan pengambilan ID Pegawai benar
+        const idPegawai = userData.pegawai ? userData.pegawai.id_pegawai : null;
+        const idUser = userData.user ? userData.user.id_user : null;
+        
+        console.log('ID Pegawai yang Sedang Login:', idPegawai);
+        console.log('ID User:', idUser);
+        console.log('Tipe ID Pegawai:', typeof idPegawai);
+        
+        if (!idPegawai) {
+            throw new Error('Tidak dapat menemukan ID Pegawai');
+        }
+
+        // Initialize DataTable dengan ID pengguna
         cutiPribadiTable = $('#cuti-pribadi-table').DataTable({
             processing: true,
             serverSide: false,
@@ -95,16 +127,38 @@ document.addEventListener('DOMContentLoaded', function() {
                     'Accept': 'application/json'
                 },
                 dataSrc: function(response) {
-                    // Filter data based on id_pegawai - PERBAIKAN DISINI
-                    return response.data.filter(item => parseInt(item.id_pegawai) === parseInt(idPegawai));
+                    console.log('======= DEBUG CUTI DATA =======');
+                    console.log('Respon API Cuti Mentah (Stringified):', JSON.stringify(response, null, 2));
+                    console.log('Total Data Cuti:', response.data.length);
+                    
+                    // Debugging: Tampilkan detail setiap item cuti
+                    response.data.forEach((item, index) => {
+                        console.log(`Item Cuti ke-${index + 1}:`, JSON.stringify(item, null, 2));
+                    });
+                    
+                    // Filter data berdasarkan id_pegawai 
+                    const filteredData = response.data.filter(item => {
+                        console.log('Filtering Cuti - Item Full:', JSON.stringify(item, null, 2));
+                        console.log('Comparing ID Pegawai:', item.id_pegawai, 'dengan ID Login:', idPegawai);
+                        
+                        // Pastikan perbandingan ID dilakukan dengan benar
+                        return item.id_pegawai === idPegawai;
+                    });
+
+                    console.log('Data Cuti Terfilter:', filteredData);
+                    console.log('Jumlah Data Cuti Terfilter:', filteredData.length);
+                    
+                    // Tambahkan pesan khusus jika tidak ada data
+                    if (filteredData.length === 0) {
+                        console.warn('Tidak ada data cuti ditemukan untuk pegawai ini');
+                    }
+                    
+                    return filteredData;
                 },
                 error: function(xhr, error, thrown) {
-                    console.error('Error fetching data:', error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Gagal memuat data: ' + (xhr.responseJSON?.message || 'Unknown error')
-                    });
+                    console.error('Error mengambil data:', error);
+                    console.error('Response Error:', xhr.responseText);
+                    handleError('Error', 'Gagal memuat data: ' + (xhr.responseJSON?.message || 'Error tidak dikenal'));
                 }
             },
             columns: [
@@ -157,14 +211,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 { 
                     data: null,
                     render: function(data) {
+                        // Untuk status menunggu, tampilkan button edit dan delete
                         if (data.status === 'menunggu') {
                             return `
                                 <div class="flex align-items-center list-user-action">
                                     <a href="/cuti-pribadi/${data.id_cuti}/edit" 
-                                       class="btn btn-sm btn-icon btn-warning" 
-                                       data-bs-toggle="tooltip" 
-                                       data-bs-placement="top" 
-                                       title="Edit">
+                                    class="btn btn-sm btn-icon btn-warning" 
+                                    data-bs-toggle="tooltip" 
+                                    data-bs-placement="top" 
+                                    title="Edit">
                                         <span class="btn-inner">
                                             <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -174,11 +229,11 @@ document.addEventListener('DOMContentLoaded', function() {
                                         </span>
                                     </a>
                                     <a href="javascript:void(0)"
-                                       class="btn btn-sm btn-icon btn-danger"
-                                       data-bs-toggle="tooltip"
-                                       data-bs-placement="top"
-                                       title="Delete"
-                                       onclick="deleteCuti(${data.id_cuti})">
+                                    class="btn btn-sm btn-icon btn-danger"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    title="Delete"
+                                    onclick="deleteCuti(${data.id_cuti})">
                                         <span class="btn-inner">
                                             <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
                                                 <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -189,13 +244,30 @@ document.addEventListener('DOMContentLoaded', function() {
                                     </a>
                                 </div>
                             `;
+                        } 
+                        // Untuk status selain menunggu (disetujui atau ditolak), tampilkan hanya button view
+                        else {
+                            return `
+                                <div class="flex align-items-center list-user-action">
+                                    <a href="/cuti-pribadi/${data.id_cuti}/view" 
+                                    class="btn btn-sm btn-icon btn-info"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    title="Detail">
+                                        <span class="btn-inner">
+                                            <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M12 4.5C7.5 4.5 3.5 8.5 2 12c1.5 3.5 5.5 7.5 10 7.5s8.5-4 10-7.5c-1.5-3.5-5.5-7.5-10-7.5zm0 12c-2.5 0-4.5-2-4.5-4.5S9.5 7.5 12 7.5 16.5 9.5 16.5 12 14.5 16.5 12 16.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </span>
+                                    </a>
+                                </div>
+                            `;
                         }
-                        return '-';
                     }
                 }
             ],
             language: {
-                processing: "Loading...",
+                processing: "Memuat...",
                 lengthMenu: "Tampilkan _MENU_ data per halaman",
                 zeroRecords: "Data tidak ditemukan",
                 info: "Menampilkan halaman _PAGE_ dari _PAGES_",
@@ -212,10 +284,7 @@ document.addEventListener('DOMContentLoaded', function() {
             order: [[2, 'desc']]
         });
 
-        // Debug log untuk memeriksa ID pegawai
-        console.log('ID Pegawai yang sedang login:', idPegawai);
-
-        // Initialize tooltips after table is drawn
+        // Inisialisasi tooltip setelah tabel digambar
         cutiPribadiTable.on('draw', function() {
             const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
             tooltipTriggerList.map(function(tooltipTriggerEl) {
@@ -224,21 +293,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     })
     .catch(error => {
-        console.error('Error:', error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Gagal memuat data: ' + error.message
-        });
+        console.error('Error Utama:', error);
+        handleError('Error', 'Gagal memuat data: ' + error.message);
     });
 
-    // Event listener for the "Tambah Pengajuan Cuti" button
+    // Event listener untuk tombol "Tambah Pengajuan Cuti"
     document.getElementById('tambahCutiBtn').addEventListener('click', function() {
-        window.location.href = '/cuti-pribadi/create';
+        window.location.href = '/cuti/create';
     });
 });
 
-// Define the deleteCuti function in global scope
+// Definisikan fungsi deleteCuti dalam lingkup global
 window.deleteCuti = function(idCuti) {
     const token = localStorage.getItem('token');
     const baseUrl = 'http://127.0.0.1:8000/api';
@@ -275,7 +340,7 @@ window.deleteCuti = function(idCuti) {
                     showConfirmButton: false,
                     timer: 1500
                 });
-                // Reload the DataTable to reflect the changes
+                // Muat ulang DataTable untuk mencerminkan perubahan
                 $('#cuti-pribadi-table').DataTable().ajax.reload();
             })
             .catch(error => {

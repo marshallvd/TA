@@ -39,4 +39,9 @@ class Wawancara extends Model
     {
         return $this->belongsTo(UserPelamar::class, 'id_pelamar', 'id_pelamar');
     }
+    // Tambahkan metode untuk mengambil judul pekerjaan
+    public function getJudulPekerjaanAttribute()
+    {
+        return $this->lamaranPekerjaan->lowonganPekerjaan->judul_pekerjaan ?? 'Tidak Diketahui';
+    }
 }

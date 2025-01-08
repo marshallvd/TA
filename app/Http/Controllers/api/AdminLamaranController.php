@@ -4,15 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\LamaranPekerjaan;
+use App\Models\UserPelamar;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class AdminLamaranController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-        $this->middleware('role:admin,hrd');
-    }
+
 
     // Mendapatkan semua lamaran untuk admin
     public function index(Request $request)
@@ -27,7 +27,10 @@ class AdminLamaranController extends Controller
 
             // Filter berdasarkan tanggal
             if ($request->has('from_date') && $request->has('to_date')) {
-                $query->whereBetween('tanggal_dibuat', [$request->from_date, $request->to_date]);
+                $query->whereBetween('tanggal_dibuat', [
+                    Carbon::parse($request->from_date),
+                    Carbon::parse($request->to_date)
+                ]);
             }
 
             // Sorting
@@ -53,27 +56,33 @@ class AdminLamaranController extends Controller
         }
     }
 
+
+
     // Mendapatkan detail lamaran untuk admin
     public function show($id)
     {
         try {
-            $lamaran = LamaranPekerjaan::with(['lowonganPekerjaan', 'pelamar'])
-                ->where('id_lamaran_pekerjaan', $id)
-                ->first();
-
-            if (!$lamaran) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Lamaran tidak ditemukan'
-                ], 404);
-            }
-
+            $lamaran = LamaranPekerjaan::with([
+                'pelamar', 
+                'lowonganPekerjaan'
+            ])->findOrFail($id);
+    
+            // Gabungkan data pelamar ke dalam lamaran
+            $lamaran->setAttribute('nama', $lamaran->pelamar->nama ?? '-');
+            $lamaran->setAttribute('email', $lamaran->pelamar->email ?? '-');
+            $lamaran->setAttribute('no_hp', $lamaran->pelamar->no_hp ?? '-');
+            $lamaran->setAttribute('alamat', $lamaran->pelamar->alamat ?? '-');
+            $lamaran->setAttribute('pendidikan_terakhir', $lamaran->pelamar->pendidikan_terakhir ?? '-');
+            $lamaran->setAttribute('pengalaman_kerja', $lamaran->pelamar->pengalaman_kerja ?? '-');
+            $lamaran->setAttribute('cv_path', $lamaran->pelamar->cv_path ?? null);
+    
             return response()->json([
                 'status' => 'success',
                 'message' => 'Detail lamaran berhasil diambil',
                 'data' => $lamaran
             ]);
         } catch (\Exception $e) {
+            \Log::error('Error fetching lamaran detail: ' . $e->getMessage());
             return response()->json([
                 'status' => 'error',
                 'message' => 'Gagal mengambil detail lamaran',
@@ -83,14 +92,17 @@ class AdminLamaranController extends Controller
     }
 
     // Update status lamaran oleh admin
+// Metode untuk update status lamaran
     public function updateStatus(Request $request, $id)
     {
         try {
+            // Validasi input
             $validator = Validator::make($request->all(), [
                 'status_lamaran' => 'required|in:diterima,ditolak,dalam_proses,menunggu',
-                'catatan' => 'nullable|string'
+                'catatan' => 'nullable|string|max:500'
             ]);
 
+            // Jika validasi gagal
             if ($validator->fails()) {
                 return response()->json([
                     'status' => 'error',
@@ -99,27 +111,25 @@ class AdminLamaranController extends Controller
                 ], 422);
             }
 
-            $lamaran = LamaranPekerjaan::find($id);
+            // Cari lamaran
+            $lamaran = LamaranPekerjaan::findOrFail($id);
 
-            if (!$lamaran) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Lamaran tidak ditemukan'
-                ], 404);
-            }
-
+            // Update status lamaran
             $lamaran->update([
-                'status_lamaran' => $request->status_lamaran,
-                'catatan_admin' => $request->catatan,
+                'status_lamaran' => $request->input('status_lamaran'),
+                'catatan_admin' => $request->input('catatan', null),
                 'tanggal_diperbarui' => Carbon::now()
             ]);
 
+            // Respon sukses
             return response()->json([
                 'status' => 'success',
                 'message' => 'Status lamaran berhasil diperbarui',
                 'data' => $lamaran
             ]);
+
         } catch (\Exception $e) {
+            // Tangani error
             return response()->json([
                 'status' => 'error',
                 'message' => 'Gagal memperbarui status lamaran',
@@ -127,4 +137,34 @@ class AdminLamaranController extends Controller
             ], 500);
         }
     }
+    
+    // public function showDetail($id)
+    // {
+    //     try {
+    //         $lamaran = LamaranPekerjaan::with([
+    //             'pelamar', 
+    //             'lowonganPekerjaan'
+    //         ])->findOrFail($id);
+    
+    //         Log::info('Lamaran fetched successfully', [
+    //             'id' => $id,
+    //             'pelamar' => $lamaran->pelamar->nama ?? 'No Pelamar'
+    //         ]);
+    
+    //         return response()->json([
+    //             'status' => 'success',
+    //             'data' => $lamaran
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         Log::error('Error fetching lamaran', [
+    //             'id' => $id,
+    //             'message' => $e->getMessage()
+    //         ]);
+
+    //         return response()->json([
+    //             'status' => 'error',
+    //             'message' => 'Data lamaran tidak ditemukan'
+    //         ], 404);
+    //     }
+    // }
 }

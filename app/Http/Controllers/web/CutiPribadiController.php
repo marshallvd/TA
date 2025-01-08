@@ -68,4 +68,13 @@ class CutiPribadiController extends Controller
 
         return redirect()->route('cuti_pribadi.index')->with('success', 'Pengajuan cuti pribadi berhasil dihapus.');
     }
+
+    public function show($id)
+    {
+        // Ambil data cuti beserta relasi yang dibutuhkan
+        $cuti = Cuti::with(['jenisCuti', 'pegawai'])->findOrFail($id);
+        
+        return view('cuti_pribadi.view', compact('cuti'));
+    }
+
 }

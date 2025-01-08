@@ -7,13 +7,28 @@
 
 @section('content')
 <div class="container-fluid content-inner mt-n5 py-0">
+    {{-- Header Card --}}
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <b><h2 class="card-title mb-1">Manajemen Penilaian Kinerja</h2></b>
+                    <p class="card-text text-muted">Human Resource Management System SEB</p>
+                </div>
+                <div>
+                    <i class="bi bi-person-workspace text-primary" style="font-size: 3rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row mb-4">
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="card-title mb-0">Informasi Pegawai</h4>
                     <button type="button" class="btn btn-danger btn-sm" id="btnBack">
-                        <i class="fas fa-arrow-left me-1"></i> Kembali
+                        <i class="bi bi-arrow-left"></i> Kembali
                     </button>
                 </div>
                 <div class="card-body">
@@ -40,19 +55,70 @@
         </div>
     </div>
 
+    <!-- Panduan Penilaian di atas -->
+<div class="row mb-4 justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title mb-0 small">Panduan Penilaian</h4>
+            </div>
+            <div class="card-body p-2">
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered mb-0">
+                        <thead>
+                            <tr class="small text-center">
+                                <th class="text-center" style="width: 60px;">Nilai</th>
+                                <th>Kategori</th>
+                            </tr>
+                        </thead>
+                        <tbody class="small text-center">
+                            <tr>
+                                <td class="text-center">5</td>
+                                <td>Sangat Baik</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">4</td>
+                                <td>Baik</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">3</td>
+                                <td>Cukup</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">2</td>
+                                <td>Kurang</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">1</td>
+                                <td>Sangat Kurang</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
     <div class="row mb-4">
         <div class="col-12">
             <div class="card">
                 <div class="card-body p-2">
-                    <ul class="nav nav-pills nav-fill">
+                    <ul class="nav nav-pills nav-fill custom-pills">
                         <li class="nav-item">
-                            <a class="nav-link active" id="kpi-tab" data-bs-toggle="pill" href="#formKPI">KPI</a>
+                            <a class="nav-link active" id="kpi-tab" data-bs-toggle="pill" href="#formKPI">
+                                <i class="bi bi-list-task me-2"></i>KPI
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="kompetensi-tab" data-bs-toggle="pill" href="#formKompetensi">Kompetensi</a>
+                            <a class="nav-link" id="kompetensi-tab" data-bs-toggle="pill" href="#formKompetensi">
+                                <i class="bi bi-person-badge me-2"></i>Kompetensi
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="core-values-tab" data-bs-toggle="pill" href="#formCoreValues">Core Values</a>
+                            <a class="nav-link" id="core-values-tab" data-bs-toggle="pill" href="#formCoreValues">
+                                <i class="bi bi-star me-2"></i>Core Values
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -60,8 +126,9 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-8">
+    <!-- Form utama full width -->
+    <div class="row mb-4">
+        <div class="col-12">
             <div class="card">
                 <div class="card-body">
                     <form id="penilaianKinerjaForm">
@@ -79,7 +146,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="button" class="btn btn-primary mt-3" id="nextToKompetensi">Next</button>
+                                <button type="button" class="btn btn-primary mt-3" id="nextToKompetensi"><i class="bi bi-arrow-right-square me-2"></i>Selanjutnya</button>
                             </div>
 
                             <div class="tab-pane fade" id="formKompetensi">
@@ -91,7 +158,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="button" class="btn btn-primary mt-3" id="nextToCoreValues">Next</button>
+                                <button type="button" class="btn btn-primary mt-3" id="nextToCoreValues"><i class="bi bi-arrow-right-square me-2"></i>Selanjutnya</button>
                             </div>
 
                             <div class="tab-pane fade" id="formCoreValues">
@@ -107,65 +174,47 @@
                                     <label for="catatan" class="form-label">Catatan Penilaian</label>
                                     <textarea class="form-control" id="catatan" name="catatan" rows="3"></textarea>
                                 </div>
-                                
-                                <button type="button" class="btn btn-success mt-3" id="submitPenilaian">Submit</button>
+                                <button type="button" class="btn btn-success mt-3" id="submitPenilaian"><i class="bi bi-arrow-right-square me-2"></i>Simpan</button>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0 small">Panduan Penilaian</h5>
-                </div>
-                <div class="card-body p-2">
-                    <div class="table-responsive">
-                        <table class="table table-sm table-bordered">
-                            <thead>
-                                <tr class="small">
-                                    <th class="text-center" style="width: 60px;">Nilai</th>
-                                    <th>Kategori</th>
-                                    {{-- <th>Deskripsi</th> --}}
-                                </tr>
-                            </thead>
-                            <tbody class="small">
-                                <tr>
-                                    <td class="text-center">5</td>
-                                    <td>Sangat Baik</td>
-                                    {{-- <td>Kinerja dan pencapaian jauh melampaui ekspektasi</td> --}}
-                                </tr>
-                                <tr>
-                                    <td class="text-center">4</td>
-                                    <td>Baik</td>
-                                    {{-- <td>Kinerja dan pencapaian melampaui ekspektasi</td> --}}
-                                </tr>
-                                <tr>
-                                    <td class="text-center">3</td>
-                                    <td>Cukup</td>
-                                    {{-- <td>Kinerja dan pencapaian sesuai ekspektasi</td> --}}
-                                </tr>
-                                <tr>
-                                    <td class="text-center">2</td>
-                                    <td>Kurang</td>
-                                    {{-- <td>Kinerja dan pencapaian di bawah ekspektasi</td> --}}
-                                </tr>
-                                <tr>
-                                    <td class="text-center">1</td>
-                                    <td>Sangat Kurang</td>
-                                    {{-- <td>Kinerja dan pencapaian jauh di bawah ekspektasi</td> --}}
-                                </tr>
-                            </tbody>
-                        </table >
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
+@endsection
 
+@push('css')
+<style>
+    .custom-pills .nav-link {
+        border-radius: 4px;
+        margin: 0 5px;
+        transition: all 0.3s ease;
+        padding: 0.75rem 1.25rem;
+    }
+    
+    .custom-pills .nav-link.active {
+        background-color: #007bff;
+        color: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .custom-pills .nav-link:hover {
+        background-color: #0056b3;
+        color: white;
+    }
+
+    .nav-pills {
+        background-color: #f8f9fa;
+        padding: 0.5rem;
+        border-radius: 4px;
+    }
+</style>
+@endpush
+
+
+@push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const token = localStorage.getItem('token');
@@ -639,4 +688,4 @@ document.addEventListener('DOMContentLoaded', function() {
     fetchPegawaiDetails();
 });
 </script>
-@endsection
+@endpush

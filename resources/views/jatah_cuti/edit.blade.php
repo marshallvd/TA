@@ -7,17 +7,32 @@
 
 @section('content')
 <div class="container-fluid content-inner mt-n5 py-0">
+    {{-- Header Card --}}
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <b><h2 class="card-title mb-1">Manajemen Jatah Cuti</h2></b>
+                    <p class="card-text text-muted">Human Resource Management System SEB</p>
+                </div>
+                <div>
+                    <i class="bi bi-calendar-range text-primary" style="font-size: 3rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Employee Information Card --}}
     <div class="row mb-4">
         <div class="col-12">
             <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="card-title mb-0">Informasi Pegawai</h4>
-                    <button type="button" class="btn btn-danger btn-sm" id="btnBack">
-                        <i class="fas fa-arrow-left me-1"></i> Kembali
-                    </button>
+                <div class="card-header d-flex justify-content-between">
+                    <div class="header-title">
+                        <h4 class="card-title mb-0">Informasi Pegawai</h4>
+                    </div>
                 </div>
                 <div class="card-body">
-                    <div class="row small" id="pegawaiDetails">
+                    <div class="row" id="pegawaiDetails">
                         <div class="col-md-3">
                             <p class="mb-1"><strong>Nama:</strong></p>
                             <p class="text-muted" id="pegawaiName">-</p>
@@ -40,62 +55,149 @@
         </div>
     </div>
 
+    {{-- Main Form Card --}}
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-12">
             <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <div class="header-title">
+                        <h4 class="card-title">Form Edit Jatah Cuti</h4>
+                    </div>
+                </div>
                 <div class="card-body">
-                    <form id="jatahCutiForm" method="POST" action="{{ route('jatah_cuti.update', $jatahCuti->id_jatah_cuti) }}">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" id="id_jatah_cuti" name="id_jatah_cuti" value="{{ $jatahCuti->id_jatah_cuti }}">
-                        <input type="hidden" id="id_pegawai" name="id_pegawai" value="{{ $jatahCuti->id_pegawai }}">
-                        
-                        <div class="mb-3">
-                            <label for="tahun" class="form-label">Tahun</label>
-                            <input type="number" class="form-control" id="tahun" name="tahun" value="{{ $jatahCuti->tahun }}" readonly>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="jatah_cuti_umum" class="form-label">Jatah Cuti Umum</label>
-                            <input type="number" class="form-control" id="jatah_cuti_umum" name="jatah_cuti_umum" value="{{ $jatahCuti->jatah_cuti_umum }}" required>
-                            <small class="text-muted">Sisa Cuti Umum: {{ $jatahCuti->sisa_cuti_umum }}</small>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="jatah_cuti_menikah" class="form-label">Jatah Cuti Menikah</label>
-                            <input type="number" class="form-control" id="jatah_cuti_menikah" name="jatah_cuti_menikah" value="{{ $jatahCuti->jatah_cuti_menikah }}" required>
-                            <small class="text-muted">Sisa Cuti Menikah: {{ $jatahCuti->sisa_cuti_menikah }}</small>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="jatah_cuti_melahirkan" class="form-label">Jatah Cuti Melahirkan</label>
-                            <input type="number" class="form-control" id="jatah_cuti_melahirkan" name="jatah_cuti_melahirkan" value="{{ $jatahCuti->jatah_cuti_melahirkan }}" required>
-                            <small class="text-muted">Sisa Cuti Melahirkan: {{ $jatahCuti->sisa_cuti_melahirkan }}</small>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-success">Perbarui Jatah Cuti</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+                    <div class="new-user-info">
+                        <form id="jatahCutiForm" class="needs-validation" novalidate>
+                            <input type="hidden" id="id_jatah_cuti" name="id_jatah_cuti" value="{{ $jatahCuti->id_jatah_cuti }}">
+                            <input type="hidden" id="id_pegawai" name="id_pegawai" value="{{ $jatahCuti->id_pegawai }}">
+                            
+                            <div class="row">
+                                <div class="form-group col-md-6 mb-3">
+                                    <label class="form-label" for="id_pegawai">ID Pegawai <span class="text-danger">*</span></label>
+                                    <input type="number" 
+                                           class="form-control" 
+                                           value="{{ $jatahCuti->id_pegawai }}"
+                                           readonly>
+                                    <div class="invalid-feedback">
+                                        ID Pegawai tidak boleh kosong
+                                    </div>
+                                </div>
 
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0 small">Panduan Perubahan Jatah Cuti</h5>
-                </div>
-                <div class="card-body p-2">
-                    <p class="small">Silakan ubah jatah cuti sesuai kebutuhan. Pastikan informasi sudah benar.</p>
-                    <ul class="small">
-                        <li>Tahun tidak dapat diubah.</li>
-                        <li>Perhatikan sisa cuti yang sudah digunakan.</li>
-                        <li>Pastikan jumlah jatah cuti sesuai dengan kebijakan.</li>
-                    </ul>
+                                <div class="form-group col-md-6 mb-3">
+                                    <label class="form-label" for="tahun">Tahun <span class="text-danger">*</span></label>
+                                    <input type="number" 
+                                           class="form-control" 
+                                           id="tahun" 
+                                           name="tahun" 
+                                           value="{{ $jatahCuti->tahun }}"
+                                           readonly>
+                                    <div class="invalid-feedback">
+                                        Tahun tidak valid
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-4 mb-3">
+                                    <label class="form-label" for="jatah_cuti_umum">Jatah Cuti Umum <span class="text-danger">*</span></label>
+                                    <input type="number" 
+                                           class="form-control" 
+                                           id="jatah_cuti_umum" 
+                                           name="jatah_cuti_umum" 
+                                           required 
+                                           min="0" 
+                                           value="{{ $jatahCuti->jatah_cuti_umum }}">
+                                    <div class="invalid-feedback">
+                                        Jatah cuti umum tidak valid
+                                    </div>
+                                    <small class="text-muted">Sisa Cuti Umum: {{ $jatahCuti->sisa_cuti_umum }} hari</small>
+                                </div>
+
+                                <div class="form-group col-md-4 mb-3">
+                                    <label class="form-label" for="jatah_cuti_menikah">Jatah Cuti Menikah <span class="text-danger">*</span></label>
+                                    <input type="number" 
+                                           class="form-control" 
+                                           id="jatah_cuti_menikah" 
+                                           name="jatah_cuti_menikah" 
+                                           required 
+                                           min="0" 
+                                           value="{{ $jatahCuti->jatah_cuti_menikah }}">
+                                    <div class="invalid-feedback">
+                                        Jatah cuti menikah tidak valid
+                                    </div>
+                                    <small class="text-muted">Sisa Cuti Menikah: {{ $jatahCuti->sisa_cuti_menikah }} hari</small>
+                                </div>
+
+                                <div class="form-group col-md-4 mb-3">
+                                    <label class="form-label" for="jatah_cuti_melahirkan">Jatah Cuti Melahirkan <span class="text-danger">*</span></label>
+                                    <input type="number" 
+                                           class="form-control" 
+                                           id="jatah_cuti_melahirkan" 
+                                           name="jatah_cuti_melahirkan" 
+                                           required 
+                                           min="0" 
+                                           value="{{ $jatahCuti->jatah_cuti_melahirkan }}">
+                                    <div class="invalid-feedback">
+                                        Jatah cuti melahirkan tidak valid
+                                    </div>
+                                    <small class="text-muted">Sisa Cuti Melahirkan: {{ $jatahCuti->sisa_cuti_melahirkan }} hari</small>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4">
+                                <div class="col-12 text-end">
+                                    <button type="button" class="btn btn-danger me-2" id="btnBack">
+                                        <i class="bi bi-arrow-left me-2"></i>Kembali
+                                    </button>
+                                    <button type="button" id="resetButton" class="btn btn-warning me-2">
+                                        <i class="bi bi-arrow-clockwise me-2"></i>Reset
+                                    </button>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="bi bi-save me-2"></i>Perbarui
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    {{-- Information Alert --}}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="alert alert-info" role="alert">
+                <h4 class="alert-heading"><i class="bi bi-info-circle me-2"></i>Informasi Jatah Cuti</h4>
+                <p class="mb-0">Berikut adalah ketentuan jatah cuti yang berlaku:</p>
+                <ul class="mt-2 mb-0">
+                    <li>Cuti Umum: Diberikan kepada seluruh karyawan untuk keperluan pribadi</li>
+                    <li>Cuti Menikah: Khusus diberikan saat karyawan melangsungkan pernikahan</li>
+                    <li>Cuti Melahirkan: Diberikan kepada karyawati yang akan melahirkan</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
+
+@push('css')
+<style>
+    .form-label {
+        font-weight: 500;
+    }
+    
+    .invalid-feedback {
+        font-size: 0.875em;
+    }
+    
+    .was-validated .form-control:invalid,
+    .form-control.is-invalid {
+        border-color: #dc3545;
+    }
+
+    .alert-info {
+        background-color: #f8f9fa;
+        border-left: 4px solid #0dcaf0;
+    }
+</style>
+@endpush
 
 @push('scripts')
 <script>
@@ -143,7 +245,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const jatahCutiMenikah = parseInt(document.getElementById('jatah_cuti_menikah').value);
         const jatahCutiMelahirkan = parseInt(document.getElementById('jatah_cuti_melahirkan').value);
 
-        if (isNaN(jatahCutiUmum) || isNaN(jatahCu tiMenikah) || isNaN(jatahCutiMelahirkan)) {
+        if (isNaN(jatahCutiUmum) || isNaN(jatahCutiMenikah) || isNaN(jatahCutiMelahirkan)) {
             throw new Error('Semua jatah cuti harus berupa angka');
         }
 

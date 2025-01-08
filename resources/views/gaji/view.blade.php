@@ -6,8 +6,22 @@ Rincian Penggajian
 @endsection
 
 @section('content')
-
 <div class="container-fluid content-inner mt-n5 py-0">
+    {{-- Header Card --}}
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <b><h2 class="card-title mb-1">Rincian Penggajian</h2></b>
+                    <p class="card-text text-muted">Human Resource Management System SEB</p>
+                </div>
+                <div>
+                    <i class="bi bi-wallet2 text-primary" style="font-size: 3rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row mb-4">
         <div class="col-12">
             <div class="card">
@@ -21,114 +35,190 @@ Rincian Penggajian
                         <p>(0361) 756206, 763295</p>
                     </div>
                 </div>
-                <div class="card-body text-center">
-                    <h4 class="card-title mb-0">Slip Gaji</h4>
-                    <p class="mb-0">Periode: <span id="periodeView">-</span></p>
-                    <hr>
-                    
-                    <table class="table table-bordered mt-4">
-                        <thead>
-                            <tr>
-                                <th colspan="2" class="text-center">Informasi Pegawai</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Nama</strong></td>
-                                <td id="pegawaiNameView">-</td>
-                            </tr>
-                            <tr>
-                                <td><strong>NIK</strong></td>
-                                <td id="pegawaiNIKView">-</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Divisi</strong></td>
-                                <td id="pegawaiDivisionView">-</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Jabatan</strong></td>
-                                <td id="pegawaiPositionView">-</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <h4 class="fw-bold">Slip Gaji</h4>
+                        <p class="text-muted">Periode: <span id="periodeView" class="fw-bold">-</span></p>
+                    </div>
 
-                    <h5 class="mt-4 text-start">Pendapatan</h5>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Komponen</th>
-                                <th>Jumlah</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Gaji Pokok</strong></td>
-                                <td id="gajiPokokView">-</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Insentif</strong></td>
-                                <td id="insentifView">-</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Bonus Kehadiran</strong></td>
-                                <td id="bonusKehadiranView">-</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Tunjangan Lembur</strong></td>
-                                <td id="tunjanganLemburView">-</td>
-                            </tr>
-                            <tr>
-                                <th><strong>Total Pendapatan</strong></th>
-                                <th id="totalPendapatanView">-</th>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive mb-4">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th colspan="2" class="text-center">Informasi Pegawai</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td width="30%"><strong><i class="bi bi-person-fill me-2"></i>Nama</strong></td>
+                                    <td id="pegawaiNameView">-</td>
+                                </tr>
+                                <tr>
+                                    <td><strong><i class="bi bi-credit-card-fill me-2"></i>NIK</strong></td>
+                                    <td id="pegawaiNIKView">-</td>
+                                </tr>
+                                <tr>
+                                    <td><strong><i class="bi bi-diagram-3-fill me-2"></i>Divisi</strong></td>
+                                    <td id="pegawaiDivisionView">-</td>
+                                </tr>
+                                <tr>
+                                    <td><strong><i class="bi bi-briefcase-fill me-2"></i>Jabatan</strong></td>
+                                    <td id="pegawaiPositionView">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-                    <h5 class="mt-4 text-start">Potongan</h5>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Komponen</th>
-                                <th>Jumlah</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Potongan Pajak</strong></td>
-                                <td id="potonganPajakView">-</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Potongan BPJS</strong></td>
-                                <td id="potonganBPJSView">Rp. 200.000</td>
-                            </tr>
-                            <tr>
-                                <th><strong>Total Potongan</strong></th>
-                                <th id="totalPotonganView">-</th>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive mb-4">
+                        <h5 class="fw-bold mb-3"><i class="bi bi-cash-stack me-2"></i>Pendapatan</h5>
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Komponen</th>
+                                    <th width="40%">Jumlah</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Gaji Pokok</strong></td>
+                                    <td id="gajiPokokView" class="text-end">-</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Insentif</strong></td>
+                                    <td id="insentifView" class="text-end">-</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Bonus Kehadiran</strong></td>
+                                    <td id="bonusKehadiranView" class="text-end">-</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tunjangan Lembur</strong></td>
+                                    <td id="tunjanganLemburView" class="text-end">-</td>
+                                </tr>
+                                <tr class="table-light">
+                                    <td><strong>Total Pendapatan</strong></td>
+                                    <td id="totalPendapatanView" class="text-end fw-bold">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-                    <h5 class ="mt <h5 class="mt-4 text-start">Gaji Bersih</h5>
-                    <table class="table table-bordered">
-                        <tbody>
-                            <tr>
-                                <th><strong>Gaji Bersih</strong></th>
-                                <th id="gajiBersihView">-</th>
-                            </tr>
-                            <tr>
-                                <td colspan="2" class="text-center" id="terbilangView">-</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive mb-4">
+                        <h5 class="fw-bold mb-3"><i class="bi bi-scissors me-2"></i>Potongan</h5>
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Komponen</th>
+                                    <th width="40%">Jumlah</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Potongan Pajak</strong></td>
+                                    <td id="potonganPajakView" class="text-end">-</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Potongan BPJS</strong></td>
+                                    <td id="potonganBPJSView" class="text-end">Rp. 200.000</td>
+                                </tr>
+                                <tr class="table-light">
+                                    <td><strong>Total Potongan</strong></td>
+                                    <td id="totalPotonganView" class="text-end fw-bold">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-                    <div class="text-center mt-4">
-                        <button class="btn btn-primary" id="backButton">Kembali</button>
+                    <div class="table-responsive mb-4">
+                        <h5 class="fw-bold mb-3"><i class="bi bi-wallet-fill me-2"></i>Gaji Bersih</h5>
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr class="table-primary">
+                                    <th><strong>Gaji Bersih</strong></th>
+                                    <th id="gajiBersihView" class="text-end">-</th>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="text-center fst-italic" id="terbilangView">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="button" class="btn btn-primary px-4" id="backButton">
+                            <i class="bi bi-arrow-left me-2"></i>Kembali
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    padding: 20px;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table th,
+.table td {
+    padding: 12px 15px;
+    vertical-align: middle;
+}
+
+.table-light {
+    background-color: #f8f9fa;
+}
+
+.table-primary {
+    background-color: #e7f1ff;
+}
+
+.btn-primary {
+    padding: 10px 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+h4, h5 {
+    color: #343a40;
+}
+
+.text-muted {
+    color: #6c757d !important;
+}
+
+.table-responsive {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.fst-italic {
+    color: #6c757d;
+}
+</style>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

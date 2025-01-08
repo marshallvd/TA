@@ -7,41 +7,22 @@
 
 @section('content')
 <div class="container-fluid content-inner mt-n5 py-0">
-    <div class="row justify-content-center">
-        {{-- <div class="col-xl-3 col-lg-4">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between">
-                    <div class="header-title">
-                        <h4 class="card-title">Upload Foto</h4>
-                    </div>
+    {{-- Header Card --}}
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <b><h2 class="card-title mb-1">Manajemen Data Pegawai</h2></b>
+                    <p class="card-text text-muted">Human Resource Management System SEB</p>
                 </div>
-                <div class="card-body">
-                    <form id="photoForm">
-                        <div class="form-group">
-                            <div class="profile-img-edit position-relative">
-                                <img src="{{ asset('assets/images/avatars/avtar_1.png') }}" alt="profile-pic" id="preview-photo" class="profile-pic rounded avatar-100">
-                                <div class="upload-icone bg-primary">
-                                    <svg class="upload-button icon-14" width="14" viewBox="0 0 24 24">
-                                        <path fill="#ffffff" d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z"/>
-                                    </svg>
-                                    <input class="file-upload" type="file" accept="image/*" id="photo" name="foto">
-                                </div>
-                            </div>
-                            <div class="img-extension mt-3">
-                                <div class="d-inline-block align-items-center">
-                                    <span>Hanya</span>
-                                    <a href="javascript:void();">.jpg</a>
-                                    <a href="javascript:void();">.png</a>
-                                    <a href="javascript:void();">.jpeg</a>
-                                    <span>yang diizinkan</span>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                <div>
+                    <i class="bi bi-person-lines-fill text-primary" style="font-size: 3rem;"></i>
                 </div>
             </div>
-        </div> --}}
-        <div class="col-xl-9 col-lg-8">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <div class="header-title">
@@ -136,8 +117,19 @@
                                     </select>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary mt-3">Update Data Pegawai</button>
-                            <a type="button" class="btn btn-secondary mt-3" href="{{ route('pegawai.index') }}">Tutup</a>
+                            <div class="row mt-4">
+                                <div class="col-12 text-end">
+                                    <a href="{{ route('pegawai.index') }}" class="btn btn-danger me-2">
+                                        <i class="bi bi-arrow-left me-2"></i>Kembali
+                                    </a>
+                                    <button type="button" id="resetButton" class="btn btn-warning me-2">
+                                        <i class="bi bi-arrow-clockwise me-2"></i>Reset
+                                    </button>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="bi bi-save me-2"></i>Simpan
+                                    </button>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -152,21 +144,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const pegawaiId = window.location.pathname.split('/').pop();
     const divisiSelect = document.getElementById('divisiSelect');
     const jabatanSelect = document.getElementById('jabatanSelect');
-    // const photoInput = document.getElementById('photo');
-    // const previewPhoto = document.getElementById('preview-photo');
     const pegawaiForm = document.getElementById('pegawaiForm');
-
-    // Preview foto yang dipilih
-    // photoInput.addEventListener('change', function(e) {
-    //     const file = e.target.files[0];
-    //     if (file) {
-    //         const reader = new FileReader();
-    //         reader.onload = function(e) {
-    //             previewPhoto.src = e.target.result;
-    //         }
-    //         reader.readAsDataURL(file);
-    //     }
-    // });
+    const resetButton = document.getElementById('resetButton');
+    
+    // Menyimpan data pegawai original
+    let originalData = null;
 
     // Fungsi untuk mengambil data pegawai yang akan diedit
     async function fetchPegawaiData() {
@@ -188,15 +170,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 throw new Error('Invalid response structure: missing data');
             }
 
-            // Fetch divisi dengan selected value
+            // Menyimpan data original
+            originalData = data.data;
+
             await fetchDivisi(data.data.id_divisi);
             
-            // Fetch jabatan dengan selected value jika ada divisi
             if (data.data.id_divisi) {
                 await fetchJabatan(data.data.id_divisi, data.data.id_jabatan);
             }
             
-            // Populate form setelah dropdown terisi
             populateForm(data.data);
             
         } catch (error) {
@@ -210,9 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Fungsi untuk mengisi form dengan data yang ada
     function populateForm(data) {
-        // Fungsi helper untuk menangani nilai null/undefined
         const setValue = (selector, value) => {
             const element = document.querySelector(selector);
             if (element) {
@@ -232,13 +212,8 @@ document.addEventListener('DOMContentLoaded', function() {
         setValue('select[name="agama"]', data.agama);
         setValue('select[name="pendidikan_terakhir"]', data.pendidikan_terakhir);
         setValue('select[name="status_kepegawaian"]', data.status_kepegawaian);
-
-        // if (data.foto) {
-        //     previewPhoto.src = `http://127.0.0.1:8000/storage/${data.foto}`;
-        // }
     }
 
-    // Fungsi untuk mengambil data divisi
     async function fetchDivisi(selectedDivisiId) {
         try {
             const response = await fetch('http://127.0.0.1:8000/api/divisi', {
@@ -252,13 +227,11 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const data = await response.json();
             
-            // Populate divisi select
             divisiSelect.innerHTML = '<option value="">Pilih Divisi</option>';
             data.forEach(divisi => {
                 const option = document.createElement('option');
                 option.value = divisi.id_divisi;
                 option.textContent = divisi.nama_divisi;
-                // Set selected jika ini adalah divisi yang dimiliki pegawai
                 if (divisi.id_divisi == selectedDivisiId) {
                     option.selected = true;
                 }
@@ -266,11 +239,15 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         } catch (error) {
             console.error('Error:', error);
-            alert('Gagal mengambil data divisi');
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Gagal mengambil data divisi',
+                confirmButtonText: 'OK'
+            });
         }
     }
 
-    // Fungsi untuk mengambil jabatan berdasarkan divisi
     async function fetchJabatan(divisiId, selectedJabatanId) {
         try {
             const response = await fetch('http://127.0.0.1:8000/api/jabatan', {
@@ -284,16 +261,13 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const data = await response.json();
             
-            // Filter jabatan berdasarkan id_divisi
             const filteredJabatan = data.filter(jabatan => jabatan.id_divisi == divisiId);
             
-            // Populate jabatan select
             jabatanSelect.innerHTML = '<option value="">Pilih Jabatan</option>';
             filteredJabatan.forEach(jabatan => {
                 const option = document.createElement('option');
                 option.value = jabatan.id_jabatan;
                 option.textContent = jabatan.nama_jabatan;
-                // Set selected jika ini adalah jabatan yang dimiliki pegawai
                 if (jabatan.id_jabatan == selectedJabatanId) {
                     option.selected = true;
                 }
@@ -301,22 +275,37 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         } catch (error) {
             console.error('Error:', error);
-            alert('Gagal mengambil data jabatan');
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Gagal mengambil data jabatan',
+                confirmButtonText: 'OK'
+            });
         }
     }
 
-    // Event listener untuk perubahan divisi
+    // Event listener untuk reset button
+    resetButton.addEventListener('click', function() {
+        if (originalData) {
+            populateForm(originalData);
+            // Reset divisi dan jabatan
+            fetchDivisi(originalData.id_divisi).then(() => {
+                if (originalData.id_divisi) {
+                    fetchJabatan(originalData.id_divisi, originalData.id_jabatan);
+                }
+            });
+        }
+    });
+
     divisiSelect.addEventListener('change', function() {
         const divisiId = this.value;
         if (divisiId) {
-            // Pass null sebagai selectedJabatanId karena ini perubahan baru
             fetchJabatan(divisiId, null);
         } else {
             jabatanSelect.innerHTML = '<option value="">Pilih Jabatan</option>';
         }
     });
 
-    // Handle form submission untuk update
     pegawaiForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
@@ -339,23 +328,23 @@ document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil!',
-                text: 'Data pegawai berhasil diupdate',
+                text: 'Data pegawai berhasil diperbarui',
                 showConfirmButton: false,
                 timer: 1500
             }).then(() => {
-                window.location.href = '/pegawai'; // Redirect ke halaman list pegawai
+                window.location.href = '/pegawai';
             });
         } catch (error) {
             console.error('Error:', error);
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Gagal mengupdate data pegawai'
+                text: 'Gagal mengupdate data pegawai',
+                confirmButtonText: 'OK'
             });
         }
     });
 
-    // Load initial data
     fetchPegawaiData();
 });
 </script>

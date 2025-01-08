@@ -9,6 +9,25 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return view('dashboard.index'); // Pastikan view ini ada
+        return view('dashboard.index'); // Halaman default
+    }
+
+    public function admin()
+    {
+        return view('dashboard.admin'); // Halaman dashboard admin
+    }
+
+    public function hrd()
+    {
+        return view('dashboard.hrd'); // Halaman dashboard HRD
+    }
+
+    public function pegawai()
+    {
+        return view('dashboard.pegawai'); // Halaman dashboard pegawai
+    }
+    public function pelamar()
+    {
+        return view('dashboard.pelamar'); // Halaman dashboard pegawai
     }
 }

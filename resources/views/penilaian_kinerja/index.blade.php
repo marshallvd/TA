@@ -7,7 +7,20 @@
 
 @section('content')
 <div class="container-fluid content-inner mt-n5 py-0">
-    <div>
+        {{-- Header Card --}}
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <b><h2 class="card-title mb-1">Manajemen Penilaian Kinerja</h2></b>
+                        <p class="card-text text-muted">Human Resource Management System SEB</p>
+                    </div>
+                    <div>
+                        <i class="bi bi-person-workspace text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
@@ -23,7 +36,7 @@
                                 <input type="month" id="periodeFilter" class="form-control">
                             </div>
                             <div class="col-md-2 d-flex align-items-end">
-                                <button id="filterButton" class="btn btn-primary">Filter</button>
+                                <button id="filterButton" class="btn btn-primary"><i class="bi bi-filter-square me-2"></i>Filter</button>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -50,7 +63,6 @@
                 </div>
             </div>
         </div>
-    </div>
 </div>
 
 <script>
@@ -59,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let penilaianTable;
     const baseUrl = 'http://127.0.0.1:8000/api';
 
+    // Token validation and redirection (remains the same)
     if (!token) {
         Swal.fire({
             icon: 'error',
@@ -71,18 +84,26 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-    // Set default filter to current month
+    // Fungsi untuk membuat format periode (remains the same)
+    function formatPeriode(date) {
+        return date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0');
+    }
+
+    // Set default filter ke bulan saat ini (remains the same)
     const currentDate = new Date();
-    const currentMonth = currentDate.getFullYear() + '-' + String(currentDate.getMonth() + 1).padStart(2, '0');
+    const currentMonth = formatPeriode(currentDate);
     document.getElementById('periodeFilter').value = currentMonth;
 
-    // Inisialisasi DataTable
+    // Inisialisasi DataTable (with updated column rendering)
     penilaianTable = $('#penilaian-kinerja-table').DataTable({
         processing: true,
         serverSide: false,
         pageLength: 10,
         columns: [
-            { data: null, render: (data, type, row, meta) => meta.row + 1 },
+            { 
+                data: null, 
+                render: (data, type, row, meta) => meta.row + 1 
+            },
             { 
                 data: 'pegawai',
                 render: function(data, type, row) {
@@ -158,7 +179,6 @@ document.addEventListener('DOMContentLoaded', function() {
                                             <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                             <path d="M20.708 6.23975H3.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                             <path d="M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                       
                                         </svg>
                                     </span>
                                 </a>
@@ -203,10 +223,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-        // Fungsi untuk mengambil data dari API
-        async function fetchData(periode = '') {
+    // Updated fetchData function to handle all employees
+    async function fetchData(periode = '') {
         try {
-            // 1. Fetch semua pegawai
+            // First, fetch all employees
             const pegawaiResponse = await fetch(`${baseUrl}/pegawai`, {
                 method: 'GET',
                 headers: {
@@ -214,19 +234,20 @@ document.addEventListener('DOMContentLoaded', function() {
                     'Accept': 'application/json',
                 }
             });
-            
+
             if (!pegawaiResponse.ok) {
-                throw new Error(`HTTP error! status: ${pegawaiResponse.status}`);
-            }
-            
-            const pegawaiData = await pegawaiResponse.json();
-            
-            // 2. Fetch penilaian kinerja untuk periode tertentu
-            let url = `${baseUrl}/penilaian-kinerja`;
-            if (periode) {
-                url += `?periode=${periode}`;
+                throw new Error('Gagal mengambil data pegawai');
             }
 
+            const pegawaiData = await pegawaiResponse.json();
+
+            // Construct URL with period parameter for performance assessments
+            const url = new URL(`${baseUrl}/penilaian-kinerja`);
+            if (periode) {
+                url.searchParams.append('periode', periode);
+            }
+
+            // Fetch performance assessments
             const penilaianResponse = await fetch(url, {
                 method: 'GET',
                 headers: {
@@ -234,37 +255,47 @@ document.addEventListener('DOMContentLoaded', function() {
                     'Accept': 'application/json',
                 }
             });
-            
-            if (!penilaianResponse.ok) {
-                throw new Error(`HTTP error! status: ${penilaianResponse.status}`);
+
+            let penilaianData = [];
+            if (penilaianResponse.ok) {
+                const penilaianResult = await penilaianResponse.json();
+                penilaianData = penilaianResult.data || [];
             }
-            
-            const penilaianData = await penilaianResponse.json();
-            
-            // 3. Gabungkan data pegawai dengan penilaian
+
+            // Merge employees with their performance assessments
             const combinedData = pegawaiData.data.map(pegawai => {
-                const penilaian = penilaianData.data.find(p => 
-                    p.pegawai && p.pegawai.id_pegawai === pegawai.id_pegawai
+                // Find matching performance assessment for this employee
+                const penilaian = penilaianData.find(
+                    p => p.pegawai && p.pegawai.id_pegawai === pegawai.id_pegawai
                 );
-                
+
                 return {
                     pegawai: pegawai,
-                    periode_penilaian: penilaian ? penilaian.periode_penilaian : periode,
-                    penilaian_k_p_i: penilaian ? penilaian.penilaian_k_p_i : null,
-                    penilaian_kompetensi: penilaian ? penilaian.penilaian_kompetensi : null,
-                    penilaian_core_values: penilaian ? penilaian.penilaian_core_values : null,
-                    nilai_akhir: penilaian ? penilaian.nilai_akhir : null,
-                    predikat: penilaian ? penilaian.predikat : null,
-                    id_penilaian_kinerja: penilaian ? penilaian.id_penilaian_kinerja : null
+                    periode_penilaian: penilaian?.periode_penilaian || periode,
+                    penilaian_k_p_i: penilaian?.penilaian_k_p_i,
+                    penilaian_kompetensi: penilaian?.penilaian_kompetensi,
+                    penilaian_core_values: penilaian?.penilaian_core_values,
+                    nilai_akhir: penilaian?.nilai_akhir,
+                    predikat: penilaian?.predikat,
+                    id_penilaian_kinerja: penilaian?.id_penilaian_kinerja
                 };
             });
 
             return combinedData;
+
         } catch (error) {
-            console.error('Fetch error:', error);
-            throw error;
+            console.error('Error fetching data:', error);
+            
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Gagal memuat data: ' + error.message
+            });
+
+            return []; // Return empty array if fetch fails
         }
     }
+
 
     // Fungsi untuk memuat data ke tabel tetap sama
     function loadTableData(data) {

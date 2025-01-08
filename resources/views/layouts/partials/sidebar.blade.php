@@ -1,7 +1,7 @@
 
 <aside class="sidebar sidebar-default sidebar-white sidebar-base navs-rounded-all on-resize ">
     <div class="sidebar-header d-flex align-items-center justify-content-start">
-        <a href="{{ route('dashboard.index') }}" class="navbar-brand">
+        <a href="{{ route('dashboard.admin') }}" class="navbar-brand">
             <!--Logo start-->
             <!--logo End-->
             
@@ -15,8 +15,6 @@
                 </div>
             </div>
             <!--logo End-->
-            
-            
             
             
             <h4 class="logo-title">HRMS SEB</h4>
@@ -36,12 +34,12 @@
             <ul class="navbar-nav iq-main-menu" id="sidebar-menu">
                 <li class="nav-item static-item">
                     <a class="nav-link static-item disabled" href="#" tabindex="-1">
-                        <span class="default-icon">Home</span>
+                        <span class="default-icon">Dashboard</span>
                         <span class="mini-icon">-</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="../dashboard/index.html">
+                    <a class="nav-link active" aria-current="page" href="{{ route('dashboard.admin') }}">
                         <i class="icon">
                             <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-20">
                                 <path opacity="0.4" d="M16.0756 2H19.4616C20.8639 2 22.0001 3.14585 22.0001 4.55996V7.97452C22.0001 9.38864 20.8639 10.5345 19.4616 10.5345H16.0756C14.6734 10.5345 13.5371 9.38864 13.5371 7.97452V4.55996C13.5371 3.14585 14.6734 2 16.0756 2Z" fill="currentColor"></path>
@@ -55,7 +53,7 @@
                 <li><hr class="hr-horizontal"></li>
                 <li class="nav-item static-item">
                     <a class="nav-link static-item disabled" href="#" tabindex="-1">
-                        <span class="default-icon">Pages</span>
+                        <span class="default-icon">Admin</span>
                         <span class="mini-icon">-</span>
                     </a>
                 </li>
@@ -76,7 +74,7 @@
                     </a>
                     <ul class="sub-nav collapse" id="sidebar-special" data-bs-parent="#sidebar-menu">
                         <li class="nav-item">
-                            <a class="nav-link " href="../dashboard/special-pages/billing.html">
+                            <a class="nav-link" href="{{ route('master_data.divisi.index') }}">
                               <i class="icon">
                                     <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
                                         <g>
@@ -89,7 +87,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " href="../dashboard/special-pages/calender.html">
+                            <a class="nav-link" href="{{ route('master_data.jabatan.index') }}">
                                 <i class="icon">
                                     <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
                                         <g>
@@ -101,8 +99,8 @@
                                 <span class="item-name">Jabatan</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link " href="../dashboard/special-pages/kanban.html">
+                        {{-- <li class="nav-item">
+                            <a class="nav-link" href="{{ route('master_data.role.index') }}">
                                <i class="icon">
                                     <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
                                         <g>
@@ -113,7 +111,7 @@
                                <i class="sidenav-mini-icon"> K </i>
                                <span class="item-name">Role</span>
                             </a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </li>
                 <li class="nav-item">
@@ -146,7 +144,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../dashboard/auth/sign-up.html">
+                            <a class="nav-link" href="{{ route('pelamar.index') }}">
                                 <i class="icon">
                                     <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
                                         <g>
@@ -180,6 +178,13 @@
                         </i> --}}
                     </a>
                 </li>
+                <li><hr class="hr-horizontal"></li>
+                <li class="nav-item static-item">
+                    <a class="nav-link static-item disabled" href="#" tabindex="-1">
+                        <span class="default-icon">HRD</span>
+                        <span class="mini-icon">-</span>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="collapse" href="#sidebar-maps" role="button" aria-expanded="false" aria-controls="sidebar-maps">
                         <i class="icon">
@@ -188,7 +193,7 @@
                                 <ellipse opacity="0.4" cx="12" cy="21" rx="5" ry="1" fill="currentColor"></ellipse>
                             </svg>
                         </i>
-                        <span class="item-name">Cuti</span>
+                        <span class="item-name">Manajmen Cuti</span>
                         <i class="right-icon">
                             <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -349,6 +354,86 @@
                     </ul>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#penggajian" role="button" aria-expanded="false" aria-controls="gaji">
+                        <i class="icon">
+                            <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path opacity="0.4" d="M21.25 13.4764C20.429 13.4764 19.761 12.8145 19.761 12.001C19.761 11.1865 20.429 10.5246 21.25 10.5246C21.449 10.5246 21.64 10.4463 21.78 10.3076C21.921 10.1679 22 9.97864 22 9.78146L21.999 7.10415C21.999 4.84102 20.14 3 17.856 3H6.144C3.86 3 2.001 4.84102 2.001 7.10415L2 9.86766C2 10.0648 2.079 10.2541 2.22 10.3938C2.36 10.5325 2.551 10.6108 2.75 10.6108C3.599 10.6108 4.239 11.2083 4.239 12.001C4.239 12.8145 3.571 13.4764 2.75 13.4764C2.336 13.4764 2 13.8093 2 14.2195V16.8949C2 19.158 3.858 21 6.143 21H17.857C20.142 21 22 19.158 22 16.8949V14.2195C22 13.8093 21.664 13.4764 21.25 13.4764Z" fill="currentColor"></path>
+                                <path d="M15.4303 11.5887L14.2513 12.7367L14.5303 14.3597C14.5783 14.6407 14.4653 14.9177 14.2343 15.0837C14.0053 15.2517 13.7063 15.2727 13.4543 15.1387L11.9993 14.3737L10.5413 15.1397C10.4333 15.1967 10.3153 15.2267 10.1983 15.2267C10.0453 15.2267 9.89434 15.1787 9.76434 15.0847C9.53434 14.9177 9.42134 14.6407 9.46934 14.3597L9.74734 12.7367L8.56834 11.5887C8.36434 11.3907 8.29334 11.0997 8.38134 10.8287C8.47034 10.5587 8.70034 10.3667 8.98134 10.3267L10.6073 10.0897L11.3363 8.61268C11.4633 8.35868 11.7173 8.20068 11.9993 8.20068H12.0013C12.2843 8.20168 12.5383 8.35968 12.6633 8.61368L13.3923 10.0897L15.0213 10.3277C15.2993 10.3667 15.5293 10.5587 15.6173 10.8287C15.7063 11.0997 15.6353 11.3907 15.4303 11.5887Z" fill="currentColor"></path>
+                            </svg>
+                        </i>
+                        <span class="item-name">Penggajian</span>
+                        <i class="right-icon">
+                            <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </i>
+                    </a>
+                    <ul class="sub-nav collapse" id="penggajian" data-bs-parent="#sidebar-menu">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('komponen_gaji.index') }}" role="button">
+                                <i class="icon">
+                                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                        <g>
+                                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                        </g>
+                                    </svg>
+                                </i>
+                                <span class="item-name">Komponen Gaji</span>
+                            </a>
+                            {{-- <ul class="sub-nav collapse" id="komponen-penilaian">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('komponen-kpi.index') }}">
+                                        <i class="icon">
+                                            <svg class="icon-8" xmlns="http://www.w3.org/2000/svg" width="8" viewBox="0 0 24 24" fill="currentColor">
+                                                <g>
+                                                    <circle cx="12" cy="12" r="4" fill="currentColor"></circle>
+                                                </g>
+                                            </svg>
+                                        </i>
+                                        <span class="item-name">KPI</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('komponen-kompetensi.index') }}">
+                                        <i class="icon">
+                                            <svg class="icon-8" xmlns="http://www.w3.org/2000/svg" width="8" viewBox="0 0 24 24" fill="currentColor">
+                                                <g>
+                                                    <circle cx="12" cy="12" r="4" fill="currentColor"></circle>
+                                                </g>
+                                            </svg>
+                                        </i>
+                                        <span class="item-name">Kompetensi</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('komponen-core-values.index') }}">
+                                        <i class="icon">
+                                            <svg class="icon-8" xmlns="http://www.w3.org/2000/svg" width="8" viewBox="0 0 24 24" fill="currentColor">
+                                                <g>
+                                                    <circle cx="12" cy="12" r="4" fill="currentColor"></circle>
+                                                </g>
+                                            </svg>
+                                        </i>
+                                        <span class="item-name">Core Values</span>
+                                    </a>
+                                </li>
+                            </ul> --}}
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('gaji.index') }}">
+                                <i class="icon">
+                                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                        <g>
+                                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                        </g>
+                                    </svg>
+                                </i>
+                                <span class="item-name">List Penggajian</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {{-- <li class="nav-item">
                     <a class="nav-link" href="{{ route('gaji.index') }}">
                         <i class="icon">
                             <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -356,13 +441,13 @@
                                 <path d="M15.4303 11.5887L14.2513 12.7367L14.5303 14.3597C14.5783 14.6407 14.4653 14.9177 14.2343 15.0837C14.0053 15.2517 13.7063 15.2727 13.4543 15.1387L11.9993 14.3737L10.5413 15.1397C10.4333 15.1967 10.3153 15.2267 10.1983 15.2267C10.0453 15.2267 9.89434 15.1787 9.76434 15.0847C9.53434 14.9177 9.42134 14.6407 9.46934 14.3597L9.74734 12.7367L8.56834 11.5887C8.36434 11.3907 8.29334 11.0997 8.38134 10.8287C8.47034 10.5587 8.70034 10.3667 8.98134 10.3267L10.6073 10.0897L11.3363 8.61268C11.4633 8.35868 11.7173 8.20068 11.9993 8.20068H12.0013C12.2843 8.20168 12.5383 8.35968 12.6633 8.61368L13.3923 10.0897L15.0213 10.3277C15.2993 10.3667 15.5293 10.5587 15.6173 10.8287C15.7063 11.0997 15.6353 11.3907 15.4303 11.5887Z" fill="currentColor"></path>
                             </svg>
                         </i>
-                        <span class="item-name">Gaji</span>
+                        <span class="item-name">Gaji</span> --}}
                         {{-- <i class="right-icon">
                             <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                             </svg>
                         </i> --}}
-                    </a>
+                    {{-- </a> --}}
                     {{-- <ul class="sub-nav collapse" id="sidebar-widget" data-bs-parent="#sidebar-menu">
                         <li class="nav-item">
                             <a class="nav-link " href="../dashboard/widget/widgetbasic.html">
@@ -404,7 +489,7 @@
                             </a>
                         </li>
                     </ul>--}}
-                </li> 
+                {{-- </li>  --}}
                 
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="collapse" href="#sidebar-form" role="button" aria-expanded="false" aria-controls="sidebar-form">
@@ -423,7 +508,20 @@
                     </a>
                     <ul class="sub-nav collapse" id="sidebar-form" data-bs-parent="#sidebar-menu">
                         <li class="nav-item">
-                            <a class="nav-link " href="../dashboard/form/form-element.html">
+                            <a class="nav-link" href="{{ route('landing.index') }}">
+                                <i class="icon">
+                                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                        <g>
+                                        <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                        </g>
+                                    </svg>
+                                </i>
+                               <i class="sidenav-mini-icon"> E </i>
+                               <span class="item-name">Landing Page</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('rekrutmen.lowongan.index') }}">
                                <i class="icon">
                                     <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
                                         <g>
@@ -436,7 +534,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " href="../dashboard/form/form-wizard.html">
+                            <a class="nav-link" href="{{ route('rekrutmen.lamaran.index') }}">
                                 <i class="icon">
                                     <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
                                         <g>
@@ -449,7 +547,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " href="../dashboard/form/form-validation.html">
+                            <a class="nav-link" href="{{ route('rekrutmen.wawancara.index') }}">
                                 <i class="icon">
                                     <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
                                         <g>
@@ -462,7 +560,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " href="../dashboard/form/form-validation.html">
+                            <a class="nav-link" href="{{ route('rekrutmen.hasil_seleksi.index') }}">
                                 <i class="icon">
                                     <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
                                         <g>
@@ -480,7 +578,7 @@
                 <li><hr class="hr-horizontal"></li>
                 <li class="nav-item static-item">
                     <a class="nav-link static-item disabled" href="#" tabindex="-1">
-                        <span class="default-icon">Elements</span>
+                        <span class="default-icon">Laporan Kepegawaian</span>
                         <span class="mini-icon">-</span>
                     </a>
                 </li>
@@ -539,6 +637,7 @@
                         </li>
                     </ul>
                 </li> --}}
+                
                 <li class="nav-item mb-5">
                     <a class="nav-link" data-bs-toggle="collapse" href="#sidebar-icons" role="button" aria-expanded="false" aria-controls="sidebar-icons">
                         <i class="icon">
@@ -547,16 +646,16 @@
                                 <rect opacity="0.4" x="8" y="1" width="5" height="5" rx="2.5" fill="currentColor"/>
                             </svg>
                         </i>
-                        <span class="item-name">Info</span>
-                        {{-- <i class="right-icon">
+                        <span class="item-name">Laporan</span>
+                        <i class="right-icon">
                             <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                             </svg>
-                        </i> --}}
+                        </i>
                     </a>
-                    {{-- <ul class="sub-nav collapse" id="sidebar-icons" data-bs-parent="#sidebar-menu">
+                    <ul class="sub-nav collapse" id="sidebar-icons" data-bs-parent="#sidebar-menu">
                         <li class="nav-item">
-                            <a class="nav-link " href="../dashboard/icons/solid.html">
+                            <a class="nav-link " href="{{ route('laporan.pegawai.index') }}">
                                 <i class="icon">
                                     <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
                                         <g>
@@ -565,11 +664,11 @@
                                     </svg>
                                 </i>
                                 <i class="sidenav-mini-icon"> S </i>
-                                 <span class="item-name">Solid</span>
+                                 <span class="item-name">Pegawai</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " href="../dashboard/icons/outline.html">
+                            <a class="nav-link " href="{{ route('laporan.cuti.index') }}">
                                 <i class="icon">
                                     <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
                                         <g>
@@ -578,7 +677,33 @@
                                     </svg>
                                 </i>
                                 <i class="sidenav-mini-icon"> O </i>
-                                 <span class="item-name">Outlined</span></a>
+                                 <span class="item-name">Cuti</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " href="{{ route('laporan.penilaian_kinerja.index') }}">
+                               <i class="icon">
+                                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                        <g>
+                                        <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                        </g>
+                                    </svg>
+                                </i>
+                                <i class="sidenav-mini-icon"> D </i>
+                                 <span class="item-name">Penilaian Kinerja</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " href="{{ route('laporan.penggajian.index') }}">
+                               <i class="icon">
+                                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                        <g>
+                                        <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                        </g>
+                                    </svg>
+                                </i>
+                                <i class="sidenav-mini-icon"> D </i>
+                                 <span class="item-name">Penggajian</span>
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link " href="../dashboard/icons/dual-tone.html">
@@ -590,16 +715,18 @@
                                     </svg>
                                 </i>
                                 <i class="sidenav-mini-icon"> D </i>
-                                 <span class="item-name">Dual Tone</span>
+                                 <span class="item-name">Rekrutmen</span>
                             </a>
                         </li>
                     </ul>
                 </li>
-            </ul> --}}
-            <!-- Sidebar Menu End -->        </div>
+            </ul>
+            <!-- Sidebar Menu End -->        
+        </div>
     </div>
     <div class="sidebar-footer"></div>
-</aside>    <main class="main-content">
+</aside>  
+  <main class="main-content">
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const sidebarToggle = document.querySelector('[data-toggle="sidebar"]');

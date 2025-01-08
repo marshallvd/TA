@@ -19,7 +19,8 @@ class LowonganController extends Controller
         return response()->json([
             'status' => 'success',
             'data' => $lowongan
-        ]);
+        ])->header('Access-Control-Allow-Origin', '*')
+          ->header('Access-Control-Allow-Methods', 'GET');
     }
 
     public function store(Request $request)
@@ -62,6 +63,7 @@ class LowonganController extends Controller
 
     public function show($id)
     {
+        \Log::info("Fetching lowongan with ID: " . $id); // Tambahkan log ini
         try {
             $lowongan = LowonganPekerjaan::with(['jabatan', 'divisi'])->findOrFail($id);
             
@@ -70,6 +72,7 @@ class LowonganController extends Controller
                 'data' => $lowongan
             ]);
         } catch (\Exception $e) {
+            \Log::error("Error fetching lowongan: " . $e->getMessage()); // Tambahkan log ini
             return response()->json([
                 'status' => 'error',
                 'message' => 'Lowongan pekerjaan tidak ditemukan'
@@ -133,6 +136,23 @@ class LowonganController extends Controller
                 'message' => 'Gagal menghapus lowongan pekerjaan',
                 'error' => $e->getMessage()
             ], 500);
+        }
+    }
+
+    public function edit($id)
+    {
+        try {
+            $lowongan = LowonganPekerjaan::with(['jabatan', 'divisi'])->findOrFail($id);
+            
+            return response()->json([
+                'status' => 'success',
+                'data' => $lowongan
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Lowongan pekerjaan tidak ditemukan'
+            ], 404);
         }
     }
 }

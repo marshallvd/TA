@@ -48,4 +48,8 @@ class LowonganPekerjaan extends Model
     {
         return $this->hasMany(LamaranPekerjaan::class, 'id_lowongan_pekerjaan', 'id_lowongan_pekerjaan');
     }
+    public function lamaranPekerjaan()
+    {
+        return $this->hasMany(LamaranPekerjaan::class, 'id_lowongan_pekerjaan', 'id_lowongan_pekerjaan');
+    }
 }

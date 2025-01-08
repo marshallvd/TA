@@ -16,6 +16,8 @@ class Jabatan extends Model
     protected $fillable = [
         'nama_jabatan',
         'id_divisi',
+        'gaji_pokok',
+        'tarif_lembur_per_hari'
     ];
 
     // Relasi dengan Divisi

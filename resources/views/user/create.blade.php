@@ -7,15 +7,30 @@
 
 @section('content')
 <div class="container-fluid content-inner mt-n5 py-0">
-    <div class="row justify-content-center">
-        <div class="col-xl-9 col-lg-8">
+    <div class="container-fluid content-inner mt-n5 py-0">
+        {{-- Header Card --}}
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <b><h2 class="card-title mb-1">Manajemen Data Pegawai</h2></b>
+                        <p class="card-text text-muted">Human Resource Management System SEB</p>
+                    </div>
+                    <div>
+                        <i class="bi bi-person-lines-fill text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <div class="header-title">
                         <h4 class="card-title">Tambah User Baru</h4>
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body position-relative" style="min-height: 300px;">
                     <div class="new-user-info">
                         <form id="userForm">
                             <div class="row">
@@ -48,8 +63,20 @@
                                     </select>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary mt-3">Simpan Data User</button>
-                            <a type="button" class="btn btn-secondary mt-3" href="/pegawai">Tutup</a>
+                            <!-- Updated button section -->
+                            <div class="row mt-3 position-absolute bottom-0 end-0 m-4">
+                                <div class="col-12">
+                                    <a type="button" class="btn btn-danger me-2" href="/pegawai">
+                                        <i class="bi bi-arrow-left me-2"></i>Kembali
+                                    </a>
+                                    <button type="reset" class="btn btn-warning me-2">
+                                        <i class="bi bi-arrow-clockwise me-2"></i>Reset
+                                    </button>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="bi bi-save me-2"></i>Simpan
+                                    </button>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -57,6 +84,10 @@
         </div>
     </div>
 </div>
+
+@push('styles')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+@endpush
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -68,8 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const togglePassword = document.getElementById('togglePassword');
     const toggleIcon = document.getElementById('toggleIcon');
 
-    console.log('ID Pegawai:', pegawaiId); // Debug: Check ID Pegawai
-
+    console.log('ID Pegawai:', pegawaiId);
 
     // Toggle password visibility
     togglePassword.addEventListener('click', function() {
@@ -110,7 +140,6 @@ document.addEventListener('DOMContentLoaded', function() {
     .catch(error => console.error('Error fetching roles:', error));
 
     // Fetch pegawai data
-    // Fetch pegawai data
     if (pegawaiId) {
         fetch(`http://127.0.0.1:8000/api/pegawai/${pegawaiId}`, {
             headers: {
@@ -119,14 +148,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         })
         .then(response => {
-            console.log('Response Status:', response.status); // Debug: Check response status
+            console.log('Response Status:', response.status);
             return response.json();
         })
         .then(data => {
-            console.log('Pegawai Data:', data); // Debug: Check received data
-            if (data && data.data) { // Periksa apakah data ada dalam property 'data'
+            console.log('Pegawai Data:', data);
+            if (data && data.data) {
                 emailInput.value = data.data.email;
-            } else if (data && data.email) { // Atau langsung dalam objek
+            } else if (data && data.email) {
                 emailInput.value = data.email;
             } else {
                 console.error('Format data tidak sesuai:', data);
@@ -144,57 +173,57 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Form submission
     document.getElementById('userForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+        e.preventDefault();
 
-    const formData = new FormData(this);
-    const data = Object.fromEntries(formData.entries());
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
 
-    // Show loading
-    Swal.fire({
-        title: 'Mohon Tunggu',
-        text: 'Sedang menyimpan data...',
-        allowOutsideClick: false,
-        didOpen: () => {
-            Swal.showLoading();
-        }
-    });
-
-    fetch('http://127.0.0.1:8000/api/users', {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(result => {
-        if (result.status === 'success') {
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: result.message,
-                showConfirmButton: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = '/pegawai';
-                }
-            });
-        } else {
-            throw new Error(result.message || 'Terjadi kesalahan saat menyimpan data');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
+        // Show loading
         Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: error.message || 'Terjadi kesalahan saat menyimpan data',
-            showConfirmButton: true
+            title: 'Mohon Tunggu',
+            text: 'Sedang menyimpan data...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        fetch('http://127.0.0.1:8000/api/users', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.status === 'success') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: result.message,
+                    showConfirmButton: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/pegawai';
+                    }
+                });
+            } else {
+                throw new Error(result.message || 'Terjadi kesalahan saat menyimpan data');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error.message || 'Terjadi kesalahan saat menyimpan data',
+                showConfirmButton: true
+            });
         });
     });
-});
 });
 </script>
 @endsection

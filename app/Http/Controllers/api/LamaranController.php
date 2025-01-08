@@ -15,7 +15,7 @@ class LamaranController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:pelamar'); // Middleware untuk melindungi route
+        // $this->middleware('auth:pelamar'); // Middleware untuk melindungi route
     }
 
     // Mendapatkan semua lamaran dari pelamar yang sedang login
@@ -72,9 +72,8 @@ class LamaranController extends Controller
     public function show($id)
     {
         try {
-            $pelamar = Auth::guard('pelamar')->user();
+
             $lamaran = LamaranPekerjaan::with(['lowonganPekerjaan'])
-                ->where('id_pelamar', $pelamar->id_pelamar)
                 ->where('id_lamaran_pekerjaan', $id)
                 ->first();
 

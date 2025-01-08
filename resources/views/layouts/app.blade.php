@@ -61,4 +61,6 @@
 
         <!-- App Script -->
         {{-- <script src="{{ asset('assets/js/hope-ui.js') }}" defer></script> --}}
+
+        
 </body>

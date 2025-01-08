@@ -7,17 +7,32 @@
 
 @section('content')
 <div class="container-fluid content-inner mt-n5 py-0">
+    {{-- Header Card --}}
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <b><h2 class="card-title mb-1">Manajemen Jatah Cuti</h2></b>
+                    <p class="card-text text-muted">Human Resource Management System SEB</p>
+                </div>
+                <div>
+                    <i class="bi bi-calendar-range text-primary" style="font-size: 3rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Employee Information Card --}}
     <div class="row mb-4">
         <div class="col-12">
             <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="card-title mb-0">Informasi Pegawai</h4>
-                    <button type="button" class="btn btn-danger btn-sm" id="btnBack">
-                        <i class="fas fa-arrow-left me-1"></i> Kembali
-                    </button>
+                <div class="card-header d-flex justify-content-between">
+                    <div class="header-title">
+                        <h4 class="card-title mb-0">Informasi Pegawai</h4>
+                    </div>
                 </div>
                 <div class="card-body">
-                    <div class="row small" id="pegawaiDetails">
+                    <div class="row" id="pegawaiDetails">
                         <div class="col-md-3">
                             <p class="mb-1"><strong>Nama:</strong></p>
                             <p class="text-muted" id="pegawaiName">-</p>
@@ -40,59 +55,150 @@
         </div>
     </div>
 
+    {{-- Main Form Card --}}
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-12">
             <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <div class="header-title">
+                        <h4 class="card-title">Form Pengajuan Jatah Cuti</h4>
+                    </div>
+                </div>
                 <div class="card-body">
-                    <form id="jatahCutiForm" method="POST" action="{{ route('jatah_cuti.store') }}">
-                        @csrf
-                        <div class="mb-3">
-                            <label for="id_pegawai" class="form-label">ID Pegawai</label>
-                            <input type="number" class="form-control" id="id_pegawai" name="id_pegawai" required>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="tahun" class="form-label">Tahun</label>
-                            <input type="number" class="form-control" id="tahun" name="tahun" value="{{ date('Y') }}" required>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="jatah_cuti_umum" class="form-label">Jatah Cuti Umum</label>
-                            <input type="number" class="form-control" id="jatah_cuti_umum" name="jatah_cuti_umum" value="12" required>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="jatah_cuti_menikah" class="form-label">Jatah Cuti Menikah</label>
-                            <input type="number" class="form-control" id="jatah_cuti_menikah" name="jatah_cuti_menikah" value="3" required>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="jatah_cuti_melahirkan" class="form-label">Jatah Cuti Melahirkan</label>
-                            <input type="number" class="form-control" id="jatah_cuti_melahirkan" name="jatah_cuti_melahirkan" value="120" required>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-success">Ajukan Jatah Cuti</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+                    <div class="new-user-info">
+                        <form id="jatahCutiForm" class="needs-validation" novalidate>
+                            <div class="row">
+                                <div class="form-group col-md-6 mb-3">
+                                    <label class="form-label" for="id_pegawai">ID Pegawai <span class="text-danger">*</span></label>
+                                    <input type="number" 
+                                           class="form-control" 
+                                           id="id_pegawai" 
+                                           name="id_pegawai" 
+                                           required 
+                                           readonly>
+                                    <div class="invalid-feedback">
+                                        ID Pegawai tidak boleh kosong
+                                    </div>
+                                </div>
 
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0 small">Panduan Pengajuan Jatah Cuti</h5>
-                </div>
-                <div class="card-body p-2">
-                    <p class="small">Silakan isi formulir di sebelah kiri untuk mengajukan jatah cuti. Pastikan semua informasi sudah benar.</p>
-                    <ul class="small">
-                        <li>Tahun harus sesuai dengan tahun pengajuan.</li>
-                        <li>Jatah cuti harus lebih besar dari 0.</li>
-                    </ul>
+                                <div class="form-group col-md-6 mb-3">
+                                    <label class="form-label" for="tahun">Tahun <span class="text-danger">*</span></label>
+                                    <input type="number" 
+                                           class="form-control" 
+                                           id="tahun" 
+                                           name="tahun" 
+                                           required 
+                                           min="2000" 
+                                           max="2100">
+                                    <div class="invalid-feedback">
+                                        Tahun tidak valid
+                                    </div>
+                                    <small class="text-muted">Masukkan tahun antara 2000-2100</small>
+                                </div>
+
+                                <div class="form-group col-md-4 mb-3">
+                                    <label class="form-label" for="jatah_cuti_umum">Jatah Cuti Umum <span class="text-danger">*</span></label>
+                                    <input type="number" 
+                                           class="form-control" 
+                                           id="jatah_cuti_umum" 
+                                           name="jatah_cuti_umum" 
+                                           required 
+                                           min="0" 
+                                           value="12">
+                                    <div class="invalid-feedback">
+                                        Jatah cuti umum tidak valid
+                                    </div>
+                                    <small class="text-muted">Minimal 0 hari</small>
+                                </div>
+
+                                <div class="form-group col-md-4 mb-3">
+                                    <label class="form-label" for="jatah_cuti_menikah">Jatah Cuti Menikah <span class="text-danger">*</span></label>
+                                    <input type="number" 
+                                           class="form-control" 
+                                           id="jatah_cuti_menikah" 
+                                           name="jatah_cuti_menikah" 
+                                           required 
+                                           min="0" 
+                                           value="3">
+                                    <div class="invalid-feedback">
+                                        Jatah cuti menikah tidak valid
+                                    </div>
+                                    <small class="text-muted">Minimal 0 hari</small>
+                                </div>
+
+                                <div class="form-group col-md-4 mb-3">
+                                    <label class="form-label" for="jatah_cuti_melahirkan">Jatah Cuti Melahirkan <span class="text-danger">*</span></label>
+                                    <input type="number" 
+                                           class="form-control" 
+                                           id="jatah_cuti_melahirkan" 
+                                           name="jatah_cuti_melahirkan" 
+                                           required 
+                                           min="0" 
+                                           value="120">
+                                    <div class="invalid-feedback">
+                                        Jatah cuti melahirkan tidak valid
+                                    </div>
+                                    <small class="text-muted">Minimal 0 hari</small>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4">
+                                <div class="col-12 text-end">
+                                    <button type="button" class="btn btn-danger me-2" id="btnBack">
+                                        <i class="bi bi-arrow-left me-2"></i>Kembali
+                                    </button>
+                                    <button type="button" id="resetButton" class="btn btn-warning me-2">
+                                        <i class="bi bi-arrow-clockwise me-2"></i>Reset
+                                    </button>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="bi bi-save me-2"></i>Simpan
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    {{-- Information Alert --}}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="alert alert-info" role="alert">
+                <h4 class="alert-heading"><i class="bi bi-info-circle me-2"></i>Informasi Jatah Cuti</h4>
+                <p class="mb-0">Berikut adalah ketentuan jatah cuti yang berlaku:</p>
+                <ul class="mt-2 mb-0">
+                    <li>Cuti Umum: Diberikan kepada seluruh karyawan untuk keperluan pribadi</li>
+                    <li>Cuti Menikah: Khusus diberikan saat karyawan melangsungkan pernikahan</li>
+                    <li>Cuti Melahirkan: Diberikan kepada karyawati yang akan melahirkan</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
+
+@push('css')
+<style>
+    .form-label {
+        font-weight: 500;
+    }
+    
+    .invalid-feedback {
+        font-size: 0.875em;
+    }
+    
+    .was-validated .form-control:invalid,
+    .form-control.is-invalid {
+        border-color: #dc3545;
+    }
+
+    .alert-info {
+        background-color: #f8f9fa;
+        border-left: 4px solid #0dcaf0;
+    }
+</style>
+@endpush
 
 @push('scripts')
 <script>

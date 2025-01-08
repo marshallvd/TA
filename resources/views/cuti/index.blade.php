@@ -7,7 +7,20 @@
 
 @section('content')
 <div class="container-fluid content-inner mt-n5 py-0">
-    <div>
+        {{-- Header Card --}}
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <b><h2 class="card-title mb-1">Manajemen Pengajuan Cuti</h2></b>
+                        <p class="card-text text-muted">Human Resource Management System SEB</p>
+                    </div>
+                    <div>
+                        <i class="bi bi-calendar-week text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
@@ -17,7 +30,7 @@
                         </div>
                         <div>
                             <button type="button" class="btn btn-primary" id="tambahCutiBtn">
-                                <i class="fas fa-plus me-2"></i>Tambah Pengajuan Cuti
+                                <i class="bi bi-plus-square me-2"></i>Tambah Pengajuan Cuti
                             </button>
                         </div>
                     </div>
@@ -28,7 +41,7 @@
                                 <input type="month" id="periodeFilter" class="form-control">
                             </div>
                             <div class="col-md-2 d-flex align-items-end">
-                                <button id="filterButton" class="btn btn-primary">Filter</button>
+                                <button id="filterButton" class="btn btn-primary"><i class="bi bi-filter-square me-2"></i>Filter</button>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -52,7 +65,7 @@
                 </div>
             </div>
         </div>
-    </div>
+
 </div>
 
 <script>

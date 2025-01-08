@@ -22,73 +22,79 @@ class HasilSeleksiController extends Controller
         ]);
     }
 
-    public function store(Request $request)
-    {
-        try {
-            DB::beginTransaction();
+// app/Http/Controllers/Api/HasilSeleksiController.php
+public function store(Request $request)
+{
+    try {
+        DB::beginTransaction();
 
-            $request->validate([
-                'id_pelamar' => 'required|exists:tb_user_pelamar,id_pelamar',
-                'id_lowongan_pekerjaan' => 'required|exists:tb_lowongan_pekerjaan,id_lowongan_pekerjaan',
-                'status' => 'required|in:lulus,gagal',
-                'catatan' => 'nullable|string'
-            ]);
+        $request->validate([
+            'id_pelamar' => 'required|exists:tb_user_pelamar,id_pelamar',
+            'id_lowongan_pekerjaan' => 'required|exists:tb_lowongan_pekerjaan,id_lowongan_pekerjaan',
+            'id_wawancara' => 'required|exists:tb_wawancara,id_wawancara',
+            'status' => 'required|in:lulus,gagal',
+            'catatan' => 'nullable|string'
+        ]);
 
-            // Cek apakah sudah ada hasil seleksi untuk pelamar ini
-            $existingHasil = HasilSeleksi::where('id_pelamar', $request->id_pelamar)
-                ->where('id_lowongan_pekerjaan', $request->id_lowongan_pekerjaan)
-                ->first();
-
-            if ($existingHasil) {
-                return response()->json([
-                    'status' => 'error',
-                    'pesan' => 'Hasil seleksi untuk pelamar ini sudah ada'
-                ], 422);
-            }
-
-            $hasilSeleksi = HasilSeleksi::create([
-                'id_pelamar' => $request->id_pelamar,
-                'id_lowongan_pekerjaan' => $request->id_lowongan_pekerjaan,
-                'status' => $request->status,
-                'catatan' => $request->catatan,
-                'sudah_dimigrasi' => false // tambahkan field ini di tabel
-            ]);
-
-            // Jika status lulus, migrasi data ke pegawai
-            if ($request->status === 'lulus') {
-                $pegawai = $this->migrasiKePegawai($request->id_pelamar, $request->id_lowongan_pekerjaan);
-                $hasilSeleksi->update(['sudah_dimigrasi' => true]);
-            }
-
-            DB::commit();
-
-            return response()->json([
-                'status' => 'sukses',
-                'pesan' => 'Hasil seleksi berhasil disimpan' . 
-                    ($request->status === 'lulus' ? ' dan data telah dimigrasi ke pegawai' : ''),
-                'data' => $hasilSeleksi
-            ], 201);
-
-        } catch (\Exception $e) {
-            DB::rollback();
+        // Cek apakah sudah ada hasil seleksi untuk wawancara ini
+        $existingHasil = HasilSeleksi::where('id_wawancara', $request->id_wawancara)->first();
+        if ($existingHasil) {
             return response()->json([
                 'status' => 'error',
-                'pesan' => 'Terjadi kesalahan: ' . $e->getMessage()
-            ], 500);
+                'pesan' => 'Hasil seleksi untuk wawancara ini sudah ada'
+            ], 422);
         }
-    }
 
+        $hasilSeleksi = HasilSeleksi::create([
+            'id_pelamar' => $request->id_pelamar,
+            'id_lowongan_pekerjaan' => $request->id_lowongan_pekerjaan,
+            'id_wawancara' => $request->id_wawancara,
+            'status' => $request->status,
+            'catatan' => $request->catatan,
+            'sudah_dimigrasi' => false
+        ]);
 
-    public function show($id)
-    {
-        $hasilSeleksi = HasilSeleksi::with(['pelamar', 'lowonganPekerjaan'])
-            ->findOrFail($id);
+        // Proses migrasi ke pegawai jika lulus (sama seperti sebelumnya)
+        if ($request->status === 'lulus') {
+            $pegawai = $this->migrasiKePegawai($request->id_pelamar, $request->id_lowongan_pekerjaan);
+            $hasilSeleksi->update(['sudah_dimigrasi' => true]);
+        }
+
+        DB::commit();
 
         return response()->json([
             'status' => 'sukses',
+            'pesan' => 'Hasil seleksi berhasil disimpan',
+            'data' => $hasilSeleksi
+        ], 201);
+
+    } catch (\Exception $e) {
+        DB::rollback();
+        return response()->json([
+            'status' => 'error',
+            'pesan' => 'Terjadi kesalahan: ' . $e->getMessage()
+        ], 500);
+    }
+}
+
+
+public function show($id)
+{
+    try {
+        $hasilSeleksi = HasilSeleksi::with(['pelamar', 'lowonganPekerjaan'])
+            ->findOrFail($id);
+    
+        return response()->json([
+            'status' => 'success',
             'data' => $hasilSeleksi
         ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Data hasil seleksi tidak ditemukan'
+        ], 404);
     }
+}
 
 
 

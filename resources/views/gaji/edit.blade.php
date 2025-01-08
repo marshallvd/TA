@@ -1,22 +1,38 @@
-@extends('layouts.app')
 @extends('layouts.master')
 
 @section('title') Edit Gaji @endsection
 
 @section('content')
-
 <div class="container-fluid content-inner mt-n5 py-0">
-    <div class="row mb-4">
+    {{-- Header Card --}}
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <h2 class="card-title mb-1"><b>Manajemen Penggajian</b></h2>
+                    <p class="card-text text-muted">Human Resource Management System SEB</p>
+                </div>
+                <div>
+                    <i class="bi bi-wallet2 text-primary" style="font-size: 3rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Employee Information Card --}}
+    <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="card-title mb-0">Informasi Pegawai</h4>
+                <div class="card-header d-flex justify-content-between">
+                    <div class="header-title">
+                        <h4 class="card-title">Informasi Pegawai</h4>
+                    </div>
                     <button type="button" class="btn btn-danger btn-sm" id="btnBack">
-                        <i class="fas fa-arrow-left me-1"></i> Kembali
+                        <i class="bi bi-arrow-left me-1"></i> Kembali
                     </button>
                 </div>
                 <div class="card-body">
-                    <div class="row small" id="pegawaiDetails">
+                    <div class="row" id="pegawaiDetails">
                         <div class="col-md-3">
                             <p class="mb-1"><strong>Nama:</strong></p>
                             <p class="text-muted" id="pegawaiName">-</p>
@@ -39,82 +55,103 @@
         </div>
     </div>
 
+    {{-- Salary Form and Preview in one row --}}
     <div class="row">
+        {{-- Salary Form --}}
         <div class="col-md-4">
-            <div class="card">
+            <div class="card h-100">
                 <div class="card-header">
                     <h4 class="card-title mb-0">Form Edit Gaji</h4>
                 </div>
                 <div class="card-body">
-                    <form id="editGajiForm">
-                        
+                    <form id="editGajiForm" class="needs-validation" novalidate>
                         <input type="hidden" id="id_pegawai" name="id_pegawai">
                         <input type="hidden" id="divisi_pegawai" name="divisi_pegawai">
                         <input type="hidden" id="id_gaji" name="id_gaji">
 
                         <div class="mb-3">
-                            <label for="periodeView" class="form-label">Periode Gaji (YYYY-MM)</label>
-                            <input type="text" id="periodeView" class="form-control" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label for="jumlah_kehadiran" class="form-label">Jumlah Kehadiran</label>
-                            <input type="number" id="jumlah_kehadiran" name="jumlah_kehadiran" class="form-control" min="0" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="jumlah_hari_lembur" class="form-label">Jumlah Hari Lembur</label>
-                            <input type="number" id="jumlah_hari_lembur" name="jumlah_hari_lembur" class="form-control" min="0" required>
+                            <label for="periodeView" class="form-label">Periode Gaji</label>
+                            <input type="text" id="periodeView" class="form-control bg-light" readonly>
                         </div>
 
-                        <button type="button" class="btn btn-primary" id="updateGaji">Update Gaji</button>
+                        <div class="mb-3">
+                            <label for="predikat" class="form-label">Predikat Penilaian Kinerja</label>
+                            <input type="text" id="predikat" name="predikat" class="form-control bg-light" readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="jumlah_kehadiran" class="form-label">Jumlah Kehadiran <span class="text-danger">*</span></label>
+                            <input type="number" id="jumlah_kehadiran" name="jumlah_kehadiran" class="form-control" min="0" required>
+                            <div class="invalid-feedback">Masukkan jumlah kehadiran</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="jumlah_hari_lembur" class="form-label">Jumlah Hari Lembur <span class="text-danger">*</span></label>
+                            <input type="number" id="jumlah_hari_lembur" name="jumlah_hari_lembur" class="form-control" min="0" required>
+                            <div class="invalid-feedback">Masukkan jumlah hari lembur</div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <button type="button" id="resetButton" class="btn btn-warning me-2">
+                                    <i class="bi bi-arrow-clockwise me-2"></i>Reset
+                                </button>
+                                <button type="submit" class="btn btn-success" id="updateGaji">
+                                    <i class="bi bi-save me-2"></i>Update
+                                </button>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
 
+        {{-- Salary Preview Card --}}
         <div class="col-md-8">
-            <div class="card">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h4 class="card-title mb-0">Preview Gaji</h4>
+                </div>
                 <div class="card-body">
-                    <div id="previewSection" style="display: block;">
+                    <div id="previewSection">
                         <div class="row">
-                            <!-- Kolom Pendapatan -->
                             <div class="col-md-6">
-                                <h5 class="mb-3">Pendapatan</h5>
+                                <h5 class="fw-bold mb-3">Pendapatan</h5>
                                 <div class="mb-3">
-                                    <label class="form-label">Gaji Pokok</label>
-                                    <input type="text" id="gajiPokokPreview" class="form-control" readonly>
+                                    <label for="gajiPokokPreview" class="form-label">Gaji Pokok</label>
+                                    <input type="text" id="gajiPokokPreview" class="form-control bg-light" readonly>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Insentif</label>
-                                    <input type="text" id="insentifPreview" class="form-control" readonly>
+                                    <label for="insentifPreview" class="form-label">Insentif</label>
+                                    <input type="text" id="insentifPreview" class="form-control bg-light" readonly>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Bonus Kehadiran</label>
-                                    <input type="text" id="bonusKehadiranPreview" class="form-control" readonly>
+                                    <label for="bonusKehadiranPreview" class="form-label">Bonus Kehadiran</label>
+                                    <input type="text" id="bonusKehadiranPreview" class="form-control bg-light" readonly>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Tunjangan Lembur</label>
-                                    <input type="text" id="tunjanganLemburPreview" class="form-control" readonly>
+                                    <label for="tunjanganLemburPreview" class="form-label">Tunjangan Lembur</label>
+                                    <input type="text" id="tunjanganLemburPreview" class="form-control bg-light" readonly>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Total Pendapatan</label>
-                                    <input type="text" id="totalPendapatanPreview" class="form-control fw-bold" readonly>
+                                    <label for="totalPendapatanPreview" class="form-label fw-bold">Total Pendapatan</label>
+                                    <input type="text" id="totalPendapatanPreview" class="form-control bg-light fw-bold" readonly>
                                 </div>
                             </div>
                             
-                            <!-- Kolom Potongan -->
                             <div class="col-md-6">
-                                <h5 class="mb-3">Potongan</h5>
+                                <h5 class="fw-bold mb-3">Potongan</h5>
                                 <div class="mb-3">
-                                    <label class="form-label">Potongan Pajak</label>
-                                    <input type="text" id="potonganPajakPreview" class="form-control" readonly>
+                                    <label for="potonganPajakPreview" class="form-label">Potongan Pajak</label>
+                                    <input type="text" id="potonganPajakPreview" class="form-control bg-light" readonly>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Potongan BPJS</label>
-                                    <input type="text" id="potonganBPJSPreview" class="form-control" readonly value="200000">
+                                    <label for="potonganBPJSPreview" class="form-label">Potongan BPJS</label>
+                                    <input type="text" id="potonganBPJSPreview" class="form-control bg-light" readonly>
                                 </div>
                                 <div class="mt-4">
-                                    <h5 class="mb-3">Gaji Bersih</h5>
-                                    <input type="text" id="gajiBersihPreview" class="form-control form-control-lg fw-bold bg-light" readonly>
+                                    <h5 class="fw-bold mb-3">Gaji Bersih</h5>
+                                    <input type="text" id="gajiBersihPreview" class="form-control form-control-lg bg-light fw-bold" readonly>
                                 </div>
                             </div>
                         </div>
@@ -123,8 +160,84 @@
             </div>
         </div>
     </div>
-</div>
 
+    {{-- Salary Guidelines --}}
+    <div class="col-12 mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Ketentuan Penggajian</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold mb-3">Komponen Gaji:</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                Gaji Pokok: Sesuai dengan jabatan
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                Insentif: Berdasarkan penilaian kinerja
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                Bonus Kehadiran: Rp 25.000/hari
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold mb-3">Potongan:</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="bi bi-info-circle text-primary me-2"></i>
+                                Pajak: 10% dari total pendapatan
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-info-circle text-primary me-2"></i>
+                                BPJS: Rp 200.000 (flat)
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@push('css')
+<style>
+    .card {
+        border: none;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    .card-header {
+        background-color: transparent;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+        padding: 1rem;
+    }
+    .form-label {
+        font-weight: 500;
+    }
+    .input-group-text {
+        background-color: #f8f9fa;
+        border-color: #ced4da;
+    }
+    .input-group-text i {
+        color: #6c757d;
+    }
+    .input-group:focus-within .input-group-text {
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+    .bg-light {
+        background-color: #f8f9fa !important;
+    }
+</style>
+@endpush
+
+@push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
    const token = localStorage.getItem('token');
@@ -400,81 +513,89 @@ document.addEventListener('DOMContentLoaded', function() {
    
    fetchGajiDetails();
    
-   document.getElementById('updateGaji').addEventListener('click', async function() {
-       try {
-           const idPegawai = document.getElementById('id_pegawai').value;
-           if (!idPegawai) {
-               throw new Error('ID Pegawai tidak ditemukan');
-           }
+// Add form submit handler
+const editGajiForm = document.getElementById('editGajiForm');
+editGajiForm.addEventListener('submit', async function(e) {
+    // Prevent default form submission
+    e.preventDefault();
+    
+    try {
+        const idPegawai = document.getElementById('id_pegawai').value;
+        if (!idPegawai) {
+            throw new Error('ID Pegawai tidak ditemukan');
+        }
 
-           const periodeView = document.getElementById('periodeView').value;
-           const [tahun, bulan] = periodeView.split('-');
-           
-           const getNumericValue = (elementId) => {
-               const value = document.getElementById(elementId).value;
-               return parseCurrencyToNumber(value);
-           };
+        const periodeView = document.getElementById('periodeView').value;
+        const [tahun, bulan] = periodeView.split('-');
+        
+        const getNumericValue = (elementId) => {
+            const value = document.getElementById(elementId).value;
+            return parseCurrencyToNumber(value);
+        };
 
-           const requestBody = {
-               id_pegawai: idPegawai,
-               id_divisi: document.getElementById('divisi_pegawai').value,
-               periode_tahun: tahun,
-               periode_bulan: bulan,
-               jumlah_kehadiran: parseInt(document.getElementById('jumlah_kehadiran').value) || 0,
-               jumlah_hari_lembur: parseInt(document.getElementById('jumlah_hari_lembur').value) || 0,
-               gaji_pokok: getGajiPokok(),
-               insentif: await hitungInsentif(),
-               bonus_kehadiran: getNumericValue('bonusKehadiranPreview'),
-               tunjangan_lembur: getNumericValue('tunjanganLemburPreview'),
-               total_pendapatan: getNumericValue('totalPendapatanPreview'),
-               potongan_pajak: getNumericValue('potonganPajakPreview'),
-               potongan_bpjs: 200000,
-               gaji_bersih: getNumericValue('gajiBersihPreview')
-           };
+        const requestBody = {
+            id_pegawai: idPegawai,
+            id_divisi: document.getElementById('divisi_pegawai').value,
+            periode_tahun: tahun,
+            periode_bulan: bulan,
+            jumlah_kehadiran: parseInt(document.getElementById('jumlah_kehadiran').value) || 0,
+            jumlah_hari_lembur: parseInt(document.getElementById('jumlah_hari_lembur').value) || 0,
+            gaji_pokok: getGajiPokok(),
+            insentif: await hitungInsentif(),
+            bonus_kehadiran: getNumericValue('bonusKehadiranPreview'),
+            tunjangan_lembur: getNumericValue('tunjanganLemburPreview'),
+            total_pendapatan: getNumericValue('totalPendapatanPreview'),
+            potongan_pajak: getNumericValue('potonganPajakPreview'),
+            potongan_bpjs: 200000,
+            gaji_bersih: getNumericValue('gajiBersihPreview')
+        };
 
-           const confirmation = await Swal.fire({
-               title: 'Konfirmasi Update',
-               text: 'Apakah Anda yakin ingin mengupdate data gaji ini?',
-               icon: 'question',
-               showCancelButton: true,
-               confirmButtonText: 'Ya, Update',
-               cancelButtonText: 'Batal'
-           });
+        const confirmation = await Swal.fire({
+            title: 'Konfirmasi Update',
+            text: 'Apakah Anda yakin ingin mengupdate data gaji ini?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Update',
+            cancelButtonText: 'Batal'
+        });
 
-           if (confirmation.isConfirmed) {
-               const response = await fetch(`http://127.0.0.1:8000/api/gaji/${idGaji}`, {
-                   method: 'PUT',
-                   headers: {
-                       'Authorization': `Bearer ${token}`,
-                       'Accept': 'application/json',
-                       'Content-Type': 'application/json'
-                   },
-                   body: JSON.stringify(requestBody)
-               });
+        if (confirmation.isConfirmed) {
+            const response = await fetch(`http://127.0.0.1:8000/api/gaji/${idGaji}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            });
 
-               if (!response.ok) {
-                   const errorData = await response.json();
-                   throw new Error(errorData.message || 'Gagal mengupdate gaji');
-               }
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Gagal mengupdate gaji');
+            }
 
-               const result = await response.json();
-               await Swal.fire({
-                   icon: 'success',
-                   title: 'Berhasil',
-                   text: result.message || 'Gaji berhasil diupdate'
-               });
+            const result = await response.json();
+            await Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: result.message || 'Gaji berhasil diupdate'
+            });
 
-               window.location.href = '/gaji';
-           }
-       } catch (error) {
-           console.error('Error updating gaji:', error);
-           await Swal.fire({
-               icon: 'error',
-               title: 'Error',
-               text: error.message || 'Terjadi kesalahan saat mengupdate gaji'
-           });
-       }
-   });
+            // Redirect after successful update
+            window.location.href = '/gaji';
+        }
+    } catch (error) {
+        console.error('Error updating gaji:', error);
+        await Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.message || 'Terjadi kesalahan saat mengupdate gaji'
+        });
+    }
+});
+
+// Remove the click event listener from the update button since we're handling the form submit
 
    // Handle back button click
 document.getElementById('btnBack').addEventListener('click', async function() {
@@ -499,4 +620,4 @@ document.getElementById('btnBack').addEventListener('click', async function() {
 
 });
 </script>
-@endsection'
+@endpush

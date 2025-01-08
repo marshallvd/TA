@@ -6,6 +6,20 @@
 
 @section('content')
 <div class="container-fluid content-inner mt-n5 py-0">
+    {{-- Header Card --}}
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <b><h2 class="card-title mb-1">Manajemen Jenis Cuti</h2></b>
+                    <p class="card-text text-muted">Human Resource Management System SEB</p>
+                </div>
+                <div>
+                    <i class="bi bi-calendar-range text-primary" style="font-size: 3rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -15,13 +29,13 @@
                     </div>
                     <div>
                         <a href="{{ route('jenis_cuti.create') }}" class="btn btn-primary">
-                            <i class="fas fa-plus me-2"></i>Tambah Jenis Cuti
+                            <i class="bi bi-plus-square me-2"></i>Tambah Jenis Cuti
                         </a>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="jenis-cuti-table" class="table table-striped">
+                        <table id="jenis-cuti-table" class="table table-striped"style="width:100%">
                             <thead>
                                 <tr>
                                     <th width="5%">No</th>
@@ -29,7 +43,6 @@
                                     <th width="15%">Kategori</th>
                                     <th width="15%">Jumlah Hari Diizinkan</th>
                                     <th width="10%">Aksi</th>
-                                </ ```blade
                                 </tr>
                             </thead>
                         </table>

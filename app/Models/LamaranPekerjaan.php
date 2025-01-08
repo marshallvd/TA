@@ -33,13 +33,20 @@ class LamaranPekerjaan extends Model
         'tanggal_diperbarui' => 'datetime',
     ];
 
+    // Relasi dengan Pelamar
+    public function pelamar()
+    {
+        return $this->belongsTo(UserPelamar::class, 'id_pelamar', 'id_pelamar');
+    }
+
+    // Relasi dengan LowonganPekerjaan
     public function lowonganPekerjaan()
     {
         return $this->belongsTo(LowonganPekerjaan::class, 'id_lowongan_pekerjaan', 'id_lowongan_pekerjaan');
     }
 
-    public function pelamar()
+    public function wawancara()
     {
-        return $this->belongsTo(UserPelamar::class, 'id_pelamar', 'id_pelamar');
+        return $this->hasOne(Wawancara::class, 'id_lamaran_pekerjaan', 'id_lamaran_pekerjaan');
     }
 }
