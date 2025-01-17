@@ -26,51 +26,110 @@ Tambah Jabatan
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <div class="header-title">
-                        <h4 class="card-title">Tambah Jabatan</h4>
+                        <h4 class="card-title">Tambah Jabatan Baru</h4>
                     </div>
                 </div>
                 <div class="card-body">
-                    <form id="createJabatanForm">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label class="form-label" for="nama_jabatan">Nama Jabatan</label>
-                                    <input type="text" class="form-control" id="nama_jabatan" name="nama_jabatan" required>
-                                    <div class="invalid-feedback" id="nama_jabatan_error"></div>
-                                </div>
-                                
-                                <div class="form-group mb-3">
-                                    <label class="form-label" for="id_divisi">Divisi</label>
-                                    <select class="form-control" id="id_divisi" name="id_divisi" required>
-                                        <option value="">Pilih Divisi</option>
-                                    </select>
-                                    <div class="invalid-feedback" id="id_divisi_error"></div>
+                    <div class="new-user-info">
+                        <form id="createJabatanForm" class="needs-validation" novalidate>
+                            <div class="row g-4">
+                                <!-- Nama Jabatan Input -->
+                                <div class="col-md-6">
+                                    <div class="form-group position-relative">
+                                        <label class="form-label fw-bold" for="nama_jabatan">
+                                            <i class="bi bi-person-badge me-1"></i>Nama Jabatan
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" 
+                                               class="form-control form-control-lg shadow-none border-2" 
+                                               id="nama_jabatan" 
+                                               name="nama_jabatan" 
+                                               required 
+                                               maxlength="100"
+                                               placeholder="Masukkan nama jabatan">
+                                        <div class="invalid-feedback">
+                                            Nama jabatan tidak boleh kosong
+                                        </div>
+                                        <small class="text-muted">
+                                            <i class="bi bi-info-circle me-1"></i>Maksimal 100 karakter
+                                        </small>
+                                    </div>
                                 </div>
 
-                                <div class="form-group mb-3">
-                                    <label class="form-label" for="gaji_pokok">Gaji Pokok</label>
-                                    <input type="number" class="form-control" id="gaji_pokok" name="gaji_pokok" required min="0">
-                                    <div class="invalid-feedback" id="gaji_pokok_error"></div>
+                                <!-- Divisi Select -->
+                                <div class="col-md-6">
+                                    <div class="form-group position-relative">
+                                        <label class="form-label fw-bold" for="id_divisi">
+                                            <i class="bi bi-building me-1"></i>Divisi
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <select class="form-control form-control-lg shadow-none border-2" 
+                                                id="id_divisi" 
+                                                name="id_divisi" 
+                                                required>
+                                            <option value="">Pilih Divisi</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Divisi harus dipilih
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="form-group mb-3">
-                                    <label class="form-label" for="tarif_lembur_per_hari">Tarif Lembur per Hari</label>
-                                    <input type="number" class="form-control" id="tarif_lembur_per_hari" name="tarif_lembur_per_hari" required min="0">
-                                    <div class="invalid-feedback" id="tarif_lembur_per_hari_error"></div>
+                                <!-- Gaji Pokok Input -->
+                                <div class="col-md-6">
+                                    <div class="form-group position-relative">
+                                        <label class="form-label fw-bold" for="gaji_pokok">
+                                            <i class="bi bi-cash me-1"></i>Gaji Pokok
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" 
+                                               class="form-control form-control-lg shadow-none border-2" 
+                                               id="gaji_pokok" 
+                                               name="gaji_pokok" 
+                                               required
+                                               placeholder="Masukkan gaji pokok">
+                                        <div class="invalid-feedback">
+                                            Gaji pokok tidak boleh kosong
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tarif Lembur Input -->
+                                <div class="col-md-6">
+                                    <div class="form-group position-relative">
+                                        <label class="form-label fw-bold" for="tarif_lembur_per_hari">
+                                            <i class="bi bi-clock-history me-1"></i>Tarif Lembur per Hari
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" 
+                                               class="form-control form-control-lg shadow-none border-2" 
+                                               id="tarif_lembur_per_hari" 
+                                               name="tarif_lembur_per_hari" 
+                                               required
+                                               placeholder="Masukkan tarif lembur">
+                                        <div class="invalid-feedback">
+                                            Tarif lembur tidak boleh kosong
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row mt-3 position-absolute bottom-0 end-0 m-4">
-                            <div class="col-12">
-                                <a href="{{ route('master_data.jabatan.index') }}" class="btn btn-danger me-2">
-                                    <i class="bi bi-arrow-left me-2"></i>Kembali
-                                </a>
-                                <button type="submit" class="btn btn-success">
-                                    <i class="bi bi-save me-2"></i>Simpan
-                                </button>
+
+                            <!-- Action Buttons -->
+                            <div class="row mt-5">
+                                <div class="col-12 d-flex justify-content-end gap-2">
+                                    <a href="{{ route('master_data.jabatan.index') }}" class="btn btn-danger me-2">
+                                        <i class="bi bi-arrow-left me-2"></i>Kembali
+                                    </a>
+                                    <button type="button" id="resetButton" class="btn btn-warning me-2">
+                                        <i class="bi bi-arrow-clockwise me-2"></i>Reset
+                                    </button>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="bi bi-save me-2"></i>Simpan
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -78,44 +137,63 @@ Tambah Jabatan
 </div>
 @endsection
 
+@push('css')
+<style>
+    /* Form styling */
+    .form-label {
+        font-weight: 500;
+    }
+
+    .invalid-feedback {
+        font-size: 0.875em;
+    }
+
+    .was-validated .form-control:invalid,
+    .form-control.is-invalid {
+        border-color: #dc3545;
+    }
+
+    /* Custom form control styling */
+    .form-control-lg {
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+    }
+
+    /* Icon styling */
+    .bi {
+        vertical-align: -0.125em;
+    }
+</style>
+@endpush
+
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Get token from localStorage
-    const token = localStorage.getItem('token');
-
-    // Check if token exists, if not redirect to login
-    if (!token) {
-        window.location.href = '/login';
-        return;
-    }
-
-    // Initialize elements
-    const form = document.getElementById('createJabatanForm');
+    const jabatanForm = document.getElementById('createJabatanForm');
+    const resetButton = document.getElementById('resetButton');
     const gajiPokokInput = document.getElementById('gaji_pokok');
     const tarifLemburInput = document.getElementById('tarif_lembur_per_hari');
+    
+    // Store original data for reset functionality
+    let originalData = {
+        nama_jabatan: '',
+        id_divisi: '',
+        gaji_pokok: '0',
+        tarif_lembur_per_hari: '0'
+    };
 
-    // Function to format currency inputs
+    // Function to format currency
     function formatCurrency(input) {
-        // Ubah type input menjadi "text" untuk menangani format currency
         input.setAttribute('type', 'text');
         
         input.addEventListener('input', function(e) {
-            // Remove non-digit characters
             let value = this.value.replace(/\D/g, '');
-            
-            // Batasi panjang input jika diperlukan (opsional)
-            // Misalnya untuk 15 digit (triliunan rupiah)
             if (value.length > 15) {
                 value = value.slice(0, 15);
             }
-            
-            // Format the number with thousand separator
             if (value) {
                 value = new Intl.NumberFormat('id-ID').format(value);
             }
-            
-            // Update the input value
             this.value = value;
         });
 
@@ -124,51 +202,60 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.value = '0';
             }
         });
+    }
 
-        // Tambahkan event untuk hanya mengizinkan input angka dan beberapa tombol kontrol
-        input.addEventListener('keydown', function(e) {
-            // Allow: backspace, delete, tab, escape, enter, dots
-            if ([46, 8, 9, 27, 13, 110, 190].indexOf(e.keyCode) !== -1 ||
-                // Allow: Ctrl+A, Command+A
-                (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
-                // Allow: home, end, left, right, down, up
-                (e.keyCode >= 35 && e.keyCode <= 40)) {
-                return;
-            }
-            // Ensure that it is a number and stop the keypress if not
-            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) &&
-                (e.keyCode < 96 || e.keyCode > 105)) {
-                e.preventDefault();
+    // Function to populate form with data
+    function populateForm(data) {
+        document.getElementById('nama_jabatan').value = data.nama_jabatan;
+        document.getElementById('id_divisi').value = data.id_divisi;
+        document.getElementById('gaji_pokok').value = data.gaji_pokok;
+        document.getElementById('tarif_lembur_per_hari').value = data.tarif_lembur_per_hari;
+    }
+
+    // Initialize currency formatting
+    formatCurrency(gajiPokokInput);
+    formatCurrency(tarifLemburInput);
+
+    // Reset button functionality with confirmation
+    resetButton.addEventListener('click', async function() {
+        const result = await Swal.fire({
+            title: 'Konfirmasi Reset',
+            text: 'Apakah Anda yakin ingin mengembalikan data ke kondisi awal? Perubahan yang belum disimpan akan hilang.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Reset',
+            cancelButtonText: 'Batal',
+            customClass: {
+                confirmButton: 'btn btn-warning me-2',
+                cancelButton: 'btn btn-secondary'
             }
         });
-    }
 
-    // Function to clear error messages and invalid classes
-    function clearErrors() {
-        const errorElements = document.querySelectorAll('.invalid-feedback');
-        errorElements.forEach(element => element.textContent = '');
-        const inputElements = form.querySelectorAll('.form-control');
-        inputElements.forEach(element => element.classList.remove('is-invalid'));
-    }
+        if (result.isConfirmed) {
+            populateForm(originalData);
+            jabatanForm.classList.remove('was-validated');
+            
+            const invalidInputs = jabatanForm.querySelectorAll('.is-invalid');
+            invalidInputs.forEach(input => {
+                input.classList.remove('is-invalid');
+            });
 
-    // Function to display error messages
-    function displayErrors(error) {
-        if (error.errors) {
-            Object.keys(error.errors).forEach(key => {
-                const element = document.getElementById(`${key}_error`);
-                const input = document.getElementById(key);
-                if (element && input) {
-                    element.textContent = error.errors[key][0];
-                    input.classList.add('is-invalid');
-                }
+            await Swal.fire({
+                icon: 'success',
+                title: 'Data Direset',
+                text: 'Form telah dikembalikan ke data awal',
+                timer: 1500,
+                showConfirmButton: false
             });
         }
-    }
+    });
 
     // Fetch divisions for select dropdown
     fetch('/api/divisi', {
         headers: {
-            'Authorization': `Bearer ${token}`,
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Accept': 'application/json'
         }
     })
@@ -187,75 +274,85 @@ document.addEventListener('DOMContentLoaded', function() {
         Swal.fire('Error', 'Gagal mengambil data divisi', 'error');
     });
 
-    // Handle form submission
-    form.addEventListener('submit', function(e) {
+    // Form submission
+    jabatanForm.addEventListener('submit', async function(e) {
         e.preventDefault();
-        clearErrors();
-        
-        // Get form data and clean the currency format
+
+        if (!this.checkValidity()) {
+            e.stopPropagation();
+            this.classList.add('was-validated');
+            return;
+        }
+
         const formData = {
-            nama_jabatan: document.getElementById('nama_jabatan').value,
+            nama_jabatan: document.getElementById('nama_jabatan').value.trim(),
             id_divisi: document.getElementById('id_divisi').value,
             gaji_pokok: document.getElementById('gaji_pokok').value.replace(/\D/g, ''),
             tarif_lembur_per_hari: document.getElementById('tarif_lembur_per_hari').value.replace(/\D/g, '')
         };
 
-        // Send POST request
-        fetch('/api/jabatan', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        })
-        .then(response => {
+        try {
+            const loadingAlert = await Swal.fire({
+                title: 'Mohon Tunggu',
+                text: 'Sedang menyimpan data...',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            const response = await fetch('/api/jabatan', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            await loadingAlert.close();
+
+            const responseData = await response.json();
+
             if (!response.ok) {
-                return response.json().then(err => Promise.reject(err));
+                if (responseData.errors) {
+                    Object.keys(responseData.errors).forEach(key => {
+                        const inputElement = document.getElementById(key);
+                        if (inputElement) {
+                            inputElement.classList.add('is-invalid');
+                            const feedbackElement = inputElement.nextElementSibling;
+                            if (feedbackElement && feedbackElement.classList.contains('invalid-feedback')) {
+                                feedbackElement.textContent = responseData.errors[key][0];
+                            }
+                        }
+                    });
+                    throw new Error(responseData.message || 'Terjadi kesalahan validasi');
+                }
+                throw new Error(responseData.message || 'Terjadi kesalahan saat menyimpan data');
             }
-            return response.json();
-        })
-        .then(data => {
-            Swal.fire({
+
+            await Swal.fire({
                 icon: 'success',
                 title: 'Berhasil!',
                 text: 'Data jabatan berhasil ditambahkan',
                 showConfirmButton: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = '{{ route("master_data.jabatan.index") }}';
-                }
+            }).then(() => {
+                window.location.href = '{{ route("master_data.jabatan.index") }}';
             });
-        })
-        .catch(error => {
+
+        } catch (error) {
             console.error('Error:', error);
-            displayErrors(error);
-            
-            Swal.fire({
+            await Swal.fire({
                 icon: 'error',
-                title: 'Oops...',
-                text: 'Terjadi kesalahan saat menyimpan data',
-                footer: error.message || 'Silakan coba lagi nanti'
+                title: 'Error',
+                text: error.message || 'Terjadi kesalahan saat menyimpan data',
+                confirmButtonText: 'OK'
             });
-        });
+        }
     });
-
-    // Handle reset button
-    form.addEventListener('reset', function(e) {
-        clearErrors();
-        // Reset nilai input currency ke 0
-        gajiPokokInput.value = '0';
-        tarifLemburInput.value = '0';
-    });
-
-    // Initialize currency formatting for both inputs
-    formatCurrency(gajiPokokInput);
-    formatCurrency(tarifLemburInput);
-
-    // Set initial values if needed
-    gajiPokokInput.value = '0';
-    tarifLemburInput.value = '0';
 });
 </script>
 @endpush

@@ -315,7 +315,10 @@ Route::prefix('jenis_cuti')->group(function () {
     
         Route::get('/cuti', [LaporanController::class, 'indexCuti'])
             ->name('laporan.cuti.index');
+        Route::get('/rekrutmen', [LaporanController::class, 'indexRekrutmen'])
+            ->name('laporan.rekrutmen.index');
     });
+    
 
 
 

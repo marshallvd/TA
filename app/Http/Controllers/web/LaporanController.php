@@ -31,4 +31,6 @@ class LaporanController extends Controller
     {
         return view('laporan.cuti.index');
     }
+
+
 }

@@ -1,4 +1,3 @@
-@extends('layouts.app')
 @extends('layouts.master')
 
 @section('title')
@@ -34,19 +33,19 @@
                 <div class="card-body">
                     <div class="row" id="pegawaiDetails">
                         <div class="col-md-3">
-                            <p class="mb-1"><strong>Nama:</strong></p>
+                            <p class="mb-1 fw-bold">Nama:</p>
                             <p class="text-muted" id="pegawaiName">-</p>
                         </div>
                         <div class="col-md-3">
-                            <p class="mb-1"><strong>NIK:</strong></p>
+                            <p class="mb-1 fw-bold">NIK:</p>
                             <p class="text-muted" id="pegawaiNIK">-</p>
                         </div>
                         <div class="col-md-3">
-                            <p class="mb-1"><strong>Divisi:</strong></p>
+                            <p class="mb-1 fw-bold">Divisi:</p>
                             <p class="text-muted" id="pegawaiDivision">-</p>
                         </div>
                         <div class="col-md-3">
-                            <p class="mb-1"><strong>Jabatan:</strong></p>
+                            <p class="mb-1 fw-bold">Jabatan:</p>
                             <p class="text-muted" id="pegawaiPosition">-</p>
                         </div>
                     </div>
@@ -67,86 +66,115 @@
                 <div class="card-body">
                     <div class="new-user-info">
                         <form id="jatahCutiForm" class="needs-validation" novalidate>
-                            <div class="row">
-                                <div class="form-group col-md-6 mb-3">
-                                    <label class="form-label" for="id_pegawai">ID Pegawai <span class="text-danger">*</span></label>
-                                    <input type="number" 
-                                           class="form-control" 
-                                           id="id_pegawai" 
-                                           name="id_pegawai" 
-                                           required 
-                                           readonly>
-                                    <div class="invalid-feedback">
-                                        ID Pegawai tidak boleh kosong
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <div class="form-group position-relative">
+                                        <label class="form-label fw-bold" for="id_pegawai">
+                                            <i class="bi bi-person-badge me-1"></i>ID Pegawai
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="number" 
+                                               class="form-control form-control-lg shadow-none border-2" 
+                                               id="id_pegawai" 
+                                               name="id_pegawai" 
+                                               required 
+                                               readonly>
+                                        <div class="invalid-feedback">
+                                            ID Pegawai tidak boleh kosong
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="form-group col-md-6 mb-3">
-                                    <label class="form-label" for="tahun">Tahun <span class="text-danger">*</span></label>
-                                    <input type="number" 
-                                           class="form-control" 
-                                           id="tahun" 
-                                           name="tahun" 
-                                           required 
-                                           min="2000" 
-                                           max="2100">
-                                    <div class="invalid-feedback">
-                                        Tahun tidak valid
+                                <div class="col-md-6">
+                                    <div class="form-group position-relative">
+                                        <label class="form-label fw-bold" for="tahun">
+                                            <i class="bi bi-calendar-event me-1"></i>Tahun
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="number" 
+                                               class="form-control form-control-lg shadow-none border-2" 
+                                               id="tahun" 
+                                               name="tahun" 
+                                               required 
+                                               min="2000" 
+                                               max="2100"
+                                               placeholder="Masukkan tahun">
+                                        <div class="invalid-feedback">
+                                            Tahun tidak valid
+                                        </div>
+                                        <small class="text-muted">Masukkan tahun antara 2000-2100</small>
                                     </div>
-                                    <small class="text-muted">Masukkan tahun antara 2000-2100</small>
                                 </div>
 
-                                <div class="form-group col-md-4 mb-3">
-                                    <label class="form-label" for="jatah_cuti_umum">Jatah Cuti Umum <span class="text-danger">*</span></label>
-                                    <input type="number" 
-                                           class="form-control" 
-                                           id="jatah_cuti_umum" 
-                                           name="jatah_cuti_umum" 
-                                           required 
-                                           min="0" 
-                                           value="12">
-                                    <div class="invalid-feedback">
-                                        Jatah cuti umum tidak valid
+                                <div class="col-md-4">
+                                    <div class="form-group position-relative">
+                                        <label class="form-label fw-bold" for="jatah_cuti_umum">
+                                            <i class="bi bi-calendar-check me-1"></i>Jatah Cuti Umum
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="number" 
+                                               class="form-control form-control-lg shadow-none border-2" 
+                                               id="jatah_cuti_umum" 
+                                               name="jatah_cuti_umum" 
+                                               required 
+                                               min="0" 
+                                               value="12"
+                                               placeholder="Masukkan jumlah hari">
+                                        <div class="invalid-feedback">
+                                            Jatah cuti umum tidak valid
+                                        </div>
+                                        <small class="text-muted">Minimal 0 hari</small>
                                     </div>
-                                    <small class="text-muted">Minimal 0 hari</small>
                                 </div>
 
-                                <div class="form-group col-md-4 mb-3">
-                                    <label class="form-label" for="jatah_cuti_menikah">Jatah Cuti Menikah <span class="text-danger">*</span></label>
-                                    <input type="number" 
-                                           class="form-control" 
-                                           id="jatah_cuti_menikah" 
-                                           name="jatah_cuti_menikah" 
-                                           required 
-                                           min="0" 
-                                           value="3">
-                                    <div class="invalid-feedback">
-                                        Jatah cuti menikah tidak valid
+                                <div class="col-md-4">
+                                    <div class="form-group position-relative">
+                                        <label class="form-label fw-bold" for="jatah_cuti_menikah">
+                                            <i class="bi bi-calendar-heart me-1"></i>Jatah Cuti Menikah
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="number" 
+                                               class="form-control form-control-lg shadow-none border-2" 
+                                               id="jatah_cuti_menikah" 
+                                               name="jatah_cuti_menikah" 
+                                               required 
+                                               min="0" 
+                                               value="3"
+                                               placeholder="Masukkan jumlah hari">
+                                        <div class="invalid-feedback">
+                                            Jatah cuti menikah tidak valid
+                                        </div>
+                                        <small class="text-muted">Minimal 0 hari</small>
                                     </div>
-                                    <small class="text-muted">Minimal 0 hari</small>
                                 </div>
 
-                                <div class="form-group col-md-4 mb-3">
-                                    <label class="form-label" for="jatah_cuti_melahirkan">Jatah Cuti Melahirkan <span class="text-danger">*</span></label>
-                                    <input type="number" 
-                                           class="form-control" 
-                                           id="jatah_cuti_melahirkan" 
-                                           name="jatah_cuti_melahirkan" 
-                                           required 
-                                           min="0" 
-                                           value="120">
-                                    <div class="invalid-feedback">
-                                        Jatah cuti melahirkan tidak valid
+                                <div class="col-md-4">
+                                    <div class="form-group position-relative">
+                                        <label class="form-label fw-bold" for="jatah_cuti_melahirkan">
+                                            <i class="bi bi-calendar-plus me-1"></i>Jatah Cuti Melahirkan
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="number" 
+                                               class="form-control form-control-lg shadow-none border-2" 
+                                               id="jatah_cuti_melahirkan" 
+                                               name="jatah_cuti_melahirkan" 
+                                               required 
+                                               min="0" 
+                                               value="120"
+                                               placeholder="Masukkan jumlah hari">
+                                        <div class="invalid-feedback">
+                                            Jatah cuti melahirkan tidak valid
+                                        </div>
+                                        <small class="text-muted">Minimal 0 hari</small>
                                     </div>
-                                    <small class="text-muted">Minimal 0 hari</small>
                                 </div>
                             </div>
 
-                            <div class="row mt-4">
-                                <div class="col-12 text-end">
-                                    <button type="button" class="btn btn-danger me-2" id="btnBack">
+                            <div class="row mt-5">
+                                <div class="col-12 d-flex justify-content-end gap-2">
+                                    <a href="/jatah_cuti" class="btn btn-danger me-2">
                                         <i class="bi bi-arrow-left me-2"></i>Kembali
-                                    </button>
+                                    </a>
                                     <button type="button" id="resetButton" class="btn btn-warning me-2">
                                         <i class="bi bi-arrow-clockwise me-2"></i>Reset
                                     </button>
@@ -177,26 +205,40 @@
         </div>
     </div>
 </div>
+@endsection
 
 @push('css')
 <style>
-    .form-label {
-        font-weight: 500;
-    }
-    
-    .invalid-feedback {
-        font-size: 0.875em;
-    }
-    
-    .was-validated .form-control:invalid,
-    .form-control.is-invalid {
-        border-color: #dc3545;
-    }
+/* Form styling */
+.form-label {
+    font-weight: 500;
+}
 
-    .alert-info {
-        background-color: #f8f9fa;
-        border-left: 4px solid #0dcaf0;
-    }
+.invalid-feedback {
+    font-size: 0.875em;
+}
+
+.was-validated .form-control:invalid,
+.form-control.is-invalid {
+    border-color: #dc3545;
+}
+
+/* Custom form control styling */
+.form-control-lg {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+}
+
+/* Icon styling */
+.bi {
+    vertical-align: -0.125em;
+}
+
+/* Alert styling */
+.alert-info {
+    background-color: #f8f9fa;
+    border-left: 4px solid #0dcaf0;
+}
 </style>
 @endpush
 
@@ -208,13 +250,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
     const idPegawai = urlParams.get('id_pegawai');
     const baseUrl = 'http://127.0.0.1:8000/api';
+    const jatahCutiForm = document.getElementById('jatahCutiForm');
+    const resetButton = document.getElementById('resetButton');
 
     // Initial token check
     if (!token) {
         Swal.fire({
             icon: 'error',
-            title: 'Error',
-            text: 'Token tidak ditemukan. Silakan login kembali.'
+            title: 'Akses Ditolak',
+            text: 'Anda harus login untuk mengakses halaman ini.',
+            confirmButtonText: 'OK'
         }).then(() => {
             window.location.href = '/login';
         });
@@ -233,53 +278,62 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
+    // Reset button functionality
+    resetButton.addEventListener('click', async function() {
+        const result = await Swal.fire({
+            title: 'Konfirmasi Reset',
+            text: 'Apakah Anda yakin ingin mengosongkan semua field?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Reset',
+            cancelButtonText: 'Batal'
+        });
+
+        if (result.isConfirmed) {
+            setDefaultValues();
+            jatahCutiForm.classList.remove('was-validated');
+            showSuccessAlert('Form berhasil direset', true);
+        }
+    });
+
     // Utility Functions
-    function showError(message) {
-        console.error('Error occurred:', message);
-        Swal.fire({
+    function showLoadingAlert(message) {
+        return Swal.fire({
+            title: 'Mohon Tunggu',
+            text: message,
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+    }
+
+    function showSuccessAlert(message, autoClose = false) {
+        return Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: message,
+            showConfirmButton: !autoClose,
+            timer: autoClose ? 1500 : undefined
+        });
+    }
+
+    function showErrorAlert(message) {
+        return Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: message
-        });
-    }
-
-    function showSuccess(message) {
-        Swal.fire({
-            icon: 'success',
-            title: 'Berhasil',
             text: message,
-            timer: 2000,
-            showConfirmButton: false
+            confirmButtonText: 'OK'
         });
     }
 
-    function validateForm() {
-        const jatahCutiUmum = parseInt(document.getElementById('jatah_cuti_umum').value);
-        const jatahCutiMenikah = parseInt(document.getElementById('jatah_cuti_menikah').value);
-        const jatahCutiMelahirkan = parseInt(document.getElementById('jatah_cuti_melahirkan').value);
-        const tahun = parseInt(document.getElementById('tahun').value);
-
-        if (isNaN(jatahCutiUmum) || isNaN(jatahCutiMenikah) || isNaN(jatahCutiMelahirkan)) {
-            throw new Error('Semua jatah cuti harus berupa angka');
-        }
-
-        if (jatahCutiUmum < 0 || jatahCutiMenikah < 0 || jatahCutiMelahirkan < 0) {
-            throw new Error('Jatah cuti tidak boleh negatif');
-        }
-
-        if (!tahun || tahun < 2000 || tahun > 2100) {
-            throw new Error('Tahun tidak valid');
-        }
-
-        if (!document.getElementById('id_pegawai').value) {
-            throw new Error('ID Pegawai tidak boleh kosong');
-        }
-    }
-
-    // API Functions
     async function fetchPegawaiDetails() {
         try {
-            console.log('Fetching pegawai details for ID:', idPegawai);
+            showLoadingAlert('Mengambil data pegawai...');
+
             const pegawaiResponse = await fetch(`${baseUrl}/pegawai/${idPegawai}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -292,8 +346,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             const pegawaiData = await pegawaiResponse.json();
-            console.log('Pegawai data received:', pegawaiData);
-
             document.getElementById('pegawaiName').textContent = pegawaiData.data.nama_lengkap;
             document.getElementById('pegawaiNIK').textContent = pegawaiData.data.nik;
 
@@ -306,153 +358,181 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             await checkExistingJatahCuti();
+            Swal.close();
 
         } catch (error) {
             console.error('Error in fetchPegawaiDetails:', error);
-            showError(error.message);
+            showErrorAlert(error.message);
         }
     }
 
-    async function fetchJabatan(idJabatan) {
-        try {
-            console.log('Fetching jabatan for ID:', idJabatan);
-            const response = await fetch(`${baseUrl}/jabatan/${idJabatan}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json'
-                }
-            });
 
-            if (!response.ok) throw new Error('Gagal mengambil data jabatan');
 
-            const data = await response.json();
-            console.log('Jabatan data received:', data);
-            document.getElementById('pegawaiPosition').textContent = data.nama_jabatan;
-        } catch (error) {
-            console.error('Error in fetchJabatan:', error);
-            document.getElementById('pegawaiPosition').textContent = '-';
-        }
-    }
-
-    async function fetchDivisi(idDivisi) {
-        try {
-            console.log('Fetching divisi for ID:', idDivisi);
-            const response = await fetch(`${baseUrl}/divisi/${idDivisi}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json'
-                }
-            });
-
-            if (!response.ok) throw new Error('Gagal mengambil data divisi');
-
-            const data = await response.json();
-            console.log('Divisi data received:', data);
-            document.getElementById('pegawaiDivision').textContent = data.nama_divisi;
-        } catch (error) {
-            console.error('Error in fetchDivisi:', error);
-            document.getElementById('pegawaiDivision').textContent = '-';
-        }
-    }
-
-    async function checkExistingJatahCuti() {
-        try {
-            console.log('Checking existing jatah cuti for pegawai:', idPegawai);
-            const response = await fetch(`${baseUrl}/check-jatah-cuti/${idPegawai}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json'
-                }
-            });
-
-            if (!response.ok) throw new Error('Gagal memeriksa jatah cuti');
-
-            const data = await response.json();
-            console.log('Existing jatah cuti data:', data);
-
-            if (data.data) {
-                Swal.fire({
-                    icon: 'info',
-                    title: 'Info',
-                    text: 'Jatah cuti untuk pegawai ini sudah ada. Mengalihkan ke halaman edit...',
-                    timer: 2000,
-                    showConfirmButton: false
-                }).then(() => {
-                    window.location.href = `/jatah-cuti/edit/${data.data.id}`;
-                });
+async function fetchJabatan(idJabatan) {
+    try {
+        const response = await fetch(`${baseUrl}/jabatan/${idJabatan}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
             }
-        } catch (error) {
-            console.error('Error in checkExistingJatahCuti:', error);
-            showError(error.message);
-        }
+        });
+
+        if (!response.ok) throw new Error('Gagal mengambil data jabatan');
+
+        const data = await response.json();
+        document.getElementById('pegawaiPosition').textContent = data.nama_jabatan;
+    } catch (error) {
+        console.error('Error in fetchJabatan:', error);
+        document.getElementById('pegawaiPosition').textContent = '-';
     }
+}
 
-    async function handleSubmit(event) {
-        event.preventDefault();
-        
-        try {
-            validateForm();
-            
-            const formData = {
-                id_pegawai: document.getElementById('id_pegawai').value,
-                tahun: document.getElementById('tahun').value,
-                jatah_cuti_umum: document.getElementById('jatah_cuti_umum').value,
-                jatah_cuti_menikah: document.getElementById('jatah_cuti_menikah').value,
-                jatah_cuti_melahirkan: document.getElementById('jatah_cuti_melahirkan').value
-            };
-
-            console.log('Submitting form data:', formData);
-            console.log('API URL:', `${baseUrl}/jatah-cuti`);
-            console.log('Token:', token);
-
-            const response = await fetch(`${baseUrl}/jatah-cuti`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-
-            const result = await response.json();
-            console.log('Submit response:', result);
-
-            if (!response.ok) {
-                throw new Error(result.message || result.error || 'Gagal menyimpan jatah cuti');
+async function fetchDivisi(idDivisi) {
+    try {
+        const response = await fetch(`${baseUrl}/divisi/${idDivisi}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
             }
+        });
 
-            showSuccess(result.message || 'Jatah cuti berhasil disimpan');
-            setTimeout(() => {
-                window.location.href = '/jatah_cuti';
-            }, 2000);
+        if (!response.ok) throw new Error('Gagal mengambil data divisi');
 
-        } catch (error) {
-            console.error('Error in handleSubmit:', {
-                message: error.message,
-                stack: error.stack
+        const data = await response.json();
+        document.getElementById('pegawaiDivision').textContent = data.nama_divisi;
+    } catch (error) {
+        console.error('Error in fetchDivisi:', error);
+        document.getElementById('pegawaiDivision').textContent = '-';
+    }
+}
+
+async function checkExistingJatahCuti() {
+    try {
+        const response = await fetch(`${baseUrl}/check-jatah-cuti/${idPegawai}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
+            }
+        });
+
+        if (!response.ok) throw new Error('Gagal memeriksa jatah cuti');
+
+        const data = await response.json();
+
+        if (data.data) {
+            await Swal.fire({
+                icon: 'info',
+                title: 'Info',
+                text: 'Jatah cuti untuk pegawai ini sudah ada. Mengalihkan ke halaman edit...',
+                timer: 2000,
+                showConfirmButton: false
             });
-            showError(error.message);
+            window.location.href = `/jatah-cuti/edit/${data.data.id}`;
         }
+    } catch (error) {
+        console.error('Error in checkExistingJatahCuti:', error);
+        showErrorAlert(error.message);
+    }
+}
+
+function validateForm() {
+    const jatahCutiUmum = parseInt(document.getElementById('jatah_cuti_umum').value);
+    const jatahCutiMenikah = parseInt(document.getElementById('jatah_cuti_menikah').value);
+    const jatahCutiMelahirkan = parseInt(document.getElementById('jatah_cuti_melahirkan').value);
+    const tahun = parseInt(document.getElementById('tahun').value);
+
+    if (isNaN(jatahCutiUmum) || isNaN(jatahCutiMenikah) || isNaN(jatahCutiMelahirkan)) {
+        throw new Error('Semua jatah cuti harus berupa angka');
     }
 
-    // Initialize
-    function setDefaultValues() {
-        document.getElementById('id_pegawai').value = idPegawai;
-        document.getElementById('tahun').value = new Date().getFullYear();
+    if (jatahCutiUmum < 0 || jatahCutiMenikah < 0 || jatahCutiMelahirkan < 0) {
+        throw new Error('Jatah cuti tidak boleh negatif');
     }
 
-    // Event Listeners
-    document.getElementById('jatahCutiForm').addEventListener('submit', handleSubmit);
-    
-    document.getElementById('btnBack').addEventListener('click', function() {
-        window.location.href = '/jatah_cuti';
+    if (!tahun || tahun < 2000 || tahun > 2100) {
+        throw new Error('Tahun tidak valid');
+    }
+
+    if (!document.getElementById('id_pegawai').value) {
+        throw new Error('ID Pegawai tidak boleh kosong');
+    }
+}
+
+function handleValidationErrors(errors) {
+    Object.keys(errors).forEach(key => {
+        const inputElement = document.querySelector(`[name="${key}"]`);
+        if (inputElement) {
+            inputElement.classList.add('is-invalid');
+            const feedbackElement = inputElement.nextElementSibling;
+            if (feedbackElement && feedbackElement.classList.contains('invalid-feedback')) {
+                feedbackElement.textContent = errors[key][0];
+            }
+        }
     });
+}
 
-    // Initialize the form
-    setDefaultValues();
-    fetchPegawaiDetails();
+async function handleSubmit(event) {
+    event.preventDefault();
+    
+    if (!jatahCutiForm.checkValidity()) {
+        event.stopPropagation();
+        jatahCutiForm.classList.add('was-validated');
+        return;
+    }
+    
+    try {
+        validateForm();
+        showLoadingAlert('Sedang menyimpan data...');
+        
+        const formData = {
+            id_pegawai: document.getElementById('id_pegawai').value,
+            tahun: document.getElementById('tahun').value,
+            jatah_cuti_umum: document.getElementById('jatah_cuti_umum').value,
+            jatah_cuti_menikah: document.getElementById('jatah_cuti_menikah').value,
+            jatah_cuti_melahirkan: document.getElementById('jatah_cuti_melahirkan').value
+        };
+
+        const response = await fetch(`${baseUrl}/jatah-cuti`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            if (result.errors) {
+                handleValidationErrors(result.errors);
+                throw new Error('Terjadi kesalahan validasi');
+            }
+            throw new Error(result.message || 'Gagal menyimpan data');
+        }
+
+        await showSuccessAlert('Jatah cuti berhasil disimpan');
+        window.location.href = '/jatah_cuti';
+
+    } catch (error) {
+        console.error('Error in handleSubmit:', error);
+        showErrorAlert(error.message);
+    }
+}
+
+function setDefaultValues() {
+    document.getElementById('id_pegawai').value = idPegawai;
+    document.getElementById('tahun').value = new Date().getFullYear();
+    document.getElementById('jatah_cuti_umum').value = '12';
+    document.getElementById('jatah_cuti_menikah').value = '3';
+    document.getElementById('jatah_cuti_melahirkan').value = '120';
+}
+
+// Initialize form and event listeners
+jatahCutiForm.addEventListener('submit', handleSubmit);
+setDefaultValues();
+fetchPegawaiDetails();
 });
 </script>
 @endpush
-@endsection

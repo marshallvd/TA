@@ -19,7 +19,7 @@ class GajiController extends Controller
 {
     public function index()
     {
-        $gaji = Gaji::with('pegawai')->paginate(10);
+        $gaji = Gaji::with('pegawai')->get();
         return response()->json($gaji);
     }
 

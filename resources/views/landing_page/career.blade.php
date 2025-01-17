@@ -272,172 +272,149 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Load Divisions with Error Handling
     async function loadDivisiOptions() {
-    console.log('🔄 Loading division options...');
-    try {
-        const response = await fetch('http://127.0.0.1:8000/api/public/divisi', {
-            headers: {
-                'Accept': 'application/json',
-                ...(token && { 'Authorization': `Bearer ${token}` })
-            }
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const result = await response.json();
-        console.log('📋 Division Data:', result);
-        
-        // Check if divisions array exists
-        const divisions = result.data || result;
-        if (Array.isArray(divisions) && divisions.length > 0) {
-            // Clear existing options
-            divisiFilter.innerHTML = '<option value="">Semua Divisi</option>';
-            
-            // Sort divisions by nama_divisi
-            const sortedDivisions = [...divisions].sort((a, b) => 
-                a.nama_divisi.localeCompare(b.nama_divisi)
-            );
-
-            // Add new options
-            sortedDivisions.forEach(divisi => {
-                if (divisi && divisi.id_divisi && divisi.nama_divisi) {
-                    const option = new Option(divisi.nama_divisi, divisi.id_divisi);
-                    divisiFilter.add(option);
+        console.log('🔄 Loading division options...');
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/public/divisi', {
+                headers: {
+                    'Accept': 'application/json',
+                    ...(token && { 'Authorization': `Bearer ${token}` })
                 }
             });
             
-            console.log('✅ Divisions loaded successfully:', divisions.length);
-        } else {
-            throw new Error('No divisions found in the response');
-        }
-    } catch (error) {
-        console.error('❌ Error loading divisions:', error);
-        divisiFilter.innerHTML = '<option value="">Semua Divisi</option>';
-    }
-}
-
-// Update fetchJobs function to handle division filtering better
-async function fetchJobs() {
-    console.log('🔄 Starting job fetch process...');
-    showLoadingState();
-    
-    try {
-        let url = 'http://127.0.0.1:8000/api/lowongan';
-        const queryParams = new URLSearchParams();
-
-        // Search filter
-        if (searchInput.value.trim()) {
-            queryParams.append('search', searchInput.value.trim());
-            console.log('🔍 Added search parameter:', searchInput.value.trim());
-        }
-
-        // Division filter
-        if (divisiFilter.value) {
-            queryParams.append('divisi_id', divisiFilter.value);
-            console.log('👥 Added division filter:', divisiFilter.value);
-        }
-
-        // Job type filter
-        if (jenisFilter.value) {
-            queryParams.append('jenis_pekerjaan', jenisFilter.value.toLowerCase());
-            console.log('💼 Added job type filter:', jenisFilter.value);
-        }
-
-        // Salary range filters
-        if (gajiMinFilter.value) {
-            const minGaji = parseInt(gajiMinFilter.value);
-            queryParams.append('gaji_min', minGaji);
-            console.log('💰 Added minimum salary filter:', minGaji);
-        }
-        if (gajiMaxFilter.value) {
-            const maxGaji = parseInt(gajiMaxFilter.value);
-            queryParams.append('gaji_max', maxGaji);
-            console.log('💰 Added maximum salary filter:', maxGaji);
-        }
-
-        // Append query parameters if any exist
-        if (queryParams.toString()) {
-            url += '?' + queryParams.toString();
-        }
-
-        console.log('🔗 Fetching from URL:', url);
-
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                ...(token && { 'Authorization': `Bearer ${token}` })
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-        });
+            
+            const result = await response.json();
+            console.log('📋 Division Data:', result);
+            
+            const divisions = result.data || result;
+            if (Array.isArray(divisions) && divisions.length > 0) {
+                divisiFilter.innerHTML = '<option value="">Semua Divisi</option>';
+                
+                const sortedDivisions = [...divisions].sort((a, b) => 
+                    a.nama_divisi.localeCompare(b.nama_divisi)
+                );
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+                sortedDivisions.forEach(divisi => {
+                    if (divisi && divisi.id_divisi && divisi.nama_divisi) {
+                        const option = new Option(divisi.nama_divisi, divisi.id_divisi);
+                        divisiFilter.add(option);
+                    }
+                });
+                
+                console.log('✅ Divisions loaded successfully:', divisions.length);
+            } else {
+                throw new Error('No divisions found in the response');
+            }
+        } catch (error) {
+            console.error('❌ Error loading divisions:', error);
+            divisiFilter.innerHTML = '<option value="">Semua Divisi</option>';
         }
-
-        const result = await response.json();
-        console.log('📋 Raw API Result:', result);
-
-        if (!result.data) {
-            throw new Error('No data found in response');
-        }
-
-        // Client-side filtering with safe property access
-        currentJobs = result.data.filter(job => {
-            // Safe property access checks
-            if (!job) return false;
-
-            // Search filter
-            const searchTerm = searchInput.value.toLowerCase().trim();
-            const jobTitle = (job.judul_pekerjaan || '').toLowerCase();
-            const matchesSearch = !searchTerm || jobTitle.includes(searchTerm);
-            
-            // Division filter
-            const jobDivisiId = job.divisi_id || job.id_divisi; // Try both possible property names
-            const matchesDivisi = !divisiFilter.value || 
-                (jobDivisiId && jobDivisiId.toString() === divisiFilter.value);
-            
-            // Job type filter
-            const jobType = (job.jenis_pekerjaan || '').toLowerCase();
-            const matchesJobType = !jenisFilter.value || 
-                jobType === jenisFilter.value.toLowerCase();
-            
-            // Salary filter
-            const jobMinSalary = parseInt(job.gaji_minimal || 0);
-            const jobMaxSalary = parseInt(job.gaji_maksimal || 0);
-            const filterMinSalary = parseInt(gajiMinFilter.value || 0);
-            const filterMaxSalary = parseInt(gajiMaxFilter.value || Infinity);
-            
-            const matchesSalary = 
-                (!filterMinSalary || jobMinSalary >= filterMinSalary) && 
-                (!filterMaxSalary || jobMaxSalary <= filterMaxSalary);
-
-            console.log('Filter results for job:', {
-                jobId: job.id_lowongan_pekerjaan,
-                searchMatch: matchesSearch,
-                divisiMatch: matchesDivisi,
-                typeMatch: matchesJobType,
-                salaryMatch: matchesSalary
-            });
-            
-            return matchesSearch && matchesDivisi && matchesJobType && matchesSalary;
-        });
-
-        console.log('✅ Filtered jobs:', currentJobs);
-        
-        if (currentJobs.length === 0) {
-            showNoResults();
-        } else {
-            sortAndRenderJobs();
-        }
-
-    } catch (error) {
-        console.error('❌ Error fetching jobs:', error);
-        showError('Terjadi kesalahan saat memuat data lowongan. Silakan coba lagi.');
     }
-}
+
+    async function fetchJobs() {
+        console.log('🔄 Starting job fetch process...');
+        showLoadingState();
+        
+        try {
+            let url = 'http://127.0.0.1:8000/api/lowongan';
+            const queryParams = new URLSearchParams();
+
+            // Add status filter to only show active jobs
+            queryParams.append('status', 'aktif');
+
+            if (searchInput.value.trim()) {
+                queryParams.append('search', searchInput.value.trim());
+            }
+
+            if (divisiFilter.value) {
+                queryParams.append('divisi_id', divisiFilter.value);
+            }
+
+            if (jenisFilter.value) {
+                queryParams.append('jenis_pekerjaan', jenisFilter.value.toLowerCase());
+            }
+
+            if (gajiMinFilter.value) {
+                queryParams.append('gaji_min', gajiMinFilter.value);
+            }
+            if (gajiMaxFilter.value) {
+                queryParams.append('gaji_max', gajiMaxFilter.value);
+            }
+
+            if (queryParams.toString()) {
+                url += '?' + queryParams.toString();
+            }
+
+            console.log('🔗 Fetching from URL:', url);
+
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    ...(token && { 'Authorization': `Bearer ${token}` })
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log('📋 Raw API Result:', result);
+
+            if (!result.data) {
+                throw new Error('No data found in response');
+            }
+
+            // Filter for active jobs only
+            currentJobs = result.data.filter(job => {
+                if (!job) return false;
+
+                // Check for active status
+                const isActive = job.status?.toLowerCase() === 'aktif';
+                if (!isActive) return false;
+
+                // Continue with existing filters
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                const jobTitle = (job.judul_pekerjaan || '').toLowerCase();
+                const matchesSearch = !searchTerm || jobTitle.includes(searchTerm);
+                
+                const jobDivisiId = job.divisi_id || job.id_divisi;
+                const matchesDivisi = !divisiFilter.value || 
+                    (jobDivisiId && jobDivisiId.toString() === divisiFilter.value);
+                
+                const jobType = (job.jenis_pekerjaan || '').toLowerCase();
+                const matchesJobType = !jenisFilter.value || 
+                    jobType === jenisFilter.value.toLowerCase();
+                
+                const jobMinSalary = parseInt(job.gaji_minimal || 0);
+                const jobMaxSalary = parseInt(job.gaji_maksimal || 0);
+                const filterMinSalary = parseInt(gajiMinFilter.value || 0);
+                const filterMaxSalary = parseInt(gajiMaxFilter.value || Infinity);
+                
+                const matchesSalary = 
+                    (!filterMinSalary || jobMinSalary >= filterMinSalary) && 
+                    (!filterMaxSalary || jobMaxSalary <= filterMaxSalary);
+
+                return matchesSearch && matchesDivisi && matchesJobType && matchesSalary;
+            });
+
+            console.log('✅ Filtered active jobs:', currentJobs);
+            
+            if (currentJobs.length === 0) {
+                showNoResults();
+            } else {
+                sortAndRenderJobs();
+            }
+
+        } catch (error) {
+            console.error('❌ Error fetching jobs:', error);
+            showError('Terjadi kesalahan saat memuat data lowongan. Silakan coba lagi.');
+        }
+    }
 
 // Update renderJobs for safer property access
 function sortAndRenderJobs() {
@@ -477,7 +454,7 @@ function sortAndRenderJobs() {
                                 <i class="bi bi-building me-2"></i>${job.divisi?.nama_divisi || 'Divisi tidak tersedia'}
                             </p>
                         </div>
-                        <a href="/rekrutmen/lowongan/pelamar/${job.id_lowongan_pekerjaan}" 
+                        <a href="/landing/login" 
                            class="btn btn-primary btn-sm">
                             Lihat Detail
                         </a>
@@ -533,38 +510,44 @@ function sortAndRenderJobs() {
         `;
     }
 
-    // Event Listeners
-    searchButton.addEventListener('click', fetchJobs);
-    searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') fetchJobs();
-    });
-    
-    filterButton.addEventListener('click', fetchJobs);
-    
-    resetFilterButton.addEventListener('click', () => {
-        searchInput.value = '';
-        divisiFilter.value = '';
-        jenisFilter.value = '';
-        gajiMinFilter.value = '';
-        gajiMaxFilter.value = '';
-        currentSort = 'newest';
-        fetchJobs();
-    });
+// Event Listeners
+searchButton.addEventListener('click', fetchJobs);
+searchInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') fetchJobs();
+});
 
-    sortOptions.forEach(option => {
-        option.addEventListener('click', (e) => {
-            e.preventDefault();
-            currentSort = option.dataset.sort;
-            document.getElementById('sortButton').innerHTML = `
-                <i class="bi bi-sort-down me-2"></i>${option.textContent}
-            `;
-            sortAndRenderJobs();
-        });
-    });
+filterButton.addEventListener('click', fetchJobs);
 
-    // Initialize
-    loadDivisiOptions();
+resetFilterButton.addEventListener('click', () => {
+    searchInput.value = '';
+    divisiFilter.value = '';
+    jenisFilter.value = '';
+    gajiMinFilter.value = '';
+    gajiMaxFilter.value = '';
+    currentSort = 'newest';
     fetchJobs();
 });
+
+// Tambahkan event listener untuk sorting di sini
+sortOptions.forEach(option => {
+    option.addEventListener('click', (e) => {
+        e.preventDefault();
+        currentSort = option.dataset.sort;
+        
+        // Update button text
+        document.getElementById('sortButton').innerHTML = `
+            <i class="bi bi-sort-down me-2"></i>${option.textContent}
+        `;
+        
+        // Gunakan fungsi sortAndRenderJobs yang sudah ada
+        sortAndRenderJobs();
+    });
+});
+
+// Initialize
+loadDivisiOptions();
+fetchJobs();
+});
 </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 @endpush

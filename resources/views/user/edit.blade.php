@@ -15,7 +15,7 @@
                     <p class="card-text text-muted">Human Resource Management System SEB</p>
                 </div>
                 <div>
-                    <i class="bi bi-pencil-square text-primary" style="font-size: 3rem;"></i>
+                    <i class="bi bi-person-gear text-primary" style="font-size: 3rem;"></i>
                 </div>
             </div>
         </div>
@@ -31,45 +31,113 @@
                 </div>
                 <div class="card-body">
                     <div class="new-user-info">
-                        <form id="userForm">
+                        <form id="userForm" class="needs-validation" novalidate>
                             <input type="hidden" name="_method" value="PUT">
                             <input type="hidden" id="userId" name="id_user">
-                            <div class="row">
-                                <div class="form-group col-md-6 mb-3">
-                                    <label class="form-label">Pegawai:</label>
-                                    <select class="form-control" name="id_pegawai" id="pegawaiSelect" required>
-                                        <option value="">Pilih Pegawai</option>
-                                    </select>
+                            <div class="row g-4">
+                                <!-- Pegawai Select -->
+                                <div class="col-md-6">
+                                    <div class="form-group position-relative">
+                                        <label class="form-label fw-bold" for="pegawaiSelect">
+                                            <i class="bi bi-person-badge me-1"></i>Pegawai
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <select class="form-control form-control-lg shadow-none border-2" 
+                                                id="pegawaiSelect" 
+                                                name="id_pegawai" 
+                                                required>
+                                            <option value="">Pilih Pegawai</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Pegawai harus dipilih
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6 mb-3">
-                                    <label class="form-label">Role:</label>
-                                    <select class="form-control" name="id_role" id="roleSelect" required>
-                                        <option value="">Pilih Role</option>
-                                    </select>
+
+                                <!-- Role Select -->
+                                <div class="col-md-6">
+                                    <div class="form-group position-relative">
+                                        <label class="form-label fw-bold" for="roleSelect">
+                                            <i class="bi bi-shield-lock me-1"></i>Role
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <select class="form-control form-control-lg shadow-none border-2" 
+                                                id="roleSelect" 
+                                                name="id_role" 
+                                                required>
+                                            <option value="">Pilih Role</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Role harus dipilih
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6 mb-3">
-                                    <label class="form-label">Email:</label>
-                                    <input type="email" class="form-control" name="email" required>
+
+                                <!-- Email Input -->
+                                <div class="col-md-6">
+                                    <div class="form-group position-relative">
+                                        <label class="form-label fw-bold" for="email">
+                                            <i class="bi bi-envelope me-1"></i>Email
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="email" 
+                                               class="form-control form-control-lg shadow-none border-2" 
+                                               id="email" 
+                                               name="email" 
+                                               required
+                                               placeholder="Masukkan alamat email">
+                                        <div class="invalid-feedback">
+                                            Email tidak boleh kosong dan harus valid
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6 mb-3">
-                                    <label class="form-label">Password Baru (Kosongkan jika tidak ingin mengubah):</label>
-                                    <input type="password" class="form-control" name="password" minlength="8">
+
+                                <!-- Password Input -->
+                                <div class="col-md-6">
+                                    <div class="form-group position-relative">
+                                        <label class="form-label fw-bold" for="password">
+                                            <i class="bi bi-key me-1"></i>Password Baru
+                                        </label>
+                                        <input type="password" 
+                                               class="form-control form-control-lg shadow-none border-2" 
+                                               id="password" 
+                                               name="password" 
+                                               minlength="8"
+                                               placeholder="Kosongkan jika tidak ingin mengubah password">
+                                        <div class="invalid-feedback">
+                                            Password minimal 8 karakter
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6 mb-3">
-                                    <label class="form-label">Status:</label>
-                                    <select class="form-control" name="status" required>
-                                        <option value="">Pilih Status</option>
-                                        <option value="aktif">Aktif</option>
-                                        <option value="nonaktif">Non Aktif</option>
-                                    </select>
+
+                                <!-- Status Select -->
+                                <div class="col-md-6">
+                                    <div class="form-group position-relative">
+                                        <label class="form-label fw-bold" for="status">
+                                            <i class="bi bi-toggle-on me-1"></i>Status
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <select class="form-control form-control-lg shadow-none border-2" 
+                                                id="status" 
+                                                name="status" 
+                                                required>
+                                            <option value="">Pilih Status</option>
+                                            <option value="aktif">Aktif</option>
+                                            <option value="non-aktif">Non-aktif</option>
+                                        </select>
+                                        <div class="invalid-feedback">
+                                            Status harus dipilih
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row mt-3 position-absolute bottom-0 end-0 m-4">
-                                <div class="col-12">
+
+                            <!-- Action Buttons -->
+                            <div class="row mt-5">
+                                <div class="col-12 d-flex justify-content-end gap-2">
                                     <a href="/user" class="btn btn-danger me-2">
                                         <i class="bi bi-arrow-left me-2"></i>Kembali
                                     </a>
-                                    <button type="reset" class="btn btn-warning me-2">
+                                    <button type="button" id="resetButton" class="btn btn-warning me-2">
                                         <i class="bi bi-arrow-clockwise me-2"></i>Reset
                                     </button>
                                     <button type="submit" class="btn btn-success">
@@ -85,294 +153,363 @@
     </div>
 </div>
 @endsection
+
+@push('css')
+<style>
+/* Form styling */
+.form-label {
+    font-weight: 500;
+}
+
+.invalid-feedback {
+    font-size: 0.875em;
+}
+
+.was-validated .form-control:invalid,
+.form-control.is-invalid {
+    border-color: #dc3545;
+}
+
+/* Custom form control styling */
+.form-control-lg {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+}
+
+/* Icon styling */
+.bi {
+    vertical-align: -0.125em;
+}
+</style>
+@endpush
+
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Inisialisasi variabel dan konstanta
+    // Get necessary DOM elements and setup variables
     const token = localStorage.getItem('token');
     const userId = window.location.pathname.split('/').pop();
+    const userForm = document.getElementById('userForm');
+    const resetButton = document.getElementById('resetButton');
     const pegawaiSelect = document.getElementById('pegawaiSelect');
     const roleSelect = document.getElementById('roleSelect');
-    const userForm = document.getElementById('userForm');
     const API_URL = 'http://127.0.0.1:8000/api';
-    let initialUserData = null;
+    
+    // Store original data for reset functionality
+    let originalData = null;
 
-    // Fungsi untuk cek token
-    function checkToken() {
-        if (!token) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Authentication Error',
-                text: 'Token tidak ditemukan. Silakan login kembali.'
-            }).then(() => {
-                window.location.href = '/login';
-            });
-            return false;
+    // Initialize form
+    initializeForm();
+
+    async function initializeForm() {
+        try {
+            await Promise.all([
+                fetchAndPopulateUserData(),
+                fetchPegawai(),
+                fetchRole()
+            ]);
+        } catch (error) {
+            console.error('Error initializing form:', error);
+            showErrorAlert(error.message);
+            redirectToIndex();
         }
-        return true;
     }
 
-    // Fungsi untuk mengambil data user yang akan diedit
-    async function fetchUserData() {
-        if (!checkToken()) return;
+    async function fetchAndPopulateUserData() {
+    try {
+        showLoadingAlert('Sedang mengambil data user...');
+        
+        const response = await fetch(`${API_URL}/users/${userId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
+            }
+        });
 
+        const result = await response.json();
+        console.log('GET User Response:', result); // Debug log untuk melihat format data dari server
+        
+        if (!response.ok) {
+            throw new Error(result.message || 'Gagal mengambil data user');
+        }
+
+        originalData = result.data ? result.data : result;
+        
+        if (!originalData || typeof originalData !== 'object') {
+            throw new Error('Invalid data structure received from API');
+        }
+
+        // Debug log untuk melihat nilai status yang diterima
+        console.log('Original status value:', originalData.status);
+        console.log('Original status type:', typeof originalData.status);
+
+        populateFormFields(originalData);
+        Swal.close();
+
+    } catch (error) {
+        console.error('Fetch user data error:', error);
+        Swal.close();
+        throw error;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const statusSelect = document.getElementById('status');
+    if (statusSelect) {
+        statusSelect.innerHTML = `
+            <option value="">Pilih Status</option>
+            <option value="aktif">Aktif</option>
+            <option value="non-aktif">Non-Aktif</option>
+        `;
+    }
+});
+function populateFormFields(data) {
         try {
-            const response = await fetch(`${API_URL}/users/${userId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+            console.log('Populating form with data:', data);
+            
+            const userData = data.data || data;
+            
+            document.getElementById('userId').value = userData.id_user || '';
+            document.querySelector('input[name="email"]').value = userData.email || '';
+            
+            // Updated status handling for correct enum values
+            const statusSelect = document.querySelector('select[name="status"]');
+            if (statusSelect) {
+                // Convert any 'non-aktif' to 'nonaktif' for compatibility
+                const status = userData.status === 'non-aktif' ? 'nonaktif' : userData.status;
+                if (status === 'aktif' || status === 'nonaktif') {
+                    statusSelect.value = status;
                 }
-            });
+            }
             
-            const data = await response.json();
-            console.log('User Data Response:', data);
-            
-            if (!response.ok) {
-                throw new Error(data.message || `HTTP error! status: ${response.status}`);
+            if (userData.id_pegawai && pegawaiSelect) {
+                pegawaiSelect.value = userData.id_pegawai;
             }
 
-            // Fetch pegawai dan role data secara berurutan
-            await fetchPegawai(data.id_pegawai);
-            await fetchRole(data.id_role);
-            
-            // Populate form dengan data user
-            populateForm(data);
-            
+            if (userData.id_role && roleSelect) {
+                roleSelect.value = userData.id_role;
+            }
+
+            console.log('Form populated successfully');
         } catch (error) {
-            console.error('Error in fetchUserData:', error);
-            handleFetchError(error);
+            console.error('Error in populateFormFields:', error);
+            throw new Error('Failed to populate form fields: ' + error.message);
         }
     }
 
-    // Fungsi untuk mengisi form dengan data yang ada
-    function populateForm(data) {
-        // Handle jika data adalah object atau nested dalam property
-        const userData = data.data || data;
 
-        // Simpan data awal
-        initialUserData = {...userData};
-        
-        document.getElementById('userId').value = userData.id_user;
-        document.querySelector('input[name="email"]').value = userData.email || '';
-        document.querySelector('select[name="status"]').value = userData.status || '';
-        
-        // Set selected values untuk pegawai dan role
-        if (userData.id_pegawai) {
-            pegawaiSelect.value = userData.id_pegawai;
-        }
-        if (userData.id_role) {
-            roleSelect.value = userData.id_role;
-        }
-    }
-
-    // Fungsi untuk mengambil data pegawai
-    async function fetchPegawai(selectedPegawaiId) {
-        if (!checkToken()) return;
-
+    async function fetchPegawai() {
         try {
             const response = await fetch(`${API_URL}/pegawai`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    'Accept': 'application/json'
                 }
             });
-            
-            console.log('Pegawai API Response:', response);
-            
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Failed to fetch pegawai');
-            }
-            
-            const responseData = await response.json();
-            console.log('Pegawai Data:', responseData);
 
-            // Handle berbagai kemungkinan struktur data
-            const pegawaiData = responseData.data || responseData || [];
-            const pegawaiArray = Array.isArray(pegawaiData) ? pegawaiData : [pegawaiData];
-            
-            pegawaiSelect.innerHTML = '<option value="">Pilih Pegawai</option>';
-            pegawaiArray.forEach(pegawai => {
-                if (!pegawai || (!pegawai.id_pegawai && !pegawai.nama_lengkap)) {
-                    console.warn('Invalid pegawai object:', pegawai);
-                    return;
-                }
+            if (!response.ok) throw new Error('Gagal mengambil data pegawai');
 
-                const option = document.createElement('option');
-                option.value = pegawai.id_pegawai;
-                option.textContent = pegawai.nama_lengkap;
-                if (pegawai.id_pegawai == selectedPegawaiId) {
-                    option.selected = true;
-                }
-                pegawaiSelect.appendChild(option);
-            });
-
-            console.log('Pegawai select populated successfully');
+            const result = await response.json();
+            populatePegawaiSelect(result.data || result);
 
         } catch (error) {
-            console.error('Error in fetchPegawai:', error);
-            handleFetchError(error);
+            throw new Error('Gagal memuat data pegawai: ' + error.message);
         }
     }
 
-    // Fungsi untuk mengambil data role
-    async function fetchRole(selectedRoleId) {
-        if (!checkToken()) return;
+    function populatePegawaiSelect(pegawaiData) {
+        pegawaiSelect.innerHTML = '<option value="">Pilih Pegawai</option>';
+        pegawaiData.forEach(pegawai => {
+            const option = document.createElement('option');
+            option.value = pegawai.id_pegawai;
+            option.textContent = pegawai.nama_lengkap;
+            if (originalData && pegawai.id_pegawai == originalData.id_pegawai) {
+                option.selected = true;
+            }
+            pegawaiSelect.appendChild(option);
+        });
+    }
 
+    async function fetchRole() {
         try {
-            console.log('Fetching roles with token:', token);
-            
             const response = await fetch(`${API_URL}/role`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    'Accept': 'application/json'
                 }
             });
-            
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || response.statusText);
-            }
-            
-            const responseData = await response.json();
-            console.log('Role API Raw Response:', responseData);
-            
-            // Handle berbagai kemungkinan struktur data
-            let roleData;
-            if (responseData.data) {
-                roleData = responseData.data;
-            } else if (Array.isArray(responseData)) {
-                roleData = responseData;
-            } else if (typeof responseData === 'object') {
-                roleData = [responseData];
-            } else {
-                throw new Error('Unexpected role data format');
-            }
 
-            // Pastikan roleData adalah array
-            const roleArray = Array.isArray(roleData) ? roleData : [roleData];
-            
-            roleSelect.innerHTML = '<option value="">Pilih Role</option>';
-            
-            roleArray.forEach(role => {
-                // Handle berbagai kemungkinan property names
-                const roleId = role.id_role || role.id || role.role_id;
-                const roleName = role.nama_role || role.name || role.role_name;
-                
-                if (!roleId || !roleName) {
-                    console.warn('Incomplete role data:', role);
-                    return;
-                }
-                
-                const option = document.createElement('option');
-                option.value = roleId;
-                option.textContent = roleName;
-                if (roleId == selectedRoleId) {
-                    option.selected = true;
-                }
-                roleSelect.appendChild(option);
-            });
+            if (!response.ok) throw new Error('Gagal mengambil data role');
 
-            console.log('Role select populated successfully');
-            
+            const result = await response.json();
+            populateRoleSelect(result.data || result);
+
         } catch (error) {
-            console.error('Detailed Error in fetchRole:', {
-                message: error.message,
-                stack: error.stack
-            });
-            handleFetchError(error);
+            throw new Error('Gagal memuat data role: ' + error.message);
         }
     }
 
-    // Handle form submission untuk update
-    userForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        if (!checkToken()) return;
-
-        try {
-            const formData = new FormData(this);
-            
-            // Jika password kosong, hapus dari formData
-            if (!formData.get('password')) {
-                formData.delete('password');
+    function populateRoleSelect(roleData) {
+        roleSelect.innerHTML = '<option value="">Pilih Role</option>';
+        roleData.forEach(role => {
+            const option = document.createElement('option');
+            option.value = role.id_role;
+            option.textContent = role.nama_role;
+            if (originalData && role.id_role == originalData.id_role) {
+                option.selected = true;
             }
+            roleSelect.appendChild(option);
+        });
+    }
 
-            // Log form data untuk debugging
-            console.log('Form Data being sent:', Object.fromEntries(formData));
-            
-            const response = await fetch(`${API_URL}/users/${userId}`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json'
-                },
-                body: formData
-            });
-            
-            console.log('Update Response:', response);
+    // Event Listeners
+    resetButton.addEventListener('click', async function() {
+        const result = await Swal.fire({
+            title: 'Konfirmasi Reset',
+            text: 'Apakah Anda yakin ingin mengembalikan data ke kondisi awal?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Reset',
+            cancelButtonText: 'Batal'
+        });
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Failed to update user');
-            }
-            
-            const responseData = await response.json();
-            console.log('Update Success Data:', responseData);
-
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: 'Data user berhasil diupdate',
-                showConfirmButton: false,
-                timer: 1500
-            }).then(() => {
-                window.location.href = '/user';
-            });
-        } catch (error) {
-            console.error('Error in form submission:', error);
-            handleFetchError(error);
-        }
-    }); 
-
-    // Event listener untuk reset button
-    userForm.addEventListener('reset', function(e) {
-        e.preventDefault();
-        if (initialUserData) {
-            // Kembalikan form ke data awal
-            document.getElementById('userId').value = initialUserData.id_user;
-            document.querySelector('input[name="email"]').value = initialUserData.email || '';
-            document.querySelector('select[name="status"]').value = initialUserData.status || '';
-            document.querySelector('input[name="password"]').value = ''; // Reset password field
-            
-            // Reset pegawai dan role ke nilai awal
-            if (initialUserData.id_pegawai) {
-                pegawaiSelect.value = initialUserData.id_pegawai;
-            }
-            if (initialUserData.id_role) {
-                roleSelect.value = initialUserData.id_role;
-            }
-            
-            // Clear any error states
-            const errorElements = document.querySelectorAll('.invalid-feedback');
-            errorElements.forEach(element => element.textContent = '');
-            const inputElements = userForm.querySelectorAll('.form-control');
-            inputElements.forEach(element => element.classList.remove('is-invalid'));
-            
-            Swal.fire({
-                icon: 'success',
-                title: 'Form Direset',
-                text: 'Form telah dikembalikan ke data awal',
-                showConfirmButton: false,
-                timer: 1500
-            });
+        if (result.isConfirmed && originalData) {
+            populateFormFields(originalData);
+            await Promise.all([fetchPegawai(), fetchRole()]);
+            showSuccessAlert('Data berhasil direset', true);
         }
     });
 
-    // Fungsi helper untuk handle error
+    userForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        if (!this.checkValidity()) {
+            e.stopPropagation();
+            this.classList.add('was-validated');
+            return;
+        }
+
+        try {
+            showLoadingAlert('Sedang menyimpan perubahan...');
+
+            const formData = new FormData(this);
+            
+            // Create request data with correct status value format
+            const requestData = {
+                id_pegawai: formData.get('id_pegawai'),
+                id_role: formData.get('id_role'),
+                email: formData.get('email'),
+                status: formData.get('status') // Status value is already correct from select
+            };
+            
+            // Add password if provided
+            const password = formData.get('password');
+            if (password && password.trim()) {
+                requestData.password = password;
+            }
+
+            console.log('Request data being sent:', requestData);
+
+            const response = await fetch(`${API_URL}/users/${userId}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            });
+
+            const result = await response.json();
+            console.log('API Response:', result);
+
+            if (!response.ok) {
+                if (result.errors) {
+                    console.error('Validation errors:', result.errors);
+                    handleValidationErrors(result.errors);
+                    throw new Error('Terjadi kesalahan validasi');
+                }
+                if (result.status) {
+                    const errorMessage = Array.isArray(result.status) ? result.status[0] : result.status;
+                    throw new Error(errorMessage);
+                }
+                throw new Error(result.message || 'Gagal menyimpan perubahan');
+            }
+
+            await showSuccessAlert('Data user berhasil diperbarui');
+            redirectToIndex();
+
+        } catch (error) {
+            console.error('Full error details:', error);
+            showErrorAlert(error.message);
+        }
+    });
+
+    // Update the error handling function
+    function handleValidationErrors(errors) {
+        console.log('Handling validation errors:', errors);
+        Object.keys(errors).forEach(key => {
+            const inputElement = document.querySelector(`[name="${key}"]`);
+            if (inputElement) {
+                inputElement.classList.add('is-invalid');
+                const feedbackElement = inputElement.nextElementSibling;
+                if (feedbackElement && feedbackElement.classList.contains('invalid-feedback')) {
+                    feedbackElement.textContent = Array.isArray(errors[key]) ? errors[key][0] : errors[key];
+                }
+                console.log(`Added error feedback for ${key}:`, errors[key]);
+            } else {
+                console.warn(`No input element found for ${key}`);
+            }
+        });
+    }
+
+    // Utility Functions
+    function showLoadingAlert(message) {
+        return Swal.fire({
+            title: 'Mohon Tunggu',
+            text: message,
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+    }
+
+    function showSuccessAlert(message, autoClose = false) {
+        return Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: message,
+            showConfirmButton: !autoClose,
+            timer: autoClose ? 1500 : undefined
+        });
+    }
+
+    function showErrorAlert(message) {
+        return Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: message,
+            confirmButtonText: 'OK'
+        });
+    }
+
+    function handleValidationErrors(errors) {
+        Object.keys(errors).forEach(key => {
+            const inputElement = document.querySelector(`[name="${key}"]`);
+            if (inputElement) {
+                inputElement.classList.add('is-invalid');
+                const feedbackElement = inputElement.nextElementSibling;
+                if (feedbackElement && feedbackElement.classList.contains('invalid-feedback')) {
+                    feedbackElement.textContent = errors[key][0];
+                }
+            }
+        });
+    }
+
     function handleFetchError(error) {
         console.error('Error caught by handler:', error);
 
@@ -406,9 +543,29 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Load initial data saat halaman dimuat
-    fetchUserData();
-});
+    function redirectToIndex() {
+        window.location.href = '/user';
+    }
 
+    // Token validation check on page load
+    function checkToken() {
+        if (!token) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Authentication Error',
+                text: 'Token tidak ditemukan. Silakan login kembali.'
+            }).then(() => {
+                window.location.href = '/login';
+            });
+            return false;
+        }
+        return true;
+    }
+
+    // Check token when page loads
+    if (!checkToken()) {
+        return;
+    }
+});
 </script>
 @endpush

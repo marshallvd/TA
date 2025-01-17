@@ -18,7 +18,7 @@
                                 <p class="card-text text-muted">Human Resource Management System SEB</p>
                             </div>
                             <div>
-                                <i class="bi bi-cash text-primary" style="font-size: 3rem;"></i>
+                                <i class="bi bi-cash-stack text-primary" style="font-size: 3rem;"></i>
                             </div>
                         </div>
                     </div>
@@ -34,20 +34,18 @@
                                         <span class="text-muted text-uppercase small">Total Digaji</span>
                                     </div>
                                     <div>
-                                        <svg class="icon-20 text-primary" xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                        </svg>
+                                        <i class="bi bi-cash-stack text-primary"></i>
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="d-flex align-items-center">
                                         <div class="border rounded p-3 bg-soft-primary me-3">
-                                            <i class="fas fa-money-bill-wave icon-20"></i>
+                                            <i class="bi bi-cash-stack"></i>
                                         </div>
                                         <h2 id="totalGajiCount" class="counter mb-0">0/0</h2>
                                     </div>
                                     <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#chartModal" data-chart-type="totalGaji">
-                                        Grafik
+                                        <i class="bi bi-bar-chart-fill me-1"></i>Grafik
                                     </button>
                                 </div>
                             </div>
@@ -61,17 +59,20 @@
                                         <span class="text-muted text-uppercase small">Rata-rata Gaji per Divisi</span>
                                     </div>
                                     <div>
-                                        <svg class="icon-20 text-success" xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                        </svg>
+                                        <i class="bi bi-building-fill text-success"></i>
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div id="divisiTertinggiGaji">
-                                        <!-- Rata-rata Gaji per Divisi akan diisi dinamis -->
+                                        <div class="d-flex align-items-center">
+                                            <div class="border rounded p-3 bg-soft-success me-3">
+                                                <i class="bi bi-building-fill"></i>
+                                            </div>
+                                            <!-- Rata-rata Gaji per Divisi akan diisi dinamis -->
+                                        </div>
                                     </div>
                                     <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#chartModal" data-chart-type="gajiPerDivisi">
-                                        Grafik
+                                        <i class="bi bi-bar-chart-fill me-1"></i>Grafik
                                     </button>
                                 </div>
                             </div>
@@ -82,69 +83,60 @@
                             <div class="card-body">
                                 <div class="d-flex justify-content-between mb-3">
                                     <div>
-                                        <span class=" text-muted text-uppercase small">Rata-rata Gaji per Jabatan</span>
+                                        <span class="text-muted text-uppercase small">Rata-rata Gaji per Jabatan</span>
                                     </div>
                                     <div>
-                                        <svg class="icon-20 text-warning" xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                        </svg>
+                                        <i class="bi bi-person-workspace text-warning"></i>
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div id="jabatanTertinggiGaji">
-                                        <!-- Rata-rata Gaji per Jabatan akan diisi dinamis -->
+                                        <div class="d-flex align-items-center">
+                                            <div class="border rounded p-3 bg-soft-warning me-3">
+                                                <i class="bi bi-person-workspace"></i>
+                                            </div>
+                                            <!-- Rata-rata Gaji per Jabatan akan diisi dinamis -->
+                                        </div>
                                     </div>
                                     <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#chartModal" data-chart-type="gajiPerJabatan">
-                                        Grafik
+                                        <i class="bi bi-bar-chart-fill me-1"></i>Grafik
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {{-- <div class="col-md-3">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between mb-3">
-                                    <div>
-                                        <span class="text-muted text-uppercase small">Total Pegawai</span>
-                                    </div>
-                                    <div>
-                                        <svg class="icon-20 text-info" xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h2 id="totalPegawaiCount" class="counter mb-0">0</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
                 </div>
-
-                <!-- Modal for Chart -->
-                {{-- <div class="modal fade" id="chartModal" tabindex="-1" aria-labelledby="chartModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="chartModalLabel">Grafik</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <canvas id="chartCanvas" style="border: 1px solid red; width: 100%; height: 400px;"></canvas>                            
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
 
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <div class="header-title">
                             <h4 class="card-title">Data Penggajian</h4>
                         </div>
-                        <div class="d-flex">
-                            <button class="btn btn-primary me-2" id="exportPdfBtn">
-                                <i class="fas fa-file-pdf me-2"></i>Cetak PDF
+                        <div class="d-flex align-items-center">
+                            <div class="dropdown me-2">
+                                <button class="btn btn-success dropdown-toggle" type="button" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-file-earmark-arrow-up me-2"></i>Ekspor
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="exportDropdown">
+                                    <li>
+                                        <a class="dropdown-item" href="#" id="exportPdfBtn">
+                                            <i class="bi bi-file-pdf text-danger me-2"></i>Cetak PDF
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#" id="exportExcelBtn">
+                                            <i class="bi bi-file-excel text-success me-2"></i>Ekspor Excel
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#" id="exportCsvBtn">
+                                            <i class="bi bi-filetype-csv text-info me-2"></i>Ekspor CSV
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <button class="btn btn-warning" id="copyTableBtn">
+                                <i class="bi bi-clipboard me-2"></i>Salin
                             </button>
                         </div>
                     </div>
@@ -153,18 +145,24 @@
                         <!-- Enhanced Filtering Section -->
                         <div class="row mb-4">
                             <div class="col-md-2">
-                                <label for="yearFilter">Filter Tahun:</label>
+                                <label for="yearFilter">
+                                    <i class="bi bi-calendar-year me-2"></i>Filter Tahun:
+                                </label>
                                 <select id="yearFilter" class="form-control">
                                     <option value="">Semua Tahun</option>
                                     <!-- Years will be populated dynamically -->
                                 </select>
                             </div>
                             <div class="col-md-2">
-                                <label for="monthYearFilter">Filter Bulan & Tahun:</label>
+                                <label for="monthYearFilter">
+                                    <i class="bi bi-calendar-month me-2"></i>Filter Bulan & Tahun:
+                                </label>
                                 <input type="month" id="monthYearFilter" class="form-control">
                             </div>
                             <div class="col-md-2">
-                                <label for="predikatFilter">Filter Predikat:</label>
+                                <label for="predikatFilter">
+                                    <i class="bi bi-star me-2"></i>Filter Predikat:
+                                </label>
                                 <select id="predikatFilter" class="form-control">
                                     <option value="">Semua Predikat</option>
                                     <option value="sangat baik">Sangat Baik</option>
@@ -175,22 +173,30 @@
                                 </select>
                             </div>
                             <div class="col-md-2">
-                                <label for="divisiFilter">Filter Divisi:</label>
+                                <label for="divisiFilter">
+                                    <i class="bi bi-building me-2"></i>Filter Divisi:
+                                </label>
                                 <select id="divisiFilter" class="form-control">
                                     <option value="">Semua Divisi</option>
                                     <!-- Divisi will be populated dynamically -->
                                 </select>
                             </div>
                             <div class="col-md-2">
-                                <label for="jabatanFilter">Filter Jabatan:</label>
+                                <label for="jabatanFilter">
+                                    <i class="bi bi-person-workspace me-2"></i>Filter Jabatan:
+                                </label>
                                 <select id="jabatanFilter" class="form-control">
                                     <option value="">Semua Jabatan</option>
                                     <!-- Jabatan will be populated dynamically -->
                                 </select>
                             </div>
                             <div class="col-md-2 d-flex align-items-end">
-                                <button id="applyFilterBtn" class="btn btn-primary me-2">Filter</button>
-                                <button id="resetFilterBtn" class="btn btn-secondary">Reset</button>
+                                <button id="applyFilterBtn" class="btn btn-primary me-2">
+                                    <i class="bi bi-funnel me-2"></i>Filter
+                                </button>
+                                <button id="resetFilterBtn" class="btn btn-secondary">
+                                    <i class="bi bi-arrow-counterclockwise me-2"></i>Reset
+                                </button>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -220,6 +226,7 @@
         </div>
     </div>
 </div>
+
 <!-- Modal for Chart -->
 <div class="modal fade" id="chartModal" tabindex="-1" aria-labelledby="chartModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -231,14 +238,18 @@
             <div class="modal-body">
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label for="chartYearFilter">Tahun:</label>
+                        <label for="chartYearFilter">
+                            <i class="bi bi-calendar-year me-2"></i>Tahun:
+                        </label>
                         <select id="chartYearFilter" class="form-control">
                             <option value="">Pilih Tahun</option>
                             <!-- Tahun akan diisi dinamis -->
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <label for="chartMonthFilter">Bulan:</label>
+                        <label for="chartMonthFilter">
+                            <i class="bi bi-calendar-month me-2"></i>Bulan:
+                        </label>
                         <select id="chartMonthFilter" class="form-control">
                             <option value="">Pilih Bulan</option>
                             <option value="01">Januari</option>
@@ -259,12 +270,21 @@
                 <canvas id="chartCanvas"></canvas>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="generateChartBtn">Tampilkan Grafik</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-primary" id="generateChartBtn">
+                    <i class="bi bi-bar-chart-fill me-2"></i>Tampilkan Grafik
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-2"></i>Tutup
+                </button>
             </div>
         </div>
     </div>
 </div>
+@endsection
+
+@push('scripts')
+    
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -279,7 +299,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 return [];
             }
 
-            const fullUrl = `http://127.0.0.1:8000/api/${endpoint}`;
+            const fullUrl = `${API_BASE_URL}/${endpoint}`;
             console.log(`Fetching data from: ${fullUrl}`); // Debug URL
 
             const response = await fetch(fullUrl, {
@@ -1012,6 +1032,242 @@ $('#resetFilterBtn').on('click', function() {
     
     gajiTable.draw(); // Render ulang tanpa filter
 });
+
+// Fungsi Ekspor PDF
+function exportToPDF() {
+    try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('l'); // Landscape
+        
+        // Gunakan DataTable yang benar
+        const table = $('#gaji-karyawan-table').DataTable();
+        const headers = ['No', 'Nama Pegawai', 'Periode Gaji', 'Predikat', 'Kehadiran', 'Lembur', 
+                        'Total Pendapatan', 'Total Potongan', 'Gaji Bersih', 'Divisi', 'Jabatan'];
+        
+        // Ambil data dari DataTable
+        const allData = table.rows().data().toArray().map((row, index) => [
+            index + 1,
+            row.pegawai?.nama_lengkap || '',
+            `${row.periode_tahun}-${String(row.periode_bulan).padStart(2, '0')}`,
+            row.predikat_penilaian || '',
+            row.jumlah_kehadiran || '',
+            row.jumlah_hari_lembur || '',
+            `Rp ${Number(row.total_pendapatan).toLocaleString('id-ID')}`,
+            `Rp ${Number(row.total_potongan).toLocaleString('id-ID')}`,
+            `Rp ${Number(row.gaji_bersih).toLocaleString('id-ID')}`,
+            getNamaDivisi(divisiData, row.pegawai?.id_divisi) || '',
+            getNamaJabatan(jabatanData, row.pegawai?.id_jabatan) || ''
+        ]);
+        
+        doc.text("Laporan Penggajian", 14, 15);
+        doc.autoTable({
+            head: [headers],
+            body: allData,
+            startY: 25,
+            styles: {
+                fontSize: 8,
+                cellPadding: 2,
+                overflow: 'linebreak'
+            },
+            margin: { top: 20 }
+        });
+        
+        doc.save(`Laporan_Penggajian_${new Date().toLocaleDateString('id-ID')}.pdf`);
+        
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: 'PDF berhasil diekspor',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
+    } catch (error) {
+        console.error('Gagal ekspor PDF:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Kesalahan',
+            text: 'Gagal mengekspor PDF: ' + error.message
+        });
+    }
+}
+
+// Fungsi Ekspor Excel
+function exportToExcel() {
+    try {
+        const table = $('#gaji-karyawan-table').DataTable();
+        const headers = ['No', 'Nama Pegawai', 'Periode Gaji', 'Predikat', 'Kehadiran', 'Lembur', 
+                        'Total Pendapatan', 'Total Potongan', 'Gaji Bersih', 'Divisi', 'Jabatan'];
+        
+        // Ambil data dari DataTable
+        const allData = table.rows().data().toArray().map((row, index) => [
+            index + 1,
+            row.pegawai?.nama_lengkap || '',
+            `${row.periode_tahun}-${String(row.periode_bulan).padStart(2, '0')}`,
+            row.predikat_penilaian || '',
+            row.jumlah_kehadiran || '',
+            row.jumlah_hari_lembur || '',
+            row.total_pendapatan || '',
+            row.total_potongan || '',
+            row.gaji_bersih || '',
+            getNamaDivisi(divisiData, row.pegawai?.id_divisi) || '',
+            getNamaJabatan(jabatanData, row.pegawai?.id_jabatan) || ''
+        ]);
+        
+        const workSheetData = [headers, ...allData];
+        
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.aoa_to_sheet(workSheetData);
+        
+        // Atur lebar kolom
+        ws['!cols'] = headers.map(() => ({ wch: 20 }));
+        
+        XLSX.utils.book_append_sheet(wb, ws, "Penggajian");
+        XLSX.writeFile(wb, `Laporan_Penggajian_${new Date().toLocaleDateString('id-ID')}.xlsx`);
+        
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: 'Excel berhasil diekspor',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
+    } catch (error) {
+        console.error('Gagal ekspor Excel:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Kesalahan',
+            text: 'Gagal mengekspor Excel: ' + error.message
+        });
+    }
+}
+
+// Fungsi Ekspor CSV
+function exportToCSV() {
+    try {
+        const table = $('#gaji-karyawan-table').DataTable();
+        const headers = ['No', 'Nama Pegawai', 'Periode Gaji', 'Predikat', 'Kehadiran', 'Lembur', 
+                        'Total Pendapatan', 'Total Potongan', 'Gaji Bersih', 'Divisi', 'Jabatan'];
+        
+        // Ambil data dari DataTable
+        const allData = table.rows().data().toArray().map((row, index) => [
+            index + 1,
+            row.pegawai?.nama_lengkap || '',
+            `${row.periode_tahun}-${String(row.periode_bulan).padStart(2, '0')}`,
+            row.predikat_penilaian || '',
+            row.jumlah_kehadiran || '',
+            row.jumlah_hari_lembur || '',
+            row.total_pendapatan || '',
+            row.total_potongan || '',
+            row.gaji_bersih || '',
+            getNamaDivisi(divisiData, row.pegawai?.id_divisi) || '',
+            getNamaJabatan(jabatanData, row.pegawai?.id_jabatan) || ''
+        ]);
+        
+        const csvContent = [
+            headers.join(','),
+            ...allData.map(row => row.join(','))
+        ].join('\n');
+        
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        
+        link.setAttribute('href', url);
+        link.setAttribute('download', `Laporan_Penggajian_${new Date().toLocaleDateString('id-ID')}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: 'CSV berhasil diekspor',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
+    } catch (error) {
+        console.error('Gagal ekspor CSV:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Kesalahan',
+            text: 'Gagal mengekspor CSV: ' + error.message
+        });
+    }
+}
+
+// Fungsi Salin Tabel
+function copyTableToClipboard() {
+    try {
+        const table = $('#gaji-karyawan-table').DataTable();
+        const headers = ['No', 'Nama Pegawai', 'Periode Gaji', 'Predikat', 'Kehadiran', 'Lembur', 
+                        'Total Pendapatan', 'Total Potongan', 'Gaji Bersih', 'Divisi', 'Jabatan'];
+        
+        // Ambil data dari DataTable
+        const allData = table.rows().data().toArray().map((row, index) => [
+            index + 1,
+            row.pegawai?.nama_lengkap || '',
+            `${row.periode_tahun}-${String(row.periode_bulan).padStart(2, '0')}`,
+            row.predikat_penilaian || '',
+            row.jumlah_kehadiran || '',
+            row.jumlah_hari_lembur || '',
+            `Rp ${Number(row.total_pendapatan).toLocaleString('id-ID')}`,
+            `Rp ${Number(row.total_potongan).toLocaleString('id-ID')}`,
+            `Rp ${Number(row.gaji_bersih).toLocaleString('id-ID')}`,
+            getNamaDivisi(divisiData, row.pegawai?.id_divisi) || '',
+            getNamaJabatan(jabatanData, row.pegawai?.id_jabatan) || ''
+        ]);
+        
+        let clipboardText = headers.join('\t') + '\n';
+        allData.forEach(row => {
+            clipboardText += row.join('\t') + '\n';
+        });
+        
+        navigator.clipboard.writeText(clipboardText).then(() => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Tabel berhasil disalin ke clipboard',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        });
+    } catch (error) {
+        console.error('Gagal menyalin tabel:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Kesalahan',
+            text: 'Gagal menyalin tabel: ' + error.message
+        });
+    }
+}
+
+// Event Listeners
+$(document).ready(function() {
+    $('#exportPdfBtn').on('click', function() {
+        exportToPDF();
+    });
+    
+    $('#exportExcelBtn').on('click', function() {
+        exportToExcel();
+    });
+    
+    $('#exportCsvBtn').on('click', function() {
+        exportToCSV();
+    });
+    
+    $('#copyTableBtn').on('click', function() {
+        copyTableToClipboard();
+    });
+});
+
 });
 </script>
-@endsection
+@endpush

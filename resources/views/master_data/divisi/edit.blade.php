@@ -20,7 +20,7 @@ Edit Divisi
             </div>
         </div>
     </div>
-    
+
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -30,27 +30,49 @@ Edit Divisi
                     </div>
                 </div>
                 <div class="card-body">
-                    <form id="editDivisiForm">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="form-label" for="nama_divisi">Nama Divisi</label>
-                                    <input type="text" class="form-control" id="nama_divisi" name="nama_divisi" required>
-                                    <div class="invalid-feedback" id="nama_divisi_error"></div>
+                    <div class="new-user-info">
+                        <form id="editDivisiForm" class="needs-validation" novalidate>
+                            <div class="row g-4">
+                                <!-- Nama Divisi Input -->
+                                <div class="col-12">
+                                    <div class="form-group position-relative">
+                                        <label class="form-label fw-bold" for="nama_divisi">
+                                            <i class="bi bi-building me-1"></i>Nama Divisi
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" 
+                                               class="form-control form-control-lg shadow-none border-2" 
+                                               id="nama_divisi" 
+                                               name="nama_divisi" 
+                                               required 
+                                               maxlength="100"
+                                               placeholder="Masukkan nama divisi">
+                                        <div class="invalid-feedback">
+                                            Nama divisi tidak boleh kosong
+                                        </div>
+                                        <small class="text-muted">
+                                            <i class="bi bi-info-circle me-1"></i>Maksimal 100 karakter
+                                        </small>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row mt-3 position-absolute bottom-0 end-0 m-4">
-                            <div class="col-12">
-                                <a href="{{ route('master_data.divisi.index') }}" class="btn btn-danger me-2">
-                                    <i class="bi bi-arrow-left me-2"></i>Kembali
-                                </a>
-                                <button type="submit" class="btn btn-success">
-                                    <i class="bi bi-save me-2"></i>Update
-                                </button>
+
+                            <!-- Action Buttons -->
+                            <div class="row mt-5">
+                                <div class="col-12 d-flex justify-content-end gap-2">
+                                    <a href="{{ route('master_data.divisi.index') }}" class="btn btn-danger me-2">
+                                        <i class="bi bi-arrow-left me-2"></i>Kembali
+                                    </a>
+                                    <button type="button" id="resetButton" class="btn btn-warning me-2">
+                                        <i class="bi bi-arrow-clockwise me-2"></i>Reset
+                                    </button>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="bi bi-save me-2"></i>Update
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -58,13 +80,44 @@ Edit Divisi
 </div>
 @endsection
 
+@push('css')
+<style>
+    /* Form styling */
+    .form-label {
+        font-weight: 500;
+    }
+
+    .invalid-feedback {
+        font-size: 0.875em;
+    }
+
+    .was-validated .form-control:invalid,
+    .form-control.is-invalid {
+        border-color: #dc3545;
+    }
+
+    /* Custom form control styling */
+    .form-control-lg {
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+    }
+
+    /* Icon styling */
+    .bi {
+        vertical-align: -0.125em;
+    }
+</style>
+@endpush
+
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Get token from localStorage
+    const divisiForm = document.getElementById('editDivisiForm');
+    const resetButton = document.getElementById('resetButton');
     const token = localStorage.getItem('token');
+    let originalData = null;
 
-    // Check if token exists, if not redirect to login
+    // Check token and redirect if not present
     if (!token) {
         window.location.href = '/login';
         return;
@@ -74,116 +127,178 @@ document.addEventListener('DOMContentLoaded', function() {
     const pathArray = window.location.pathname.split('/');
     const divisiId = pathArray[pathArray.indexOf('edit') - 1];
 
-    // Fetch existing divisi data
-    fetch(`/api/divisi/${divisiId}`, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/json',
+    // Function to fetch and populate divisi data
+    // Function to fetch and populate divisi data
+    async function fetchDivisiData() {
+        try {
+            // Start loading indicator in form instead of full-screen alert
+            const formContainer = document.querySelector('.card-body');
+            formContainer.style.opacity = '0.6';
+            
+            const response = await fetch(`/api/divisi/${divisiId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json',
+                }
+            });
+
+            // Restore form visibility
+            formContainer.style.opacity = '1';
+
+            if (!response.ok) {
+                throw new Error('Divisi tidak ditemukan');
+            }
+
+            const data = await response.json();
+            originalData = data; // Store original data for reset
+            populateForm(data);
+            
+        } catch (error) {
+            console.error('Error:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Gagal mengambil data divisi',
+                confirmButtonText: 'Kembali'
+            }).then(() => {
+                window.location.href = '{{ route("master_data.divisi.index") }}';
+            });
         }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Divisi tidak ditemukan');
-        }
-        return response.json();
-    })
-    .then(data => {
-        // Populate form with existing data
+    }
+
+    // Function to populate form with data
+    function populateForm(data) {
         document.getElementById('nama_divisi').value = data.nama_divisi;
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Gagal mengambil data divisi',
-            confirmButtonText: 'Kembali'
-        }).then(() => {
-            window.location.href = '{{ route("master_data.divisi.index") }}';
-        });
+    }
+
+    // Fetch initial data
+    fetchDivisiData();
+
+    // Reset button handler - restores to original data
+    // Reset button handler - now with confirmation dialog
+    resetButton.addEventListener('click', async function() {
+        if (originalData) {
+            // Show confirmation dialog
+            const result = await Swal.fire({
+                title: 'Konfirmasi Reset',
+                text: 'Apakah Anda yakin ingin mengembalikan data ke kondisi awal? Perubahan yang belum disimpan akan hilang.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Reset',
+                cancelButtonText: 'Batal',
+                // Adding custom class for better styling
+                customClass: {
+                    confirmButton: 'btn btn-warning me-2',
+                    cancelButton: 'btn btn-secondary'
+                }
+            });
+
+            // Only proceed with reset if user confirms
+            if (result.isConfirmed) {
+                // Reset form to original data
+                populateForm(originalData);
+                divisiForm.classList.remove('was-validated');
+                
+                // Remove any custom error states
+                const invalidInputs = divisiForm.querySelectorAll('.is-invalid');
+                invalidInputs.forEach(input => {
+                    input.classList.remove('is-invalid');
+                });
+
+                // Show reset success message
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Data Direset',
+                    text: 'Form telah dikembalikan ke data awal',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            }
+        }
     });
 
-    // Handle form submission
-    const form = document.getElementById('editDivisiForm');
-    form.addEventListener('submit', function(e) {
+    // Form submission handler
+    divisiForm.addEventListener('submit', async function(e) {
         e.preventDefault();
 
-        // Reset error messages
-        document.getElementById('nama_divisi_error').textContent = '';
-        document.getElementById('nama_divisi').classList.remove('is-invalid');
-        
-        // Get form data
+        // Basic validation
+        if (!this.checkValidity()) {
+            e.stopPropagation();
+            this.classList.add('was-validated');
+            return;
+        }
+
         const formData = {
-            nama_divisi: document.getElementById('nama_divisi').value
+            nama_divisi: document.getElementById('nama_divisi').value.trim()
         };
 
-        // Send PUT request
-        fetch(`/api/divisi/${divisiId}`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        })
-        .then(response => {
+        try {
+            // Show loading state
+            const loadingAlert = await Swal.fire({
+                title: 'Mohon Tunggu',
+                text: 'Sedang memperbarui data...',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // Send update request
+            const response = await fetch(`/api/divisi/${divisiId}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            await loadingAlert.close();
+
+            const responseData = await response.json();
+
             if (!response.ok) {
-                return response.json().then(err => Promise.reject(err));
+                // Handle validation errors
+                if (responseData.errors) {
+                    Object.keys(responseData.errors).forEach(key => {
+                        const inputElement = document.getElementById(key);
+                        if (inputElement) {
+                            inputElement.classList.add('is-invalid');
+                            const feedbackElement = inputElement.nextElementSibling;
+                            if (feedbackElement && feedbackElement.classList.contains('invalid-feedback')) {
+                                feedbackElement.textContent = responseData.errors[key][0];
+                            }
+                        }
+                    });
+                    throw new Error(responseData.message || 'Terjadi kesalahan validasi');
+                }
+                throw new Error(responseData.message || 'Terjadi kesalahan saat memperbarui data');
             }
-            return response.json();
-        })
-        .then(data => {
-            Swal.fire({
+
+            // Show success message and redirect
+            await Swal.fire({
                 icon: 'success',
                 title: 'Berhasil!',
                 text: 'Data divisi berhasil diperbarui',
                 showConfirmButton: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = '{{ route("master_data.divisi.index") }}';
-                }
+            }).then(() => {
+                window.location.href = '{{ route("master_data.divisi.index") }}';
             });
-        })
-        .catch(error => {
+
+        } catch (error) {
             console.error('Error:', error);
-            
-            if (error.nama_divisi) {
-                document.getElementById('nama_divisi_error').textContent = error.nama_divisi[0];
-                document.getElementById('nama_divisi').classList.add('is-invalid');
-            }
-
-            Swal.fire({
+            await Swal.fire({
                 icon: 'error',
-                title: 'Oops...',
-                text: 'Terjadi kesalahan saat memperbarui data',
-                footer: error.message || 'Silakan coba lagi nanti'
+                title: 'Error',
+                text: error.message || 'Terjadi kesalahan saat memperbarui data',
+                confirmButtonText: 'OK'
             });
-        });
-    });
-
-    // Handle reset button
-    form.addEventListener('reset', function(e) {
-        // Fetch original data again to reset to initial values
-        fetch(`/api/divisi/${divisiId}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/json',
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('nama_divisi').value = data.nama_divisi;
-        })
-        .catch(error => {
-            console.error('Error resetting form:', error);
-        });
-
-        // Clear error messages
-        document.getElementById('nama_divisi_error').textContent = '';
-        document.getElementById('nama_divisi').classList.remove('is-invalid');
+        }
     });
 });
 </script>

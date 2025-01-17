@@ -140,7 +140,7 @@
                                     </svg>
                                 </i>
                                 <i class="sidenav-mini-icon"> L </i>
-                                <span class="item-name">List User Pegawai</span>
+                                <span class="item-name">User Pegawai</span>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -153,7 +153,7 @@
                                     </svg>
                                 </i>
                                 <i class="sidenav-mini-icon"> R </i>
-                                <span class="item-name">List User Pelamar</span>
+                                <span class="item-name">User Pelamar</span>
                             </a>
                         </li>
                     </ul>
@@ -237,7 +237,7 @@
                                     </svg>
                                 </i>
                                 <i class="sidenav-mini-icon"> V </i>
-                                <span class="item-name">List Pengajuan Cuti</span>
+                                <span class="item-name">Pengajuan Cuti</span>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -348,7 +348,7 @@
                                         </g>
                                     </svg>
                                 </i>
-                                <span class="item-name">List Penilaian</span>
+                                <span class="item-name">Daftar Penilaian</span>
                             </a>
                         </li>
                     </ul>
@@ -380,44 +380,6 @@
                                 </i>
                                 <span class="item-name">Komponen Gaji</span>
                             </a>
-                            {{-- <ul class="sub-nav collapse" id="komponen-penilaian">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('komponen-kpi.index') }}">
-                                        <i class="icon">
-                                            <svg class="icon-8" xmlns="http://www.w3.org/2000/svg" width="8" viewBox="0 0 24 24" fill="currentColor">
-                                                <g>
-                                                    <circle cx="12" cy="12" r="4" fill="currentColor"></circle>
-                                                </g>
-                                            </svg>
-                                        </i>
-                                        <span class="item-name">KPI</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('komponen-kompetensi.index') }}">
-                                        <i class="icon">
-                                            <svg class="icon-8" xmlns="http://www.w3.org/2000/svg" width="8" viewBox="0 0 24 24" fill="currentColor">
-                                                <g>
-                                                    <circle cx="12" cy="12" r="4" fill="currentColor"></circle>
-                                                </g>
-                                            </svg>
-                                        </i>
-                                        <span class="item-name">Kompetensi</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('komponen-core-values.index') }}">
-                                        <i class="icon">
-                                            <svg class="icon-8" xmlns="http://www.w3.org/2000/svg" width="8" viewBox="0 0 24 24" fill="currentColor">
-                                                <g>
-                                                    <circle cx="12" cy="12" r="4" fill="currentColor"></circle>
-                                                </g>
-                                            </svg>
-                                        </i>
-                                        <span class="item-name">Core Values</span>
-                                    </a>
-                                </li>
-                            </ul> --}}
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('gaji.index') }}">
@@ -429,6 +391,18 @@
                                     </svg>
                                 </i>
                                 <span class="item-name">List Penggajian</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('gaji.pribadi') }}">
+                                <i class="icon">
+                                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                        <g>
+                                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                        </g>
+                                    </svg>
+                                </i>
+                                <span class="item-name">Gaji Pribadi</span>
                             </a>
                         </li>
                     </ul>
@@ -706,7 +680,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " href="../dashboard/icons/dual-tone.html">
+                            <a class="nav-link " href="{{ route('laporan.rekrutmen.index') }}">
                                <i class="icon">
                                     <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
                                         <g>

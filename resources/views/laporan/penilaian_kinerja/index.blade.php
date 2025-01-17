@@ -4,6 +4,11 @@
 Laporan Penilaian Kinerja 
 @endsection
 
+@section('css')
+<!-- Bootstrap Icons CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+@endsection
+
 @section('content')
 <div class="container-fluid content-inner mt-n5 py-0">
     <div class="row">
@@ -33,20 +38,18 @@ Laporan Penilaian Kinerja
                                     <span class="text-muted text-uppercase small">Total Penilaian</span>
                                 </div>
                                 <div>
-                                    <svg class="icon-20 text-primary" xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                    </svg>
+                                    <i class="bi bi-info-circle text-primary"></i>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="d-flex align-items-center">
                                     <div class="border rounded p-3 bg-soft-primary me-3">
-                                        <i class="fas fa-clipboard-list icon-20"></i>
+                                        <i class="bi bi-list-check text-primary"></i>
                                     </div>
                                     <h2 id="totalPenilaianCount" class="counter mb-0">0/0</h2>
                                 </div>
                                 <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#chartModal" data-chart-type="totalPenilaian">
-                                    Grafik
+                                    <i class="bi bi-bar-chart-line me-1"></i>Grafik
                                 </button>
                             </div>
                         </div>
@@ -60,17 +63,20 @@ Laporan Penilaian Kinerja
                                     <span class="text-muted text-uppercase small">Predikat Penilaian</span>
                                 </div>
                                 <div>
-                                    <svg class="icon-20 text-success" xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                    </svg>
+                                    <i class="bi bi-info-circle text-success"></i>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between align-items-center">
-                                <div id="predikatSummary">
-                                    <!-- Predikat akan diisi dinamis -->
+                                <div class="d-flex align-items-center">
+                                    <div class="border rounded p-3 bg-soft-success me-3">
+                                        <i class="bi bi-pie-chart text-success"></i>
+                                    </div>
+                                    <div id="predikatSummary">
+                                        <!-- Predikat akan diisi dinamis -->
+                                    </div>
                                 </div>
                                 <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#chartModal" data-chart-type="predikatPenilaian">
-                                    Grafik
+                                    <i class="bi bi-graph-up me-1"></i>Grafik
                                 </button>
                             </div>
                         </div>
@@ -84,20 +90,18 @@ Laporan Penilaian Kinerja
                                     <span class="text-muted text-uppercase small">Penilaian per Divisi</span>
                                 </div>
                                 <div>
-                                    <svg class="icon-20 text-info" xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                    </svg>
+                                    <i class="bi bi-info-circle text-info"></i>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="d-flex align-items-center">
                                     <div class="border rounded p-3 bg-soft-info me-3">
-                                        <i class="fas fa-building icon-20"></i>
+                                        <i class="bi bi-building text-info"></i>
                                     </div>
                                     <h2 id="divisiTertinggiNilai" class="mb-0">-</h2>
                                 </div>
                                 <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#chartModal" data-chart-type="penilaianPerDivisi">
-                                    Grafik
+                                    <i class="bi bi-bar-chart me-1"></i>Grafik
                                 </button>
                             </div>
                         </div>
@@ -111,21 +115,18 @@ Laporan Penilaian Kinerja
                                     <span class="text-muted text-uppercase small">Penilaian per Jabatan</span>
                                 </div>
                                 <div>
-                                    <svg class="icon-20 text-warning" xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" 
-                                        />
-                                    </svg>
+                                    <i class="bi bi-info-circle text-warning"></i>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="d-flex align-items-center">
                                     <div class="border rounded p-3 bg-soft-warning me-3">
-                                        <i class="fas fa-user-tie icon-20"></i>
+                                        <i class="bi bi-person-badge text-warning"></i>
                                     </div>
                                     <h2 id="jabatanTertinggiNilai" class="mb-0">-</h2>
                                 </div>
                                 <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#chartModal" data-chart-type="penilaianPerJabatan">
-                                    Grafik
+                                    <i class="bi bi-graph-up me-1"></i>Grafik
                                 </button>
                             </div>
                         </div>
@@ -138,7 +139,9 @@ Laporan Penilaian Kinerja
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="chartModalLabel">Grafik</h5>
+                            <h5 class="modal-title" id="chartModalLabel">
+                                <i class="bi bi-graph-up me-2"></i>Grafik
+                            </h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -153,9 +156,31 @@ Laporan Penilaian Kinerja
                     <div class="header-title">
                         <h4 class="card-title">Data Penilaian Kinerja</h4>
                     </div>
-                    <div class="d-flex">
-                        <button class="btn btn-primary me-2" id="exportPdfBtn">
-                            <i class="fas fa-file-pdf me-2"></i>Cetak PDF
+                    <div class="d-flex align-items-center">
+                        <div class="dropdown me-2">
+                            <button class="btn btn-success dropdown-toggle" type="button" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-file-earmark-arrow-up me-2"></i>Ekspor
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="exportDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="#" id="exportPdfBtn">
+                                        <i class="bi bi-file-pdf text-danger me-2"></i>Cetak PDF
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#" id="exportExcelBtn">
+                                        <i class="bi bi-file-excel text-success me-2"></i>Ekspor Excel
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#" id="exportCsvBtn">
+                                        <i class="bi bi-filetype-csv text-info me-2"></i>Ekspor CSV
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-warning" id="copyTableBtn">
+                            <i class="bi bi-clipboard me-2"></i>Salin
                         </button>
                     </div>
                 </div>
@@ -164,18 +189,24 @@ Laporan Penilaian Kinerja
                     <!-- Enhanced Filtering Section -->
                     <div class="row mb-4">
                         <div class="col-md-2">
-                            <label for="yearFilter">Filter Tahun:</label>
+                            <label for="yearFilter">
+                                <i class="bi bi-calendar-year me-1"></i>Filter Tahun:
+                            </label>
                             <select id="yearFilter" class="form-control">
                                 <option value="">Semua Tahun</option>
                                 <!-- Years will be populated dynamically -->
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <label for="monthYearFilter">Filter Bulan & Tahun:</label>
+                            <label for="monthYearFilter">
+                                <i class="bi bi-calendar-month me-1"></i>Filter Bulan & Tahun:
+                            </label>
                             <input type="month" id="monthYearFilter" class="form-control">
                         </div>
                         <div class="col-md-2">
-                            <label for="predikatFilter">Filter Predikat:</label>
+                            <label for="predikatFilter">
+                                <i class="bi bi-filter-square me-1"></i>Filter Predikat:
+                            </label>
                             <select id="predikatFilter" class="form-control">
                                 <option value="">Semua Predikat</option>
                                 <option value="sangat baik">Sangat Baik</option>
@@ -186,38 +217,47 @@ Laporan Penilaian Kinerja
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <label for="divisiFilter">Filter Divisi:</label>
+                            <label for="divisiFilter">
+                                <i class="bi bi-building me-1"></i>Filter Divisi:
+                            </label>
                             <select id="divisiFilter" class="form-control">
                                 <option value="">Semua Divisi</option>
                                 <!-- Divisi will be populated dynamically -->
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <label for="jabatanFilter">Filter Jabatan:</label>
+                            <label for="jabatanFilter">
+                                <i class="bi bi-person-badge me-1"></i>Filter Jabatan:
+                            </label>
                             <select id="jabatanFilter" class="form-control">
                                 <option value="">Semua Jabatan</option>
                                 <!-- Jabatan will be populated dynamically -->
                             </select>
                         </div>
                         <div class="col-md-2 d-flex align-items-end">
-                            <button id="applyFilterBtn" class="btn btn-primary me-2">Filter</button>
-                            <button id="resetFilterBtn" class="btn btn-secondary">Reset</button>
+                            <button id="applyFilterBtn" class="btn btn-primary me-2">
+                                <i class="bi bi-funnel me-1"></i>Filter
+                            </button>
+                            <button id="resetFilterBtn" class="btn btn-secondary">
+                                <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
+                            </button>
                         </div>
                     </div>
+
                     <div class="table-responsive">
                         <table id="penilaian-kinerja-table" class="table table-striped" style="width:100%">
-                            <thead >
+                            <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Nama Pegawai</th>
-                                    <th>Periode Penilaian</th>
-                                    <th>Nilai KPI</th>
-                                    <th>Nilai Kompetensi</th>
-                                    <th>Nilai Core Values</th>
-                                    <th>Nilai Akhir</th>
-                                    <th>Predikat</th>
-                                    <th>Divisi</th>
-                                    <th>Jabatan</th>
+                                    <th><i class="bi bi-hash me-1"></i>No</th>
+                                    <th><i class="bi bi-person me-1"></i>Nama Pegawai</th>
+                                    <th><i class="bi bi-calendar-event me-1"></i>Periode Penilaian</th>
+                                    <th><i class="bi bi-graph-up me-1"></i>Nilai KPI</th>
+                                    <th><i class="bi bi-card-checklist me-1"></i>Nilai Kompetensi</th>
+                                    <th><i class="bi bi-heart me-1"></i>Nilai Core Values</th>
+                                    <th><i class="bi bi-star me-1"></i>Nilai Akhir</th>
+                                    <th><i class="bi bi-award me-1"></i>Predikat</th>
+                                    <th><i class="bi bi-building me-1"></i>Divisi</th>
+                                    <th><i class="bi bi-person-badge me-1"></i>Jabatan</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -229,6 +269,10 @@ Laporan Penilaian Kinerja
         </div>
     </div>
 </div>
+@endsection
+
+@push('scripts')
+    
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -244,7 +288,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 return [];
             }
 
-            const fullUrl = `http://127.0.0.1:8000/api/${endpoint}`;
+            const fullUrl = `${API_BASE_URL}/${endpoint}`;
+            
             console.log(`Fetching data from: ${fullUrl}`); // Debug URL
 
             const response = await fetch(fullUrl, {
@@ -384,6 +429,114 @@ document.addEventListener('DOMContentLoaded', function() {
         ]
     });
 
+ // Fungsi untuk memuat data divisi ke dropdown
+ function populateDivisiDropdown() {
+        const divisiSelect = $('#divisiFilter');
+        divisiSelect.empty().append('<option value="">Semua Divisi</option>');
+        
+        if (divisiData && divisiData.length > 0) {
+            divisiData.forEach(divisi => {
+                divisiSelect.append(
+                    `<option value="${divisi.id_divisi}">${divisi.nama_divisi}</option>`
+                );
+            });
+        }
+    }
+
+    // Fungsi untuk memuat data jabatan ke dropdown berdasarkan divisi
+    function populateJabatanDropdown(selectedDivisiId = '') {
+        const jabatanSelect = $('#jabatanFilter');
+        jabatanSelect.empty().append('<option value="">Semua Jabatan</option>');
+        
+        let filteredJabatan = jabatanData;
+        if (selectedDivisiId) {
+            filteredJabatan = jabatanData.filter(jabatan => jabatan.id_divisi === selectedDivisiId);
+        }
+        
+        if (filteredJabatan && filteredJabatan.length > 0) {
+            filteredJabatan.forEach(jabatan => {
+                jabatanSelect.append(
+                    `<option value="${jabatan.id_jabatan}">${jabatan.nama_jabatan}</option>`
+                );
+            });
+        }
+    }
+
+    // Event listener untuk perubahan divisi
+    $('#divisiFilter').on('change', function() {
+        const selectedDivisiId = $(this).val();
+        populateJabatanDropdown(selectedDivisiId);
+    });
+
+    // Fungsi untuk menerapkan filter
+    function applyFilters() {
+        const yearFilter = $('#yearFilter').val();
+        const monthYearFilter = $('#monthYearFilter').val();
+        const predikatFilter = $('#predikatFilter').val();
+        const divisiFilter = $('#divisiFilter').val();
+        const jabatanFilter = $('#jabatanFilter').val();
+
+        // Reset existing search
+        penilaianTable.search('').columns().search('').draw();
+
+        // Custom filtering function
+        $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+            const rowData = penilaianData[dataIndex];
+            let match = true;
+
+            // Year filter
+            if (yearFilter) {
+                const penilaianYear = new Date(rowData.periode_penilaian).getFullYear().toString();
+                match = match && penilaianYear === yearFilter;
+            }
+
+            // Month-Year filter
+            if (monthYearFilter) {
+                const penilaianDate = rowData.periode_penilaian.substring(0, 7);
+                match = match && penilaianDate === monthYearFilter;
+            }
+
+            // Predikat filter
+            if (predikatFilter) {
+                match = match && rowData.predikat.toLowerCase() === predikatFilter.toLowerCase();
+            }
+
+            // Divisi filter
+            if (divisiFilter) {
+                match = match && rowData.pegawai.id_divisi.toString() === divisiFilter;
+            }
+
+            // Jabatan filter
+            if (jabatanFilter) {
+                match = match && rowData.pegawai.id_jabatan.toString() === jabatanFilter;
+            }
+
+            return match;
+        });
+
+        penilaianTable.draw();
+
+        // Remove custom filter
+        $.fn.dataTable.ext.search.pop();
+    }
+
+    // Event listener untuk tombol apply filter
+    $('#applyFilterBtn').on('click', applyFilters);
+
+    // Fungsi untuk reset filter
+    function resetFilters() {
+        $('#yearFilter, #monthYearFilter, #predikatFilter').val('');
+        $('#divisiFilter').val('').trigger('change');
+        $('#jabatanFilter').val('');
+        
+        // Clear all filters
+        $.fn.dataTable.ext.search = [];
+        penilaianTable.search('').columns().search('').draw();
+    }
+
+    // Event listener untuk tombol reset
+    $('#resetFilterBtn').on('click', resetFilters);
+
     // Fungsi Utama Memuat Data
     function initializePage() {
         Promise.all([
@@ -416,22 +569,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 yearSelect.append(`<option value="${year}">${year}</option>`);
             });
 
-            // Populate Divisi Dropdown
-            const divisiSelect = $('#divisiFilter');
-            fetchedDivisiData.forEach(divisi => {
-                divisiSelect.append(
-                    `<option value="${divisi.id_divisi}"> ${divisi.nama_divisi}</option>`
-                );
-            });
 
-            // Populate Jabatan Dropdown
-            const jabatanSelect = $('#jabatanFilter');
-            fetchedJabatanData.forEach(jabatan => {
-                jabatanSelect.append(
-                    `<option value="${jabatan.id_jabatan}">${jabatan.nama_jabatan}</option>`
-                );
-            });
-
+            populateDivisiDropdown();
+            populateJabatanDropdown();
             // Update widget counts
            // Calculate total penilaian per periode
             const currentPeriodPenilaianCount = fetchedPenilaianData.filter(penilaian => {
@@ -521,48 +661,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         $('#jabatanTertinggiNilai').text(highestJabatan.average.toFixed(2));
 
-
-            // Fungsi untuk menerapkan filter
-$('#applyFilterBtn').on('click', function() {
-    const yearFilter = $('#yearFilter').val();
-    const monthYearFilter = $('#monthYearFilter').val();
-    const predikatFilter = $('#predikatFilter').val();
-    const divisiFilter = $('#divisiFilter').val();
-    const jabatanFilter = $('#jabatanFilter').val();
-
-    penilaianTable.column(2).search(yearFilter ? yearFilter : '').draw();
-    
-    // Filter bulan dan tahun
-    if (monthYearFilter) {
-        const [filterYear, filterMonth] = monthYearFilter.split('-');
-        penilaianTable.column(2).search(filterYear + '-' + filterMonth).draw();
-    }
-
-    // Filter predikat
-    if (predikatFilter) {
-        penilaianTable.column(7).search(predikatFilter).draw();
-    }
-
-    // Filter divisi
-    if (divisiFilter) {
-        penilaianTable.column(8).search(
-            getNamaDivisi(divisiData, divisiFilter)
-        ).draw();
-    }
-
-    // Filter jabatan
-    if (jabatanFilter) {
-        penilaianTable.column(9).search(
-            getNamaJabatan(jabatanData, jabatanFilter)
-        ).draw();
-    }
-});
-
-// Fungsi reset filter
-$('#resetFilterBtn').on('click', function() {
-    $('#yearFilter, #monthYearFilter, #predikatFilter, #divisiFilter, #jabatanFilter').val('');
-    penilaianTable.search('').columns().search('').draw();
-});
             penilaianTable.clear().rows.add(fetchedPenilaianData).draw();
         }).catch(error => {
             console.error('Error initializing page:', error);
@@ -811,5 +909,293 @@ $('#resetFilterBtn').on('click', function() {
         });
     });
 });
+
+
+
+async function exportToPDF() {
+    try {
+        // Show loading notification
+        Swal.fire({
+            title: 'Mengekspor PDF...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        // Function to load script and wait for it
+        const loadScript = async (url) => {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = url;
+                script.onload = resolve;
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+        };
+
+        // Load required scripts if not already loaded
+        if (typeof window.jspdf === 'undefined') {
+            await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+        }
+        
+        // Ensure jsPDF is loaded
+        if (typeof window.jspdf === 'undefined') {
+            throw new Error('jsPDF could not be loaded');
+        }
+
+        // Create new document
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({
+            orientation: 'landscape',
+            unit: 'mm',
+            format: 'a4'
+        });
+
+        // Load autoTable if not already loaded
+        if (typeof doc.autoTable === 'undefined') {
+            await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js');
+            // Small delay to ensure plugin is initialized
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+
+        // Check again if autoTable is available
+        if (typeof doc.autoTable !== 'function') {
+            throw new Error('AutoTable plugin could not be loaded');
+        }
+
+        // Add title
+        doc.setFontSize(14);
+        doc.text("Laporan Penilaian Kinerja", 15, 15);
+
+        // Get table data
+        const tableElement = document.getElementById('penilaian-kinerja-table');
+        if (!tableElement) {
+            throw new Error('Table element not found');
+        }
+
+        // Extract table data
+        const rows = Array.from(tableElement.querySelectorAll('tr'));
+        const tableData = rows.map(row => 
+            Array.from(row.querySelectorAll('th, td')).map(cell => {
+                // Handle badge elements
+                const badge = cell.querySelector('.badge');
+                return badge ? badge.textContent.trim() : cell.textContent.trim();
+            })
+        );
+
+        // Generate PDF table
+        await doc.autoTable({
+            head: [tableData[0]],
+            body: tableData.slice(1),
+            startY: 25,
+            theme: 'grid',
+            styles: {
+                fontSize: 8,
+                cellPadding: 2
+            },
+            headStyles: {
+                fillColor: [41, 128, 185],
+                textColor: 255
+            },
+            columnStyles: {
+                0: { cellWidth: 15 },  // No
+                1: { cellWidth: 35 },  // Nama
+                2: { cellWidth: 25 },  // Periode
+                3: { cellWidth: 20 },  // KPI
+                4: { cellWidth: 20 },  // Kompetensi
+                5: { cellWidth: 20 },  // Core Values
+                6: { cellWidth: 20 },  // Nilai Akhir
+                7: { cellWidth: 25 },  // Predikat
+                8: { cellWidth: 25 },  // Divisi
+                9: { cellWidth: 25 }   // Jabatan
+            },
+            margin: { top: 25 }
+        });
+
+        // Save the PDF
+        const currentDate = new Date().toLocaleDateString('id-ID').replace(/[/]/g, '-');
+        doc.save(`Laporan_Penilaian_Kinerja_${currentDate}.pdf`);
+
+        // Show success notification
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: 'File PDF berhasil diunduh',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
+
+    } catch (error) {
+        console.error('Error generating PDF:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal mengekspor PDF',
+            text: `Terjadi kesalahan: ${error.message}`,
+            confirmButtonText: 'OK'
+        });
+    }
+}
+
+// Fungsi Ekspor Excel
+function exportToExcel() {
+    try {
+        // Show loading notification
+        Swal.fire({
+            title: 'Mengekspor Excel...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        const table = document.getElementById('penilaian-kinerja-table');
+        const wb = XLSX.utils.table_to_book(table);
+        
+        XLSX.writeFile(wb, `Laporan_Penilaian_Kinerja_${new Date().toLocaleDateString('id-ID')}.xlsx`);
+
+        // Show success notification
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: 'File Excel berhasil diunduh',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
+
+    } catch (error) {
+        console.error('Error exporting to Excel:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal mengekspor Excel',
+            text: 'Terjadi kesalahan saat membuat file Excel',
+            confirmButtonText: 'OK'
+        });
+    }
+}
+
+// Fungsi Ekspor CSV
+function exportToCSV() {
+    try {
+        // Show loading notification
+        Swal.fire({
+            title: 'Mengekspor CSV...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        const table = document.getElementById('penilaian-kinerja-table');
+        const wb = XLSX.utils.table_to_book(table);
+        const csv = XLSX.utils.sheet_to_csv(wb.Sheets[wb.SheetNames[0]]);
+        
+        const csvData = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const csvUrl = URL.createObjectURL(csvData);
+        
+        const link = document.createElement("a");
+        link.setAttribute("href", csvUrl);
+        link.setAttribute("download", `Laporan_Penilaian_Kinerja_${new Date().toLocaleDateString('id-ID')}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Cleanup
+        URL.revokeObjectURL(csvUrl);
+
+        // Show success notification
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: 'File CSV berhasil diunduh',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
+
+    } catch (error) {
+        console.error('Error exporting to CSV:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal mengekspor CSV',
+            text: 'Terjadi kesalahan saat membuat file CSV',
+            confirmButtonText: 'OK'
+        });
+    }
+}
+
+// Fungsi Salin Tabel dengan Loading State
+async function copyTableToClipboard() {
+    try {
+        // Show loading notification
+        Swal.fire({
+            title: 'Menyalin tabel...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        const table = document.getElementById('penilaian-kinerja-table');
+        const rows = table.querySelectorAll('tr');
+        
+        let clipboardText = '';
+        rows.forEach((row) => {
+            const cells = row.querySelectorAll('th, td');
+            const rowText = Array.from(cells)
+                .map(cell => cell.textContent.trim())
+                .join('\t');
+            clipboardText += rowText + '\n';
+        });
+        
+        await navigator.clipboard.writeText(clipboardText);
+
+        // Show success notification
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: 'Tabel berhasil disalin ke clipboard',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
+
+    } catch (error) {
+        console.error('Error copying table:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal menyalin',
+            text: 'Terjadi kesalahan saat menyalin tabel ke clipboard',
+            confirmButtonText: 'OK'
+        });
+    }
+}
+
+// Event Listeners
+$(document).ready(function() {
+    $('#exportPdfBtn').on('click', exportToPDF);
+    $('#exportExcelBtn').on('click', exportToExcel);
+    $('#exportCsvBtn').on('click', exportToCSV);
+    $('#copyTableBtn').on('click', copyTableToClipboard);
+});
 </script>
-@endsection
+<!-- Add these script tags in the correct order -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Excel/CSV Export Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<!-- Bootstrap JS dan Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
+@endpush
