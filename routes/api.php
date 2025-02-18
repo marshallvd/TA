@@ -109,11 +109,42 @@ Route::get('/hasil-seleksi/{id}', [HasilSeleksiController::class, 'show']);
         // Admin & HRD Routes
         Route::group(['middleware' => ['role:admin,hrd,pegawai']], function () {
             // Penilaian Management
-            Route::apiResource('penilaian-kpi', PenilaianKPIController::class);
-            Route::apiResource('penilaian-kompetensi', PenilaianKompetensiController::class);
-            Route::apiResource('penilaian-core-values', PenilaianCoreValuesController::class);
-            Route::apiResource('penilaian-kinerja', PenilaianKinerjaController::class);
-            
+            //Route::apiResource('penilaian-kpi', PenilaianKPIController::class);
+            Route::apiResource('penilaian-kpi', PenilaianKPIController::class)->names([
+                'index' => 'api.penilaian-kpi.index',
+                'store' => 'api.penilaian-kpi.store',
+                'show' => 'api.penilaian-kpi.show',
+                'update' => 'api.penilaian-kpi.update',
+                'destroy' => 'api.penilaian-kpi.destroy',
+            ]);
+
+            //Route::apiResource('penilaian-kompetensi', PenilaianKompetensiController::class);
+            Route::apiResource('penilaian-kompetensi', PenilaianKompetensiController::class)->names([
+                'index' => 'api.penilaian-kompetensi.index',
+                'store' => 'api.penilaian-kompetensi.store',
+                'show' => 'api.penilaian-kompetensi.show',
+                'update' => 'api.penilaian-kompetensi.update',
+                'destroy' => 'api.penilaian-kompetensi.destroy',
+            ]);
+
+            //Route::apiResource('penilaian-core-values', PenilaianCoreValuesController::class);
+            Route::apiResource('penilaian-core-values', PenilaianCoreValuesController::class)->names([
+                'index' => 'api.penilaian-core-values.index',
+                'store' => 'api.penilaian-core-values.store',
+                'show' => 'api.penilaian-core-values.show',
+                'update' => 'api.penilaian-core-values.update',
+                'destroy' => 'api.penilaian-core-values.destroy',
+            ]);
+
+            //Route::apiResource('penilaian-kinerja', PenilaianKinerjaController::class);
+            Route::apiResource('penilaian-kinerja', PenilaianKinerjaController::class)->names([
+                'index' => 'api.penilaian-kinerja.index',
+                'store' => 'api.penilaian-kinerja.store',
+                'show' => 'api.penilaian-kinerja.show',
+                'update' => 'api.penilaian-kinerja.update',
+                'destroy' => 'api.penilaian-kinerja.destroy',
+            ]);
+
             // Update details routes
             Route::put('penilaian-kpi/{id}/update-details', [PenilaianKPIController::class, 'update']);
             Route::put('penilaian-kompetensi/{id}/update-details', [PenilaianKompetensiController::class, 'update']);
@@ -150,10 +181,24 @@ Route::get('/hasil-seleksi/{id}', [HasilSeleksiController::class, 'show']);
             Route::put('/pelamar/{id}', [PelamarController::class, 'update']);
 
             // Recruitment Management
-            Route::apiResource('wawancara', WawancaraController::class);
+            //Route::apiResource('wawancara', WawancaraController::class);
+            Route::apiResource('wawancara', WawancaraController::class)->names([
+                'index' => 'api.wawancara.index',
+                'store' => 'api.wawancara.store',
+                'show' => 'api.wawancara.show',
+                'update' => 'api.wawancara.update',
+                'destroy' => 'api.wawancara.destroy',
+            ]);
 
-            Route::apiResource('hasil-seleksi', HasilSeleksiController::class);
-
+            //Route::apiResource('hasil-seleksi', HasilSeleksiController::class);
+            Route::apiResource('hasil-seleksi', HasilSeleksiController::class)->names([
+                'index' => 'api.hasil-seleksi.index',
+                'store' => 'api.hasil-seleksi.store',
+                'show' => 'api.hasil-seleksi.show',
+                'update' => 'api.hasil-seleksi.update',
+                'destroy' => 'api.hasil-seleksi.destroy',
+            ]);
+            
             Route::put('/api/hasil-seleksi/{id}', [HasilSeleksiController::class, 'update']);
 
             Route::put('wawancara/{id}/status', [WawancaraController::class, 'updateStatus']);
@@ -186,9 +231,37 @@ Route::get('/hasil-seleksi/{id}', [HasilSeleksiController::class, 'show']);
             Route::apiResource('setting-bobot', SettingBobotController::class);
             // Master Data Management
             Route::apiResource('users', UserController::class);
-            Route::apiResource('divisi', DivisiController::class);
-            Route::apiResource('jabatan', JabatanController::class);
-            Route::apiResource('role', RoleController::class);
+
+
+            //Route::apiResource('divisi', DivisiController::class);
+            Route::apiResource('divisi', DivisiController::class)->names([
+                'index' => 'api.divisi.index',
+                'store' => 'api.divisi.store',
+                'show' => 'api.divisi.show',
+                'update' => 'api.divisi.update',
+                'destroy' => 'api.divisi.destroy',
+            ]);
+
+
+            //Route::apiResource('jabatan', JabatanController::class);
+            Route::apiResource('jabatan', JabatanController::class)->names([
+                'index' => 'api.jabatan.index',
+                'store' => 'api.jabatan.store',
+                'show' => 'api.jabatan.show',
+                'update' => 'api.jabatan.update',
+                'destroy' => 'api.jabatan.destroy',
+            ]);
+
+            //Route::apiResource('role', RoleController::class);
+
+            Route::apiResource('role', RoleController::class)->names([
+                'index' => 'api.role.index',
+                'store' => 'api.role.store',
+                'show' => 'api.role.show',
+                'update' => 'api.role.update',
+                'destroy' => 'api.role.destroy',
+            ]);
+
             // Route::apiResource('pegawai', PegawaiController::class);
 
             Route::prefix('pegawai')->group(function () {
