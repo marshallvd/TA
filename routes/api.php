@@ -53,7 +53,15 @@ Route::get('/wawancara/{id}', [WawancaraController::class, 'show']);
 // Route publik untuk detail hasil seleksi
 Route::get('/hasil-seleksi/{id}', [HasilSeleksiController::class, 'show']);
 
-    Route::apiResource('lowongan', LowonganController::class);
+    //Route::apiResource('lowongan', LowonganController::class);
+    Route::apiResource('lowongan', LowonganController::class)->names([
+        'index' => 'api.lowongan.index',
+        'store' => 'api.lowongan.store',
+        'show' => 'api.lowongan.show',
+        'update' => 'api.lowongan.update',
+        'destroy' => 'api.lowongan.destroy',
+    ]);
+    
     Route::get('lowongan/{id}', [LowonganController::class, 'show']);
     Route::put('/pelamar/{id}', [PelamarController::class, 'update']);
     // Route::get('/admin/lamaran/{id}', [LamaranController::class, 'showDetail']);
@@ -301,9 +309,24 @@ Route::get('/hasil-seleksi/{id}', [HasilSeleksiController::class, 'show']);
             //Route::apiResource('komponen-core-values', KomponenCoreValuesController::class);
 
 
-            Route::apiResource('jenis-cuti', JenisCutiController::class);
+            //Route::apiResource('jenis-cuti', JenisCutiController::class);
+            Route::apiResource('jenis-cuti', JenisCutiController::class)->names([
+                'index' => 'api.jenis-cuti.index',
+                'store' => 'api.jenis-cuti.store',
+                'show' => 'api.jenis-cuti.show',
+                'update' => 'api.jenis-cuti.update',
+                'destroy' => 'api.jenis-cuti.destroy',
+            ]);
 
-            Route::apiResource('komponen-gaji', KomponenGajiController::class);
+
+            //Route::apiResource('komponen-gaji', KomponenGajiController::class);
+            Route::apiResource('komponen-gaji', KomponenGajiController::class)->names([
+                'index' => 'api.komponen-gaji.index',
+                'store' => 'api.komponen-gaji.store',
+                'show' => 'api.komponen-gaji.show',
+                'update' => 'api.komponen-gaji.update',
+                'destroy' => 'api.komponen-gaji.destroy',
+            ]);
             Route::get('komponen-gaji/ jenis/{jenis}', [KomponenGajiController::class, 'getByJenis']);
 
 
