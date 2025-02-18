@@ -337,7 +337,7 @@ Route::prefix('jenis_cuti')->group(function () {
 
 
         //Route::get('/pelamar/{id}/edit', [UserPelamarController::class, 'edit'])
-        ->name('pelamar.edit');
+        //->name('pelamar.edit');
 
         
     });
