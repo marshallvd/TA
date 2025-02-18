@@ -193,7 +193,7 @@ Route::get('/hasil-seleksi/{id}', [HasilSeleksiController::class, 'show']);
             // Performance Components
             //Route::apiResource('komponen-kpi', KomponenKpiController::class);
             Route::apiResource('komponen-kpi', KomponenKpiController::class)->names([
-                //'index' => 'api.komponen-kpi.index',
+                'index' => 'api.komponen-kpi.index',
                 'store' => 'api.komponen-kpi.store',
                 'show' => 'api.komponen-kpi.show',
                 'update' => 'api.komponen-kpi.update',
