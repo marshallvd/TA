@@ -124,7 +124,15 @@ Route::get('/hasil-seleksi/{id}', [HasilSeleksiController::class, 'show']);
             Route::get('/penilaian-kinerja', [PenilaianKinerjaController::class, 'getPenilaianKinerja']);
 
             // HR Management
-            Route::apiResource('gaji', GajiController::class);
+            //Route::apiResource('gaji', GajiController::class);
+            Route::apiResource('gaji', GajiController::class)->names([
+                'index' => 'api.gaji.index',
+                'store' => 'api.gaji.store',
+                'show' => 'api.gaji.show',
+                'update' => 'api.gaji.update',
+                'destroy' => 'api.gaji.destroy',
+            ]);
+
             Route::get('pegawai/gaji-status', [GajiController::class, 'getGajiStatus']);
             Route::put('/update-gaji/{id}', [GajiController::class, 'update']);
             Route::get('setting-gaji', [SettingGajiController::class, 'index']);
