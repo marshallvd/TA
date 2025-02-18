@@ -236,8 +236,8 @@ Route::prefix('jenis_cuti')->group(function () {
             
             Route::put('/{id}/update-status', [AdminLamaranController::class, 'updateStatus'])
                 ->name('rekrutmen.lamaran.update-status');
-            Route::get('/rekrutmen/lamaran/{lamaran}/view', [AdminLamaranController::class, 'showView'])
-                ->name('rekrutmen.lamaran.view');
+            // Route::get('/rekrutmen/lamaran/{lamaran}/view', [AdminLamaranController::class, 'showView'])
+            //     ->name('rekrutmen.lamaran.view');
 
             Route::get('/{id}/view', [AdminLamaranController::class, 'showView'])
                 ->name('rekrutmen.lamaran.view');
