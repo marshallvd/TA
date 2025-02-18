@@ -200,8 +200,26 @@ Route::get('/hasil-seleksi/{id}', [HasilSeleksiController::class, 'show']);
                 'destroy' => 'api.komponen-kpi.destroy',
             ]);
             
-            Route::apiResource('komponen-kompetensi', KomponenKompetensiController::class);
-            Route::apiResource('komponen-core-values', KomponenCoreValuesController::class);
+            Route::apiResource('komponen-kompetensi', KomponenKompetensiController::class)->names([
+                'index' => 'api.komponen-kompetensi.index',
+                'store' => 'api.komponen-kompetensi.store',
+                'show' => 'api.komponen-kompetensi.show',
+                'update' => 'api.komponen-kompetensi.update',
+                'destroy' => 'api.komponen-kompetensi.destroy',
+            ]);
+            
+            Route::apiResource('komponen-core-values', KomponenCoreValuesController::class)->names([
+                'index' => 'api.komponen-core-values.index',
+                'store' => 'api.komponen-core-values.store',
+                'show' => 'api.komponen-core-values.show',
+                'update' => 'api.komponen-core-values.update',
+                'destroy' => 'api.komponen-core-values.destroy',
+            ]);
+            
+            //Route::apiResource('komponen-kompetensi', KomponenKompetensiController::class);
+            //Route::apiResource('komponen-core-values', KomponenCoreValuesController::class);
+
+
             Route::apiResource('jenis-cuti', JenisCutiController::class);
 
             Route::apiResource('komponen-gaji', KomponenGajiController::class);
