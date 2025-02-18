@@ -191,7 +191,15 @@ Route::get('/hasil-seleksi/{id}', [HasilSeleksiController::class, 'show']);
                 Route::delete('/{id}', [PegawaiController::class, 'destroy']);
             });
             // Performance Components
-            Route::apiResource('komponen-kpi', KomponenKpiController::class);
+            //Route::apiResource('komponen-kpi', KomponenKpiController::class);
+            Route::apiResource('komponen-kpi', KomponenKpiController::class)->names([
+                'index' => 'api.komponen-kpi.index',
+                'store' => 'api.komponen-kpi.store',
+                'show' => 'api.komponen-kpi.show',
+                'update' => 'api.komponen-kpi.update',
+                'destroy' => 'api.komponen-kpi.destroy',
+            ]);
+            
             Route::apiResource('komponen-kompetensi', KomponenKompetensiController::class);
             Route::apiResource('komponen-core-values', KomponenCoreValuesController::class);
             Route::apiResource('jenis-cuti', JenisCutiController::class);
