@@ -100,7 +100,7 @@ Route::get('/profile/pelamar/password', [ProfileController::class, 'editpassword
     // Route Manajemen Komponen Penilaian Kinerja
     Route::prefix('komponen-penilaian')->group(function () {
         // Manajemen Komponen KPI
-        Route::get('/kpi', [KomponenKPIController::class, 'index'])->name('web.komponen-kpi.index');
+        Route::get('/kpi', [KomponenKPIController::class, 'index'])->name('komponen-kpi.index');
         Route::get('/kpi/create', [KomponenKPIController::class, 'create'])->name('komponen-kpi.create');
         Route::get('/kpi/edit/{id}', [KomponenKPIController::class, 'edit'])->name('komponen-kpi.edit');
 
