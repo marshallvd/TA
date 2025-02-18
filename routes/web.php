@@ -336,7 +336,7 @@ Route::prefix('jenis_cuti')->group(function () {
         Route::delete('/{id}', [UserPelamarController::class, 'destroy'])->name('pelamar.destroy'); // Hapus pelamar
 
 
-        Route::get('/pelamar/{id}/edit', [UserPelamarController::class, 'edit'])
+        //Route::get('/pelamar/{id}/edit', [UserPelamarController::class, 'edit'])
         ->name('pelamar.edit');
 
         
