@@ -1,24 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\web;
-
+namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class PegawaiController extends Controller
 {
     public function index()
     {
-        return view('user.index');
+        return view('pegawai.index');
     }
 
     public function create()
     {
-        return view('user.create');
+        return view('pegawai.create');
     }
 
     public function edit()
     {
-        return view('user.edit');
+        return view('pegawai.edit');
     }
 }
