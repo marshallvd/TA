@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fetch data pelamar
     async function fetchPelamarDetail() {
         try {
-            const response = await fetch('http://localhost:8000/api/pelamar/auth/me', {
+            const response = await fetch(`${API_BASE_URL}/pelamar/auth/me`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${pelamarToken}`,
@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         try {
             // Fetch data lamaran
-            const lamaranResponse = await fetch(`http://localhost:8000/api/lamaran/${lamaranId}`, {
+            const lamaranResponse = await fetch(`${API_BASE_URL}/lamaran/${lamaranId}`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',

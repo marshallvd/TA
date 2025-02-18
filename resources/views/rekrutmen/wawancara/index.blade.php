@@ -38,13 +38,13 @@
                         <table id="wawancara-table" class="table table-striped" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Nama Pelamar</th>
-                                    <th>Lowongan Pekerjaan</th>
-                                    <th>Tanggal Wawancara</th>
-                                    <th>Lokasi</th>
-                                    <th>Hasil</th>
-                                    <th>Aksi</th>
+                                    <th><i class="bi bi-hash me-1"></i>No</th>
+                                    <th><i class="bi bi-person me-1"></i>Nama Pelamar</th>
+                                    <th><i class="bi bi-briefcase me-1"></i>Lowongan Pekerjaan</th>
+                                    <th><i class="bi bi-calendar-event me-1"></i>Tanggal Wawancara</th>
+                                    <th><i class="bi bi-geo-alt me-1"></i>Lokasi</th>
+                                    <th><i class="bi bi-check-circle me-1"></i>Hasil</th>
+                                    <th><i class="bi bi-three-dots-vertical me-1"></i>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="wawancara-body">
@@ -64,7 +64,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Constants
     const API_CONFIG = {
-        baseUrl: 'http://127.0.0.1:8000/api',
+        baseUrl: API_BASE_URL,
         endpoints: {
             wawancara: '/wawancara',
             hasilSeleksi: '/hasil-seleksi'

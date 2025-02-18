@@ -38,9 +38,9 @@ Manajemen Divisi
                         <table id="divisi-table" class="table table-striped" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th width="5%">No</th>
-                                    <th width="70%">Nama Divisi</th>
-                                    <th width="25%">Aksi</th>
+                                    <th width="5%"><i class="bi bi-hash me-1"></i>No</th>
+                                    <th width="70%"><i class="bi bi-building me-1"></i>Nama Divisi</th>
+                                    <th width="25%"><i class="bi bi-gear me-1"></i>Aksi</th>
                                 </tr>
                             </thead>
                         </table>

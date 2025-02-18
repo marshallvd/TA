@@ -38,11 +38,11 @@
                         <table id="core-values-table" class="table table-striped"style="width:100%">
                             <thead>
                                 <tr>
-                                    <th >No</th>
-                                    <th >Nama Core Values</th>
-                                    <th >Bobot</th>
-                                    <th >Perilaku Utama</th>
-                                    <th >Aksi</th>
+                                    <th><i class="bi bi-hash me-1"></i>No</th>
+                                    <th><i class="bi bi-heart me-1"></i>Nama Core Values</th>
+                                    <th><i class="bi bi-percent me-1"></i>Bobot</th>
+                                    <th><i class="bi bi-person-check me-1"></i>Perilaku Utama</th>
+                                    <th><i class="bi bi-three-dots-vertical me-1"></i>Aksi</th>
                                 </tr>
                             </thead>
                         </table>
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
         processing: true,
         serverSide: false,
         ajax: {
-            url: '{{ url('api/komponen-core-values') }}',
+            url: '/api/komponen-core-values',
             type: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    fetch(`{{ url('api/komponen-core-values') }}/${coreValuesId}`, {
+                    fetch(`/api/komponen-core-values/${coreValuesId}`, {
                         method: 'DELETE',
                         headers: {
                             'Authorization': `Bearer ${token}`,

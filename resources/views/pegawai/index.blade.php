@@ -42,14 +42,14 @@
                             <table id="pegawai-list-table" class="table table-striped" style="width:100%">
                                 <thead>
                                     <tr class="ligth">
-                                        <th><b>No</b></th>
-                                        <th><b>Nama</b></th>
-                                        <th><b>Telepon</b></th>
-                                        <th><b>Email</b></th>
-                                        <th><b>Jabatan</b></th>
-                                        <th><b>Status</b></th>
-                                        <th><b>Tanggal Masuk</b></th>
-                                        <th style="min-width: 100px"><b>Action</b></th>
+                                        <th><i class="bi bi-hash me-1"></i>No</th>
+                                        <th><i class="bi bi-person me-1"></i>Nama</th>
+                                        <th><i class="bi bi-phone me-1"></i>Telepon</th>
+                                        <th><i class="bi bi-envelope me-1"></i>Email</th>
+                                        <th><i class="bi bi-person-badge me-1"></i>Jabatan</th>
+                                        <th><i class="bi bi-check-square me-1"></i>Status</th>
+                                        <th><i class="bi bi-calendar me-1"></i>Tanggal Masuk</th>
+                                        <th style="min-width: 100px"><i class="bi bi-gear me-1"></i>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="pegawai-table-body">
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Mengambil data dari endpoint:', endpoint);
         console.log('Menggunakan token:', token); // Log token
 
-        const response = await fetch(`http://127.0.0.1:8000/api/${endpoint}`, {
+        const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + token,
@@ -137,29 +137,30 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 }
 
-    // Fungsi untuk menghapus pegawai
-    async function deletePegawai(id) {
-        try {
-            const response = await fetch(`http://127.0.0.1:8000/api/pegawai/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': 'Bearer ' + token,
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('Gagal menghapus data');
+// Modifikasi fungsi deletePegawai untuk menampilkan detail error
+async function deletePegawai(id) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/pegawai/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             }
+        });
 
-            const result = await response.json();
-            return result;
-        } catch (error) {
-            console.error('Error:', error);
-            throw error;
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.error || 'Gagal menghapus data');
         }
+
+        return data;
+    } catch (error) {
+        console.error('Error detail:', error);
+        throw error;
     }
+}
 
     // Fungsi untuk mendapatkan nama jabatan dan divisi
     function getNamaJabatan(jabatanList, id_jabatan) {
@@ -289,6 +290,8 @@ document.addEventListener('DOMContentLoaded', function() {
             text: 'Anda akan menghapus pegawai ini?',
             icon: 'warning',
             showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
             confirmButtonText: 'Ya, hapus!',
             cancelButtonText: 'Tidak, batalkan!'
         }).then((result) => {

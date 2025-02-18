@@ -6,7 +6,7 @@
     <title>HRMS SEB - @yield('title')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{{ asset('assets/images/logo seb.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('assets/images/logo_app.png') }}" />
 
     
     <!-- Library / Plugin Css Build -->

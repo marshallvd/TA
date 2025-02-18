@@ -33,11 +33,11 @@
                         <table id="hasil-seleksi-table" class="table table-striped" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Lowongan Pekerjaan</th>
-                                    <th>Tanggal Seleksi</th>
-                                    <th>Status Seleksi</th>
-                                    <th>Aksi</th>
+                                    <th><i class="bi bi-hash me-1"></i>No</th>
+                                    <th><i class="bi bi-briefcase me-1"></i>Lowongan Pekerjaan</th>
+                                    <th><i class="bi bi-calendar me-1"></i>Tanggal Seleksi</th>
+                                    <th><i class="bi bi-check-square me-1"></i>Status Seleksi</th>
+                                    <th><i class="bi bi-three-dots-vertical me-1"></i>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function fetchPelamarData() {
         try {
-            const response = await fetch('http://localhost:8000/api/pelamar/auth/me', {
+            const response = await fetch(`${API_BASE_URL}/pelamar/auth/me`, {
                 headers: {
                     'Authorization': `Bearer ${pelamarToken}`,
                     'Content-Type': 'application/json',
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function fetchHasilSeleksiData(pelamarId) {
         try {
-            const response = await fetch('http://localhost:8000/api/public/hasil-seleksi', {
+            const response = await fetch(`${API_BASE_URL}/public/hasil-seleksi`, {
                 headers: {
                     'Authorization': `Bearer ${pelamarToken}`,
                     'Accept': 'application/json',

@@ -39,12 +39,12 @@
                             <table id="cuti-pribadi-table" class="table table-striped" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Jenis Cuti</th>
-                                        <th>Tanggal Mulai</th>
-                                        <th>Tanggal Selesai</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
+                                        <th><i class="bi bi-hash me-1"></i>No</th>
+                                        <th><i class="bi bi-card-list me-1"></i>Jenis Cuti</th>
+                                        <th><i class="bi bi-calendar-event me-1"></i>Tanggal Mulai</th>
+                                        <th><i class="bi bi-calendar-event me-1"></i>Tanggal Selesai</th>
+                                        <th><i class="bi bi-check-square me-1"></i>Status</th>
+                                        <th><i class="bi bi-gear me-1"></i>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -61,7 +61,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const token = localStorage.getItem('token');
-    const baseUrl = 'http://127.0.0.1:8000/api';
+    const baseUrl = API_BASE_URL;
     let cutiPribadiTable;
     
     // Fungsi untuk menangani error dengan SweetAlert

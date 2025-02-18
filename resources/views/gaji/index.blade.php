@@ -43,16 +43,16 @@
                             <table id="gaji-table" class="table table-striped" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Nama Pegawai</th>
-                                        <th>Periode Gaji</th>
-                                        <th>Status Penilaian</th>
-                                        <th>Kehadiran</th>
-                                        <th>Lembur</th>
-                                        <th>Total Pendapatan</th>
-                                        <th>Total Potongan</th>
-                                        <th>Gaji Bersih</th>
-                                        <th>Action</th>
+                                        <th><i class="bi bi-hash me-1"></i>No</th>
+                                        <th><i class="bi bi-person me-1"></i>Nama Pegawai</th>
+                                        <th><i class="bi bi-calendar-event me-1"></i>Periode Gaji</th>
+                                        <th><i class="bi bi-check-circle me-1"></i>Status Penilaian</th>
+                                        <th><i class="bi bi-calendar-check me-1"></i>Kehadiran</th>
+                                        <th><i class="bi bi-clock-history me-1"></i>Lembur</th>
+                                        <th><i class="bi bi-plus-circle me-1"></i>Total Pendapatan</th>
+                                        <th><i class="bi bi-dash-circle me-1"></i>Total Potongan</th>
+                                        <th><i class="bi bi-wallet2 me-1"></i>Gaji Bersih</th>
+                                        <th><i class="bi bi-three-dots-vertical me-1"></i>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -73,10 +73,10 @@ let gajiTable;
 
 async function fetchData(periode = '') {
     const token = localStorage.getItem('token');
-    const baseUrl = 'http://127.0.0.1:8000/api';
+    //const baseUrl = 'http://127.0.0.1:8000/api';
     
     try {
-        let url = `${baseUrl}/pegawai/gaji-status`;
+        let url = `${API_BASE_URL}/pegawai/gaji-status`;
         if (periode) {
             url += `?periode=${periode}`;
         }
@@ -120,7 +120,7 @@ function loadTableData(data) {
 
 async function deleteGaji(id) {
     const token = localStorage.getItem('token');
-    const baseUrl = 'http://127.0.0.1:8000/api';
+    //const baseUrl = 'http://127.0.0.1:8000/api';
 
     try {
         const result = await Swal.fire({
@@ -128,14 +128,16 @@ async function deleteGaji(id) {
             text: "Data yang dihapus tidak dapat dikembalikan!",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
+
+            
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
             confirmButtonText: 'Ya, hapus!',
             cancelButtonText: 'Batal'
         });
 
         if (result.isConfirmed) {
-            const response = await fetch(`${baseUrl}/gaji/${id}`, {
+            const response = await fetch(`${API_BASE_URL}/gaji/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -171,7 +173,7 @@ async function deleteGaji(id) {
 // Event listener saat DOM sudah siap
 document.addEventListener('DOMContentLoaded', function() {
     const token = localStorage.getItem('token');
-    const baseUrl = 'http://127.0.0.1:8000/api';
+    //const baseUrl = 'http://127.0.0.1:8000/api';
 
     // Cek token
     if (!token) {

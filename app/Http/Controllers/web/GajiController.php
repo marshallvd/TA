@@ -31,4 +31,8 @@ class GajiController extends Controller
     {
         return view('gaji.pribadi');
     }
+    public function setting()
+    {
+        return view('gaji.setting');
+    }
 }

@@ -33,13 +33,13 @@
                         <table id="hasil-seleksi-table" class="table table-striped" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Nama Pelamar</th>
-                                    <th>Lowongan Pekerjaan</th>
-                                    <th>Status</th>
-                                    <th>Catatan</th>
-                                    <th>Tanggal Dibuat</th>
-                                    <th>Aksi</th>
+                                    <th><i class="bi bi-hash me-1"></i>No</th>
+                                    <th><i class="bi bi-person me-1"></i>Nama Pelamar</th>
+                                    <th><i class="bi bi-briefcase me-1"></i>Lowongan Pekerjaan</th>
+                                    <th><i class="bi bi-check-square me-1"></i>Status</th>
+                                    <th><i class="bi bi-clipboard-data me-1"></i>Catatan</th>
+                                    <th><i class="bi bi-calendar me-1"></i>Tanggal Dibuat</th>
+                                    <th><i class="bi bi-three-dots-vertical me-1"></i>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="hasil-seleksi-body">
@@ -59,7 +59,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Constants
     const API_CONFIG = {
-        baseUrl: 'http://127.0.0.1:8000/api',
+        baseUrl:API_BASE_URL,
         endpoints: {
             hasilSeleksi: '/hasil-seleksi'
         }

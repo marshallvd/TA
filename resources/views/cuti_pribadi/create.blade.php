@@ -549,7 +549,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Definisikan fungsi deleteCuti dalam lingkup global
 window.deleteCuti = function(idCuti) {
     const token = localStorage.getItem('token');
-    const baseUrl = 'http://127.0.0.1:8000/api';
+    const baseUrl = API_BASE_URL;
 
     Swal.fire({
         title: 'Apakah Anda yakin?',

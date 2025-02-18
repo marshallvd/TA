@@ -389,7 +389,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function redirectToIndex() {
-        window.location.href = '/pegawai';
+        window.location.href = '/user';
     }
 });
 </script>

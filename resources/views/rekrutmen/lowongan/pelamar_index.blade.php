@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load Divisi Options
     async function loadDivisiOptions() {
     try {
-        const response = await fetch('http://127.0.0.1:8000/api/public/divisi', {
+        const response = await fetch(`${API_BASE_URL}/public/divisi`, {
             headers: {
                 'Accept': 'application/json'
             }
@@ -189,7 +189,7 @@ async function fetchLowongan() {
         if (gajiMax) params.append('gaji_maksimal', gajiMax);
 
         // Construct URL
-        const url = `http://127.0.0.1:8000/api/lowongan?${params.toString()}`;
+        const url = `${API_BASE_URL}/lowongan?${params.toString()}`;
         console.log('Fetching URL:', url);
 
         // Fetch data
@@ -213,7 +213,7 @@ async function fetchLowongan() {
         if (token) {
             try {
                 // Ambil ID Pelamar
-                const pelamarResponse = await fetch('http://127.0.0.1:8000/api/pelamar/auth/me', {
+                const pelamarResponse = await fetch(`${API_BASE_URL}/pelamar/auth/me`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Accept': 'application/json'
@@ -223,7 +223,7 @@ async function fetchLowongan() {
                 const pelamarId = pelamarData.data.id_pelamar;
 
                 // Ambil data lamaran
-                const lamaranResponse = await fetch('http://127.0.0.1:8000/api/admin/lamaran', {
+                const lamaranResponse = await fetch(`${API_BASE_URL}/admin/lamaran`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Accept': 'application/json'

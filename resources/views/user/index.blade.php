@@ -35,12 +35,12 @@
                         <table id="user-list-table" class="table table-striped" style="width:100%">
                             <thead>
                                 <tr class="ligth">
-                                    <th><b>No</b></th>
-                                    <th><b>Nama Pegawai</b></th>
-                                    <th><b>Email</b></th>
-                                    <th><b>Role</b></th>
-                                    <th><b>Status</b></th>
-                                    <th style="min-width: 100px"><b>Action</b></th>
+                                    <th><i class="bi bi-hash me-1"></i>No</th>
+                                    <th><i class="bi bi-person me-1"></i>Nama Pegawai</th>
+                                    <th><i class="bi bi-envelope me-1"></i>Email</th>
+                                    <th><i class="bi bi-person-vcard me-1"></i>Role</th>
+                                    <th><i class="bi bi-check-square me-1"></i>Status</th>
+                                    <th style="min-width: 100px"><i class="bi bi-gear me-1"></i>Action</th>
                                 </tr>
                             </thead>
                             <tbody id="user-table-body">
@@ -58,7 +58,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const token = localStorage.getItem('token');
-    const API_URL = 'http://127.0.0.1:8000/api';
+    const API_URL = API_BASE_URL;
 
     // Cek token
     if (!token) {

@@ -265,10 +265,9 @@
                                                 name="pendidikan_terakhir" 
                                                 required>
                                             <option value="">Pilih Pendidikan</option>
-                                            <option value="SD">SD</option>
-                                            <option value="SMP">SMP</option>
-                                            <option value="SMA">SMA</option>
+
                                             <option value="D3">D3</option>
+                                            <option value="D4">D4</option>
                                             <option value="S1">S1</option>
                                             <option value="S2">S2</option>
                                             <option value="S3">S3</option>
@@ -292,7 +291,7 @@
                                                 required>
                                             <option value="">Pilih Status</option>
                                             <option value="aktif">Aktif</option>
-                                            <option value="tidak aktif">Tidak Aktif</option>
+                                            <option value="tidak">Tidak Aktif</option>
                                         </select>
                                         <div class="invalid-feedback">
                                             Status kepegawaian harus dipilih

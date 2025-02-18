@@ -129,88 +129,77 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Form validation and submission
     divisiForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
+    e.preventDefault();
 
-        // Basic validation
-        if (!this.checkValidity()) {
-            e.stopPropagation();
-            this.classList.add('was-validated');
-            return;
-        }
+    // Basic validation
+    if (!this.checkValidity()) {
+        e.stopPropagation();
+        this.classList.add('was-validated');
+        return;
+    }
 
-        const formData = new FormData(this);
-        const data = {
-            nama_divisi: formData.get('nama_divisi').trim()
-        };
+    const formData = new FormData(this);
+    const data = {
+        nama_divisi: formData.get('nama_divisi').trim()
+    };
 
-        try {
-            // Show loading state
-            const loadingAlert = await Swal.fire({
-                title: 'Mohon Tunggu',
-                text: 'Sedang menyimpan data...',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                showConfirmButton: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
+    console.log('Data yang dikirim:', JSON.stringify(data)); // Log data yang dikirim
 
-            // Send data to API
-            const response = await fetch('/api/divisi', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
+    try {
+        // Send data to API
+        const response = await fetch('/api/divisi', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify(data)
+        });
 
-            // Close loading alert
-            await loadingAlert.close();
+        // Handle response
+        const responseData = await response.json(); // Hanya dibaca sekali
 
-            // Handle response
-            const responseData = await response.json();
-
-            if (!response.ok) {
-                // Validation errors
-                if (responseData.errors) {
-                    Object.keys(responseData.errors).forEach(key => {
-                        const inputElement = document.getElementById(key);
-                        if (inputElement) {
-                            inputElement.classList.add('is-invalid');
-                            const feedbackElement = inputElement.nextElementSibling;
-                            if (feedbackElement && feedbackElement.classList.contains('invalid-feedback')) {
-                                feedbackElement.textContent = responseData.errors[key][0];
-                            }
+        if (!response.ok) {
+            console.error('Respons dari server:', responseData); // Log respons dari server
+            // Validation errors
+            if (responseData.errors) {
+                Object.keys(responseData.errors).forEach(key => {
+                    const inputElement = document.getElementById(key);
+                    if (inputElement) {
+                        inputElement.classList.add('is-invalid');
+                        const feedbackElement = inputElement.nextElementSibling;
+                        if (feedbackElement && feedbackElement.classList.contains('invalid-feedback')) {
+                            feedbackElement.textContent = responseData.errors[key][0];
                         }
-                    });
-                    throw new Error(responseData.message || 'Terjadi kesalahan validasi');
-                }
-                throw new Error(responseData.message || 'Terjadi kesalahan saat menyimpan data');
+                    }
+                });
+                throw new Error(responseData.message || 'Terjadi kesalahan validasi');
             }
-
-            // Show success message
-            await Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: 'Data divisi berhasil ditambahkan',
-                showConfirmButton: true
-            }).then(() => {
-                window.location.href = '{{ route("master_data.divisi.index") }}';
-            });
-
-        } catch (error) {
-            console.error('Error:', error);
-            await Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: error.message || 'Terjadi kesalahan saat menyimpan data',
-                confirmButtonText: 'OK'
-            });
+            throw new Error(responseData.message || 'Terjadi kesalahan saat menyimpan data');
         }
-    });
+
+        // Show success message
+        await Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Data divisi berhasil ditambahkan',
+            showConfirmButton: true
+        }).then(() => {
+            window.location.href = '{{ route("master_data.divisi.index") }}';
+        });
+
+    } catch (error) {
+        console.error('Error:', error);
+        await Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.message || 'Terjadi kesalahan saat menyimpan data',
+            confirmButtonText: 'OK'
+        });
+    }
+});
 });
 </script>
 @endpush

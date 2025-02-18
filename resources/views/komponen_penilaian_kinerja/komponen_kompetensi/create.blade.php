@@ -303,7 +303,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             // Send data to API
-            const response = await fetch('{{ url('api/komponen-kompetensi') }}', {
+            const response = await fetch('/api/komponen-kompetensi', {                
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,

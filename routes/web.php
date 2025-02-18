@@ -122,6 +122,8 @@ Route::get('/profile/pelamar/password', [ProfileController::class, 'editpassword
     Route::get('/penilaian_kinerja/pribadi', [PenilaianKinerjaController::class, 'pribadi'])
     ->name('penilaian_kinerja.pribadi');
     Route::get('/penilaian_kinerja/view/{id}', [PenilaianKinerjaController::class, 'view'])->name('penilaian_kinerja.view');
+    // Di routes/web.php
+    Route::get('/penilaian-kinerja/setting', [PenilaianKinerjaController::class, 'setting'])->name('penilaian_kinerja.setting');
 
     // Route Manajemen Gaji
     Route::get('/gaji', [GajiController::class, 'index'])->name('gaji.index');
@@ -129,6 +131,9 @@ Route::get('/profile/pelamar/password', [ProfileController::class, 'editpassword
     Route::get('/gaji/edit/{id}', [GajiController::class, 'edit'])->name('gaji.edit');
     Route::get('/gaji/view/{id}', [GajiController::class, 'view'])->name('gaji.view');
     Route::get('/pribadi', [GajiController::class, 'pribadi'])->name('gaji.pribadi');
+
+    Route::get('gaji/setting', [GajiController::class, 'setting'])->name('gaji.setting');
+
     Route::prefix('komponen-gaji')->group(function () {
         Route::get('/', [KomponenGajiController::class, 'index'])
             ->name('komponen_gaji.index');

@@ -1,6 +1,5 @@
 @extends('layouts.master')
 
-@extends('layouts.master')
 
 @section('title')
     Edit User
@@ -44,7 +43,7 @@
                         <br>
                         <div class="row mt-3 position-absolute bottom-0 end-0 m-4">
                             <div class="col-12">
-                                <a href="/user" class="btn btn-danger me-2">
+                                <a href="/profile/pegawai" class="btn btn-danger me-2">
                                     <i class="bi bi-arrow-left me-2"></i>Kembali
                                 </a>
                                 <button type="reset" class="btn btn-warning me-2">

@@ -294,59 +294,60 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Fetch existing data
     async function fetchWawancaraDetail() {
-        try {
-            const response = await fetch(`/api/wawancara/${wawancaraId}`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json'
-                }
-            });
-
-            if (!response.ok) {
-                const errorData = await response.text();
-                throw new Error(errorData || `HTTP error! status: ${response.status}`);
+    try {
+        const response = await fetch(`/api/wawancara/${wawancaraId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
             }
+        });
 
-            const responseData = await response.json();
-            console.log('Full Wawancara Response:', responseData);
-
-            // Sesuaikan dengan struktur data yang diterima
-            const wawancara = responseData.data.wawancara || {};
-            const pelamarData = responseData.data.pelamar || wawancara.pelamar || {};
-
-            // Simpan data awal
-            originalData = {
-                tanggal_wawancara: wawancara.tanggal_wawancara || '',
-                lokasi: wawancara.lokasi || '',
-                catatan: wawancara.catatan || '',
-                hasil: wawancara.hasil || ''
-            };
-
-            // Update UI
-            pelamarName.value = pelamarData.nama || 'Nama Tidak Tersedia';
-            pelamarEmail.value = pelamarData.email || 'Email Tidak Tersedia';
-            tanggalWawancara.value = formatDateForInput(wawancara.tanggal_wawancara);
-            lokasiWawancara.value = wawancara.lokasi || '';
-            catatanWawancara.value = wawancara.catatan || '';
-            
-            // Set status wawancara
-            if (wawancara.hasil) {
-                statusWawancara.value = wawancara.hasil.toLowerCase();
-            }
-
-        } catch (error) {
-            console.error('Error Detail Wawancara:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: error.message || 'Terjadi kesalahan saat memuat data',
-                confirmButtonText: 'OK'
-            }).then(() => {
-                window.location.href = '/rekrutmen/wawancara';
-            });
+        if (!response.ok) {
+            const errorData = await response.text();
+            throw new Error(errorData || `HTTP error! status: ${response.status}`);
         }
+
+        const responseData = await response.json();
+        console.log('Full Wawancara Response:', responseData);
+
+        // Langsung akses data wawancara
+        const wawancara = responseData.data;
+        
+        // Simpan data awal
+        originalData = {
+            tanggal_wawancara: wawancara.tanggal_wawancara,
+            lokasi: wawancara.lokasi,
+            catatan: wawancara.catatan,
+            hasil: wawancara.hasil || ''
+        };
+
+        // Update UI dengan data yang ada
+        pelamarName.value = wawancara.lamaran_pekerjaan.nama_pelamar;
+        pelamarEmail.value = wawancara.lamaran_pekerjaan.email_pelamar;
+        tanggalWawancara.value = formatDateForInput(wawancara.tanggal_wawancara);
+        lokasiWawancara.value = wawancara.lokasi;
+        catatanWawancara.value = wawancara.catatan;
+        
+        // Set status wawancara jika ada
+        if (wawancara.hasil) {
+            statusWawancara.value = wawancara.hasil.toLowerCase();
+        } else {
+            statusWawancara.value = 'tertunda'; // default value jika hasil null
+        }
+
+    } catch (error) {
+        console.error('Error Detail Wawancara:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.message || 'Terjadi kesalahan saat memuat data',
+            confirmButtonText: 'OK'
+        }).then(() => {
+            window.location.href = '/rekrutmen/wawancara';
+        });
     }
+}
 
     // Panggil fungsi fetch
     fetchWawancaraDetail();

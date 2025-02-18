@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const fullUrl = endpoint.startsWith('http') 
                 ? endpoint 
-                : `http://127.0.0.1:8000/api/${endpoint}`;
+                : `${API_BASE_URL}/${endpoint}`;
 
             const response = await fetch(fullUrl, {
                 method: 'GET',

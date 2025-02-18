@@ -7,7 +7,20 @@
 
 @section('content')
 <div class="container-fluid content-inner mt-n5 py-0">
-    <div>
+        {{-- Header Card --}}
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <b><h2 class="card-title mb-1">Manajemen Penilaian Kinerja</h2></b>
+                        <p class="card-text text-muted">Human Resource Management System SEB</p>
+                    </div>
+                    <div>
+                        <i class="bi bi-person-workspace text-primary" style="font-size: 3rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
@@ -23,21 +36,21 @@
                                 <input type="month" id="periodeFilter" class="form-control">
                             </div>
                             <div class="col-md-2 d-flex align-items-end">
-                                <button id="filterButton" class="btn btn-primary">Filter</button>
+                                <button id="filterButton" class="btn btn-primary"><i class="bi bi-filter-square me-2"></i>Filter</button>
                             </div>
                         </div>
                         <div class="table-responsive">
                             <table id="penilaian-kinerja-pribadi-table" class="table table-striped" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Periode Penilaian</th>
-                                        <th>Nilai KPI</th>
-                                        <th>Nilai Kompetensi</th>
-                                        <th>Nilai Core Values</th>
-                                        <th>Nilai Akhir</th>
-                                        <th>Predikat</th>
-                                        <th>Action</th>
+                                        <th><i class="bi bi-hash me-1"></i>No</th>
+                                        <th><i class="bi bi-calendar-event me-1"></i>Periode Penilaian</th>
+                                        <th><i class="bi bi-graph-up me-1"></i>Nilai KPI</th>
+                                        <th><i class="bi bi-card-checklist me-1"></i>Nilai Kompetensi</th>
+                                        <th><i class="bi bi-heart me-1"></i>Nilai Core Values</th>
+                                        <th><i class="bi bi-star me-1"></i>Nilai Akhir</th>
+                                        <th><i class="bi bi-award me-1"></i>Predikat</th>
+                                        <th><i class="bi bi-three-dots-vertical me-1"></i>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -49,14 +62,14 @@
                 </div>
             </div>
         </div>
-    </div>
+
 </div>
 
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const token = localStorage.getItem('token');
-    const baseUrl = 'http://127.0.0.1:8000/api';
+    const baseUrl = API_BASE_URL;
     let pegawaiId = null;
     let penilaianPribadiTable;
 
@@ -64,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
     async function initializePage() {
         try {
             // Fetch data user dari endpoint auth/me
-            const response = await fetch('http://127.0.0.1:8000/api/auth/me', {
+            const response = await fetch(`${API_BASE_URL}/auth/me`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,

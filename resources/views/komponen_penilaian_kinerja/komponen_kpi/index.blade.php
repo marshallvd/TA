@@ -38,13 +38,13 @@
                         <table id="kpi-table" class="table table-striped"  style="width:100%">
                             <thead>
                                 <tr>
-                                    <th >No</th>
-                                    <th >Nama Indikator</th>
-                                    <th>Divisi</th>
-                                    <th >Bobot</th>
-                                    <th >Target</th>
-                                    <th >Ukuran</th>
-                                    <th >Aksi</th>
+                                    <th><i class="bi bi-hash me-1"></i>No</th>
+                                    <th><i class="bi bi-clipboard-data me-1"></i>Nama Indikator</th>
+                                    <th><i class="bi bi-building me-1"></i>Divisi</th>
+                                    <th><i class="bi bi-percent me-1"></i>Bobot</th>
+                                    <th><i class="bi bi-bullseye me-1"></i>Target</th>
+                                    <th><i class="bi bi-rulers me-1"></i>Ukuran</th>
+                                    <th><i class="bi bi-three-dots-vertical me-1"></i>Aksi</th>
                                 </tr>
                             </thead>
                         </table>
@@ -55,6 +55,40 @@
     </div>
 </div>
 @endsection
+
+@push('styles')
+    <style>
+        .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table th, .table td {
+    white-space: normal;
+    vertical-align: middle !important;
+}
+
+.text-wrap {
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+/* Mengatur ukuran minimum kolom aksi */
+.list-user-action {
+    min-width: 100px;
+    display: flex;
+    gap: 5px;
+}
+
+/* Memastikan tombol aksi tidak terpotong */
+.btn-icon {
+    padding: 0.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+    </style>
+@endpush
 
 @push('scripts')
 <script>
@@ -116,13 +150,47 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         },
         columns: [
-            { data: 'DT_RowIndex', name: 'DT_RowIndex', searchable: false },
-            { data: 'nama_indikator', name: 'nama_indikator' },
-            { data: 'nama_divisi', name: 'nama_divisi' },
-            { data: 'bobot', name: 'bobot' },
-            { data: 'target', name: 'target' },
-            { data: 'ukuran', name: 'ukuran' },
-            { data: 'actions', name: 'actions', orderable: false, searchable: false }
+            { data: 'DT_RowIndex', name: 'DT_RowIndex', searchable: false, width: '5%' },
+            { 
+                data: 'nama_indikator', 
+                name: 'nama_indikator',
+                width: '20%',
+                render: function(data) {
+                    return `<div class="text-wrap" style="max-width: 200px;">${data}</div>`;
+                }
+            },
+            { 
+                data: 'nama_divisi', 
+                name: 'nama_divisi',
+                width: '10%',
+                render: function(data) {
+                    return `<div class="text-wrap" style="max-width: 100px;">${data}</div>`;
+                }
+            },
+            { data: 'bobot', name: 'bobot', width: '10%' },
+            { 
+                data: 'target', 
+                name: 'target',
+                width: '25%',
+                render: function(data) {
+                    return `<div class="text-wrap" style="max-width: 200px;">${data}</div>`;
+                }
+            },
+            { 
+                data: 'ukuran', 
+                name: 'ukuran',
+                width: '25%',
+                render: function(data) {
+                    return `<div class="text-wrap" style="max-width: 200px;">${data}</div>`;
+                }
+            },
+            { 
+                data: 'actions', 
+                name: 'actions', 
+                orderable: false, 
+                searchable: false,
+                width: '15%'
+            }
         ],
         language: {
             processing: "Memproses...",

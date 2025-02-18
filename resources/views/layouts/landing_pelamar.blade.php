@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HRMS SEB - @yield('title')</title>
 
-    <link rel="shortcut icon" href="{{ asset('assets/images/logo seb.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('assets/images/logo_app.png') }}" />
 
 
     <!-- Bootstrap CSS -->

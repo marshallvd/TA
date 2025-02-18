@@ -48,13 +48,13 @@
                             <table id="cuti-table" class="table table-striped" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Nama Pegawai</th>
-                                        <th>Jenis Cuti</th>
-                                        <th>Tanggal Mulai</th>
-                                        <th>Tanggal Selesai</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
+                                        <th><i class="bi bi-hash me-1"></i>No</th>
+                                        <th><i class="bi bi-person me-1"></i>Nama Pegawai</th>
+                                        <th><i class="bi bi-card-list me-1"></i>Jenis Cuti</th>
+                                        <th><i class="bi bi-calendar-event me-1"></i>Tanggal Mulai</th>
+                                        <th><i class="bi bi-calendar-event me-1"></i>Tanggal Selesai</th>
+                                        <th><i class="bi bi-check-square me-1"></i>Status</th>
+                                        <th><i class="bi bi-gear me-1"></i>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -71,11 +71,11 @@
 <script>
    // Constants
 const API_CONFIG = {
-    baseUrl: 'http://127.0.0.1:8000/api',
+    //baseUrl: 'http://127.0.0.1:8000/api',
     endpoints: {
-        employees: '/pegawai',
-        leaveTypes: '/jenis-cuti',
-        leave: '/cuti'
+        employees: '/api/pegawai',
+        leaveTypes: '/api/jenis-cuti',
+        leave: '/api/cuti'
     }
 };
 
@@ -106,7 +106,7 @@ const getStatusBadgeClass = (status) => {
 // API Functions
 const fetchEmployeeNames = async () => {
     try {
-        const response = await fetch(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.employees}`, {
+        const response = await fetch(API_CONFIG.endpoints.employees, {
             method: 'GET',
             headers: getAuthHeaders()
         });
@@ -125,7 +125,7 @@ const fetchEmployeeNames = async () => {
 
 const fetchLeaveTypes = async () => {
     try {
-        const response = await fetch(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.leaveTypes}`, {
+        const response = await fetch(API_CONFIG.endpoints.leaveTypes, {
             method: 'GET',
             headers: getAuthHeaders()
         });
@@ -149,7 +149,8 @@ const initializeDataTable = () => {
         serverSide: false,
         pageLength: 10,
         ajax: {
-            url: `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.leave}`,
+            url: API_CONFIG.endpoints.leave,
+            // url: `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.leave}`,
             type: 'GET',
             data: function(d) {
                 const periode = document.getElementById('periodeFilter').value;

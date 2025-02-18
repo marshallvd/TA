@@ -186,35 +186,36 @@ document.addEventListener('DOMContentLoaded', function() {
     const resetButton = document.getElementById('resetButton');
     const divisiSelect = document.getElementById('divisiSelect');
 
-    // Fetch divisi options
-    fetch('http://127.0.0.1:8000/api/divisi', {
-        headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'Accept': 'application/json'
+    // Use the API_BASE_URL from master layout
+    const fetchDivisi = async () => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/divisi`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Accept': 'application/json'
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            
+            const data = await response.json();
+            data.forEach(divisi => {
+                const option = document.createElement('option');
+                option.value = divisi.id_divisi;
+                option.textContent = divisi.nama_divisi;
+                divisiSelect.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Error fetching divisi:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Gagal mengambil data divisi. ' + error.message
+            });
         }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        data.forEach(divisi => {
-            const option = document.createElement('option');
-            option.value = divisi.id_divisi;
-            option.textContent = divisi.nama_divisi;
-            divisiSelect.appendChild(option);
-        });
-    })
-    .catch(error => {
-        console.error('Error fetching divisi:', error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Gagal mengambil data divisi. ' + error.message
-        });
-    });
+    };
 
     // Reset button functionality
     resetButton.addEventListener('click', function() {
@@ -226,8 +227,7 @@ document.addEventListener('DOMContentLoaded', function() {
     komponenKPIForm.addEventListener('submit', async function(e) {
         e.preventDefault();
 
-        // Basic validation
-        if (!this. checkValidity()) {
+        if (!this.checkValidity()) {
             e.stopPropagation();
             this.classList.add('was-validated');
             return;
@@ -243,7 +243,6 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         try {
-            // Show loading state
             const loadingAlert = Swal.fire({
                 title: 'Mohon Tunggu',
                 text: 'Sedang menyimpan data...',
@@ -255,8 +254,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
 
-            // Send data to API
-            const response = await fetch('http://127.0.0.1:8000/api/komponen-kpi', {
+            const response = await fetch(`${API_BASE_URL}/komponen-kpi`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -266,14 +264,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify(data)
             });
 
-            // Close loading alert
             await loadingAlert.close();
-
-            // Handle response
             const responseData = await response.json();
 
             if (!response.ok) {
-                // Validation errors
                 if (responseData.errors) {
                     Object.keys(responseData.errors).forEach(key => {
                         const inputElement = document.getElementById(key);
@@ -285,21 +279,18 @@ document.addEventListener('DOMContentLoaded', function() {
                             }
                         }
                     });
-
                     throw new Error(responseData.message || 'Terjadi kesalahan validasi');
                 }
-
                 throw new Error(responseData.message || 'Terjadi kesalahan saat menyimpan data');
             }
 
-            // Show success message
             await Swal.fire({
                 icon: 'success',
                 title: 'Berhasil!',
                 text: 'Komponen KPI berhasil ditambahkan',
                 showConfirmButton: true
             }).then(() => {
-                window.location.href = '{{ route("komponen-kpi.index") }}';
+                window.location.href = `${BASE_URL}/komponen-kpi`;
             });
 
         } catch (error) {
@@ -312,6 +303,9 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
+
+    // Initialize
+    fetchDivisi();
 });
 </script>
 @endpush

@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const formData = new FormData(this);
         
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/pelamar', {
+            const response = await fetch('/api/pelamar', {
                 method: 'POST',
                 headers: {
                     'Authorization': 'Bearer ' + token,

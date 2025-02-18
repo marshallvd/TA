@@ -33,12 +33,12 @@
                         <table id="wawancara-table" class="table table-striped" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Lowongan Pekerjaan</th>
-                                    <th>Tanggal Wawancara</th>
-                                    <th>Lokasi</th>
-                                    <th>Status</th>
-                                    <th>Aksi</th>
+                                    <th><i class="bi bi-hash me-1"></i>No</th>
+                                    <th><i class="bi bi-briefcase me-1"></i>Lowongan Pekerjaan</th>
+                                    <th><i class="bi bi-calendar-event me-1"></i>Tanggal Wawancara</th>
+                                    <th><i class="bi bi-geo-alt me-1"></i>Lokasi</th>
+                                    <th><i class="bi bi-check-circle me-1"></i>Status</th>
+                                    <th><i class="bi bi-three-dots-vertical me-1"></i>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fungsi untuk mengambil data pelamar
     async function fetchPelamarData() {
         try {
-            const response = await fetch('http://localhost:8000/api/pelamar/auth/me', {
+            const response = await fetch(`${API_BASE_URL}/pelamar/auth/me`, {
                 headers: {
                     'Authorization': `Bearer ${pelamarToken}`,
                     'Content-Type': 'application/json',
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fungsi untuk mengambil data wawancara
     async function fetchWawancaraData(pelamarId) {
         try {
-            const response = await fetch('http://localhost:8000/api/public/wawancara', {
+            const response = await fetch(`${API_BASE_URL}/public/wawancara`, {
                 headers: {
                     'Authorization': `Bearer ${pelamarToken}`,
                     'Accept': 'application/json',

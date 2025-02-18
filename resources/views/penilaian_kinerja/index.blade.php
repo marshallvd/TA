@@ -43,15 +43,15 @@
                             <table id="penilaian-kinerja-table" class="table table-striped" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Nama Pegawai</th>
-                                        <th>Periode Penilaian</th>
-                                        <th>Nilai KPI</th>
-                                        <th>Nilai Kompetensi</th>
-                                        <th>Nilai Core Values</th>
-                                        <th>Nilai Akhir</th>
-                                        <th>Predikat</th>
-                                        <th>Action</th>
+                                        <th><i class="bi bi-hash me-1"></i>No</th>
+                                        <th><i class="bi bi-person me-1"></i>Nama Pegawai</th>
+                                        <th><i class="bi bi-calendar-event me-1"></i>Periode Penilaian</th>
+                                        <th><i class="bi bi-graph-up me-1"></i>Nilai KPI</th>
+                                        <th><i class="bi bi-card-checklist me-1"></i>Nilai Kompetensi</th>
+                                        <th><i class="bi bi-heart me-1"></i>Nilai Core Values</th>
+                                        <th><i class="bi bi-star me-1"></i>Nilai Akhir</th>
+                                        <th><i class="bi bi-award me-1"></i>Predikat</th>
+                                        <th><i class="bi bi-three-dots-vertical me-1"></i>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -69,7 +69,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const token = localStorage.getItem('token');
     let penilaianTable;
-    const baseUrl = 'http://127.0.0.1:8000/api';
+    const baseUrl = API_BASE_URL;
 
     // Token validation and redirection (remains the same)
     if (!token) {

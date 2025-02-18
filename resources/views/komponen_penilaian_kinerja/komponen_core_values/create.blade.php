@@ -342,7 +342,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             // Send data to API
-            const response = await fetch('{{ url('api/komponen-core-values') }}', {
+            const response = await fetch('/api/komponen-core-values', {
+
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,

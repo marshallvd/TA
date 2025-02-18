@@ -501,16 +501,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         try {
-            const loadingAlert = await Swal.fire({
-                title: 'Mohon Tunggu',
-                text: 'Sedang menyimpan data...',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                showConfirmButton: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
+            // const loadingAlert = await Swal.fire({
+            //     title: 'Mohon Tunggu',
+            //     text: 'Sedang menyimpan data...',
+            //     allowOutsideClick: false,
+            //     allowEscapeKey: false,
+            //     showConfirmButton: false,
+            //     didOpen: () => {
+            //         Swal.showLoading();
+            //     }
+            // });
 
             const formData = new FormData(this);
 
@@ -523,7 +523,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: formData
             });
 
-            await loadingAlert.close();
+            // await loadingAlert.close();
 
             const responseData = await response.json();
 

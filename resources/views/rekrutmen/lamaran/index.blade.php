@@ -63,13 +63,13 @@
                         <table id="lamaran-table" class="table table-striped" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Nama Pelamar</th>
-                                    <th>Lowongan Pekerjaan</th>
-                                    <th>Divisi</th>
-                                    <th>Tanggal Lamaran</th>
-                                    <th>Status Lamaran</th>
-                                    <th>Aksi</th>
+                                    <th><i class="bi bi-hash me-1"></i>No</th>
+                                    <th><i class="bi bi-person me-1"></i>Nama Pelamar</th>
+                                    <th><i class="bi bi-briefcase me-1"></i>Lowongan Pekerjaan</th>
+                                    <th><i class="bi bi-building me-1"></i>Divisi</th>
+                                    <th><i class="bi bi-calendar me-1"></i>Tanggal Lamaran</th>
+                                    <th><i class="bi bi-file-earmark-text me-1"></i>Status Lamaran</th>
+                                    <th><i class="bi bi-three-dots-vertical me-1"></i>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -107,19 +107,19 @@ document.addEventListener('DOMContentLoaded', function() {
     try {
         // First, make all API requests
         const [lamaranResponse, divisiResponse, wawancaraResponse] = await Promise.all([
-            fetch('http://127.0.0.1:8000/api/admin/lamaran', {
+            fetch(`${API_BASE_URL}/admin/lamaran`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Accept': 'application/json'
                 }
             }),
-            fetch('http://127.0.0.1:8000/api/divisi', {
+            fetch(`${API_BASE_URL}/divisi`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Accept': 'application/json'
                 }
             }),
-            fetch('http://127.0.0.1:8000/api/wawancara', {
+            fetch(`${API_BASE_URL}/wawancara`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Accept': 'application/json'

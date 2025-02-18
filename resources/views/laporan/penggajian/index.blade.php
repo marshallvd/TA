@@ -44,7 +44,7 @@
                                         </div>
                                         <h2 id="totalGajiCount" class="counter mb-0">0/0</h2>
                                     </div>
-                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#chartModal" data-chart-type="totalGaji">
+                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#periodChartModal" data-chart-type="totalGaji">
                                         <i class="bi bi-bar-chart-fill me-1"></i>Grafik
                                     </button>
                                 </div>
@@ -71,9 +71,12 @@
                                             <!-- Rata-rata Gaji per Divisi akan diisi dinamis -->
                                         </div>
                                     </div>
-                                    <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#chartModal" data-chart-type="gajiPerDivisi">
-                                        <i class="bi bi-bar-chart-fill me-1"></i>Grafik
-                                    </button>
+                                    <button class="btn btn-sm btn-outline-primary" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#periodChartModal" 
+                                    data-chart-type="gajiPerDivisi">
+                                <i class="bi bi-bar-chart-fill me-1"></i>Grafik
+                            </button>
                                 </div>
                             </div>
                         </div>
@@ -98,9 +101,12 @@
                                             <!-- Rata-rata Gaji per Jabatan akan diisi dinamis -->
                                         </div>
                                     </div>
-                                    <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#chartModal" data-chart-type="gajiPerJabatan">
-                                        <i class="bi bi-bar-chart-fill me-1"></i>Grafik
-                                    </button>
+                                    <button class="btn btn-sm btn-outline-primary" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#periodChartModal" 
+                                    data-chart-type="gajiPerJabatan">
+                                <i class="bi bi-bar-chart-fill me-1"></i>Grafik
+                            </button>
                                 </div>
                             </div>
                         </div>
@@ -203,17 +209,17 @@
                             <table id="gaji-karyawan-table" class="table table-striped" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Nama Pegawai</th>
-                                        <th>Periode Gaji</th>
-                                        <th>Predikat Penilaian Kinerja</th>
-                                        <th>Kehadiran</th>
-                                        <th>Lembur</th>
-                                        <th>Total Pendapatan</th>
-                                        <th>Total Potongan</th>
-                                        <th>Gaji Bersih</th>
-                                        <th>Divisi</th>
-                                        <th>Jabatan</th>
+                                        <th><i class="bi bi-hash me-1"></i>No</th>
+                                        <th><i class="bi bi-person me-1"></i>Nama Pegawai</th>
+                                        <th><i class="bi bi-calendar-event me-1"></i>Periode Gaji</th>
+                                        <th><i class="bi bi-award me-1"></i>Predikat Penilaian Kinerja</th>
+                                        <th><i class="bi bi-calendar-check me-1"></i>Kehadiran</th>
+                                        <th><i class="bi bi-clock-history me-1"></i>Lembur</th>
+                                        <th><i class="bi bi-cash-stack me-1"></i>Total Pendapatan</th>
+                                        <th><i class="bi bi-dash-circle me-1"></i>Total Potongan</th>
+                                        <th><i class="bi bi-wallet2 me-1"></i>Gaji Bersih</th>
+                                        <th><i class="bi bi-building me-1"></i>Divisi</th>
+                                        <th><i class="bi bi-person-badge me-1"></i>Jabatan</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -227,27 +233,29 @@
     </div>
 </div>
 
-<!-- Modal for Chart -->
-<div class="modal fade" id="chartModal" tabindex="-1" aria-labelledby="chartModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+<!-- Modal for Selecting Period -->
+<div class="modal fade" id="periodChartModal" tabindex="-1" aria-labelledby="periodModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="chartModalLabel">Grafik</h5>
+                <h5 class="modal-title" id="periodModalLabel">
+                    <i class="bi bi-calendar-check me-2"></i>Pilih Periode Laporan Gaji
+                </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="row mb-3">
+                <div class="row">
                     <div class="col-md-6">
-                        <label for="chartYearFilter">
+                        <label for="chartYearFilter" class="form-label">
                             <i class="bi bi-calendar-year me-2"></i>Tahun:
                         </label>
                         <select id="chartYearFilter" class="form-control">
                             <option value="">Pilih Tahun</option>
-                            <!-- Tahun akan diisi dinamis -->
+                            <!-- Years will be populated dynamically -->
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <label for="chartMonthFilter">
+                        <label for="chartMonthFilter" class="form-label">
                             <i class="bi bi-calendar-month me-2"></i>Bulan:
                         </label>
                         <select id="chartMonthFilter" class="form-control">
@@ -267,15 +275,24 @@
                         </select>
                     </div>
                 </div>
-                <canvas id="chartCanvas"></canvas>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="generateChartBtn">
-                    <i class="bi bi-bar-chart-fill me-2"></i>Tampilkan Grafik
-                </button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="bi bi-x-circle me-2"></i>Tutup
+                    <i class="bi bi-x-circle me-2"></i>Batal
                 </button>
+                <button type="button" class="btn btn-primary" id="generateChartBtn">
+                    <i class="bi bi-check-circle me-2"></i>Tampilkan
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="chartModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <canvas id="chartCanvas"></canvas> <!-- Pastikan id ini benar -->
             </div>
         </div>
     </div>
@@ -530,9 +547,31 @@ function extractValidYears(gajiData) {
                 );
             });
 
-            // Update widget counts
-            $('#totalGajiCount').text(`${fetchedGajiData.length}/${fetchedPegawaiData.length}`);
 
+            // Find the most recent period
+            const currentPeriod = gajiData.reduce((latest, curr) => {
+                if (!latest) return curr;
+                if (curr.periode_tahun > latest.periode_tahun) return curr;
+                if (curr.periode_tahun === latest.periode_tahun && curr.periode_bulan > latest.periode_bulan) return curr;
+                return latest;
+            }, null);
+
+            if (currentPeriod) {
+                // Count employees paid in the most recent period
+                const paidEmployeesCount = gajiData.filter(gaji => 
+                    gaji.periode_tahun === currentPeriod.periode_tahun && 
+                    gaji.periode_bulan === currentPeriod.periode_bulan
+                ).length;
+
+                // Count active employees
+                const activeEmployeesCount = fetchedPegawaiData.filter(pegawai => 
+                    pegawai.status_kepegawaian === 'aktif'
+                ).length;
+
+                $('#totalGajiCount').text(`${paidEmployeesCount}/${activeEmployeesCount}`);
+            } else {
+                $('#totalGajiCount').text('0/0');
+            }
             // Rata-rata Gaji per Divisi
             const divisiAverage = fetchedGajiData.reduce((acc, curr) => {
                 if (curr.pegawai && curr.pegawai.id_divisi && curr.gaji_bersih) {
@@ -599,12 +638,28 @@ function extractValidYears(gajiData) {
         initializePage();
     }
 
+
+    const colorPalettes = {
+        totalGaji: [
+            '#4CAF50', '#2196F3', '#FFC107', '#E91E63', '#9C27B0', 
+            '#00BCD4', '#FF9800', '#795548', '#607D8B', '#3F51B5'
+        ],
+        gajiPerDivisi: [
+            '#4CAF50', '#2196F3', '#FFC107', '#E91E63', '#9C27B0', 
+            '#00BCD4', '#FF9800', '#795548', '#607D8B', '#3F51B5'
+        ],
+        gajiPerJabatan: [
+            '#4CAF50', '#2196F3', '#FFC107', '#E91E63', '#9C27B0', 
+            '#00BCD4', '#FF9800', '#795548', '#607D8B', '#3F51B5'
+        ]
+    };
+
+
 // Event Listener for Chart Modal
 $(document).ready(function() {
-    $('#chartModal').on('show.bs.modal', function (event) {
+    $('#periodChartModal').on('show.bs.modal', function (event) {
         const button = $(event.relatedTarget);
         const chartType = button.data('chart-type');
-        console.log('Gaji Data:', gajiData); // Debug: Cek isi gajiData
 
         // Populate Year Filter Dropdown in Chart Modal
         const yearSelect = $('#chartYearFilter');
@@ -613,7 +668,6 @@ $(document).ready(function() {
         uniqueYears.forEach(year => {
             yearSelect.append(`<option value="${year}">${year}</option>`);
         });
-        console.log('Unique Years:', uniqueYears);
 
         // Clear previous chart if exists
         if (window.existingChart) {
@@ -626,33 +680,51 @@ $(document).ready(function() {
             const selectedMonth = $('#chartMonthFilter').val();
 
             if (!selectedYear || !selectedMonth) {
-                alert('Silakan pilih tahun dan bulan.');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Perhatian',
+                    text: 'Silakan pilih tahun dan bulan.'
+                });
                 return;
             }
-
+            // Buka modal chart
+            $('#chartModal').modal('show');
+            
+            // Tutup modal periode
+            $('#periodChartModal').modal('hide');
             // Generate the chart based on selected year and month
             configureChartModal(chartType, selectedYear, selectedMonth);
+            
+
         });
     });
 });
 
 // Chart Configuration Function
 function configureChartModal(chartType, year, month) {
-    console.log('Chart Configuration:', {
-        chartType,
-        year,
-        month,
-        gajiData: gajiData.length
-    });
-
-    const ctx = document.getElementById('chartCanvas').getContext('2d');
-    let chartConfig;
-
     try {
-        // Pastikan year dan month adalah string
-        year = String(year);
-        month = String(month).padStart(2, '0');
+        // Check for data before proceeding
+        const filteredData = gajiData.filter(curr => {
+            const currYear = String(curr.periode_tahun);
+            const currMonth = String(curr.periode_bulan).padStart(2, '0');
+            return currYear === year && currMonth === month;
+        });
 
+        // If no data found, show message and don't open chart modal
+        if (filteredData.length === 0) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Tidak Ada Data',
+                text: 'Tidak terdapat data untuk periode yang dipilih.',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            return; // Exit function early
+        }
+
+        let chartConfig;
         switch(chartType) {
             case 'totalGaji':
                 chartConfig = configureTotalGajiChart(year, month);
@@ -664,41 +736,92 @@ function configureChartModal(chartType, year, month) {
                 chartConfig = configureGajiPerJabatanChart(year, month);
                 break;
             default:
-                console.error('Invalid chart type');
-                return;
+                throw new Error('Tipe grafik tidak valid');
         }
 
-        // Tambahkan log untuk memastikan data chart valid
-        console.log('Chart Config:', chartConfig);
+        // Verify that chart data exists and has values
+        if (!chartConfig || !chartConfig.data || !chartConfig.data.datasets || 
+            chartConfig.data.datasets[0].data.every(value => value === 0)) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Tidak Ada Data',
+                text: 'Tidak terdapat data untuk periode yang dipilih.',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            return; // Exit function without showing modal
+        }
+
+        // If we have valid data, proceed with showing the chart
+        const ctx = document.getElementById('chartCanvas');
+        if (!ctx) {
+            throw new Error('Element canvas tidak ditemukan');
+        }
 
         if (window.existingChart) {
             window.existingChart.destroy();
         }
 
-        // Tambahkan penanganan jika tidak ada data
-        if (chartConfig.data.labels.length === 0) {
-            alert('Tidak ada data untuk periode yang dipilih');
-            return;
-        }
-
+        // Show chart modal and create new chart
+        $('#chartModal').modal('show');
         window.existingChart = new Chart(ctx, chartConfig);
+
     } catch (error) {
-        console.error('Chart Creation Error:', error);
-        alert('Gagal membuat grafik: ' + error.message);
+        console.error('Error creating chart:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Kesalahan',
+            text: `Gagal membuat grafik: ${error.message}`,
+            confirmButtonText: 'Tutup'
+        });
     }
 }
 
+// Tambahkan event listener untuk membersihkan modal
+$('#chartModal').on('hidden.bs.modal', function () {
+    // Kembalikan background ke semula
+    $('body').removeClass('modal-open');
+    $('.modal-backdrop').remove();
+    $('body').css({
+        'overflow': '',
+        'padding-right': ''
+    });
+});
+
 // Total Gaji Chart
 function configureTotalGajiChart(year, month) {
-    console.log('Total Gaji Chart - Input:', { year, month });
-    console.log('Gaji Data:', gajiData);
+    //console.log('Total Gaji Chart - Raw Input:', { year, month });
+    //console.log('Total Gaji Chart - Raw Gaji Data:', gajiData);
 
+    const filteredData = gajiData.filter(curr => {
+        const currYear = String(curr.periode_tahun);
+        const currMonth = String(curr.periode_bulan).padStart(2, '0');
+        
+        // console.log('Filtering:', {
+        //     currItem: curr,
+        //     currYear, 
+        //     currMonth, 
+        //     inputYear: year, 
+        //     inputMonth: month,
+        //     yearMatch: currYear === year,
+        //     monthMatch: currMonth === month
+        // });
+
+        return currYear === year && currMonth === month;
+    });
+
+    //console.log('Filtered Data:', filteredData);
     const totalGajiCounts = gajiData.reduce((acc, curr) => {
-        // Log setiap iterasi untuk memahami filtering
-        console.log('Current Item:', {
+        console.log('Current Item Details:', {
             periode_tahun: curr.periode_tahun, 
             periode_bulan: curr.periode_bulan,
-            gaji_bersih: curr.gaji_bersih
+            currYear: String(curr.periode_tahun),
+            currMonth: String(curr.periode_bulan).padStart(2, '0'),
+            inputYear: year,
+            inputMonth: month,
+            match: String(curr.periode_tahun) === year && String(curr.periode_bulan).padStart(2, '0') === month
         });
 
         const pegawai = pegawaiData.find(p => p.id_pegawai === curr.pegawai.id_pegawai);
@@ -708,12 +831,12 @@ function configureTotalGajiChart(year, month) {
         const currYear = String(curr.periode_tahun);
         const currMonth = String(curr.periode_bulan).padStart(2, '0');
 
-        console.log('Comparison:', {
-            currYear, 
-            currMonth, 
-            inputYear: year, 
-            inputMonth: month
-        });
+        // console.log('Comparison:', {
+        //     currYear, 
+        //     currMonth, 
+        //     inputYear: year, 
+        //     inputMonth: month
+        // });
 
         // Gunakan perbandingan string untuk menghindari masalah tipe data
         if (currYear === year && currMonth === month) {
@@ -722,10 +845,11 @@ function configureTotalGajiChart(year, month) {
         return acc;
     }, {});
 
-    console.log('Total Gaji Counts:', totalGajiCounts);
+    //console.log('Total Gaji Counts:', totalGajiCounts);
 
     // Jika tidak ada data, kembalikan chart kosong
-    if (Object.keys(totalGajiCounts).length === 0) {
+    if (filteredData.length === 0) {
+        console.warn('Tidak ada data untuk periode yang dipilih');
         return {
             type: 'bar',
             data: {
@@ -733,7 +857,7 @@ function configureTotalGajiChart(year, month) {
                 datasets: [{
                     label: 'Total Gaji per Pegawai',
                     data: [0],
-                    backgroundColor: 'rgba(200, 200, 200, 0.6)'
+                    backgroundColor: 'rgba(0,0,0,0.1)'
                 }]
             },
             options: {
@@ -755,7 +879,7 @@ function configureTotalGajiChart(year, month) {
             datasets: [{
                 label: 'Total Gaji per Pegawai',
                 data: Object.values(totalGajiCounts),
-                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                backgroundColor: colorPalettes.totalGaji.slice(0, Object.keys(totalGajiCounts).length),
                 borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1
             }]
@@ -827,7 +951,7 @@ function configureGajiPerDivisiChart(year, month) {
                 datasets: [{
                     label: 'Total Gaji per Divisi',
                     data: [0],
-                    backgroundColor: 'rgba(200, 200, 200, 0.6)'
+                    backgroundColor: colorPalettes.totalGaji.slice(0, Object.keys(totalGajiCounts).length),
                 }]
             },
             options: {
@@ -849,7 +973,7 @@ function configureGajiPerDivisiChart(year, month) {
             datasets: [{
                 label: 'Total Gaji per Divisi',
                 data: Object.values(divisiGajiCounts),
-                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                backgroundColor: colorPalettes.gajiPerDivisi.slice(0, Object.keys(divisiGajiCounts).length),
                 borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1
             }]
@@ -921,7 +1045,7 @@ function configureGajiPerJabatanChart(year, month) {
                 datasets: [{
                     label: 'Total Gaji per Jabatan',
                     data: [0],
-                    backgroundColor: 'rgba(200, 200, 200, 0.6)'
+                    backgroundColor: colorPalettes.totalGaji.slice(0, Object.keys(totalGajiCounts).length),
                 }]
             },
             options: {
@@ -943,7 +1067,7 @@ function configureGajiPerJabatanChart(year, month) {
             datasets: [{
                 label: 'Total Gaji per Jabatan',
                 data: Object.values(jabatanGajiCounts),
-                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                backgroundColor: colorPalettes.gajiPerJabatan.slice(0, Object.keys(jabatanGajiCounts).length),
                 borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1
             }]
@@ -1039,13 +1163,15 @@ function exportToPDF() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF('l'); // Landscape
         
-        // Gunakan DataTable yang benar
+        // Gunakan rows().nodes().to$() untuk mendapatkan baris yang sedang ditampilkan saja
         const table = $('#gaji-karyawan-table').DataTable();
+        const visibleData = table.rows({ search: 'applied' }).data().toArray();
+        
         const headers = ['No', 'Nama Pegawai', 'Periode Gaji', 'Predikat', 'Kehadiran', 'Lembur', 
                         'Total Pendapatan', 'Total Potongan', 'Gaji Bersih', 'Divisi', 'Jabatan'];
         
-        // Ambil data dari DataTable
-        const allData = table.rows().data().toArray().map((row, index) => [
+        // Ambil hanya data yang terlihat
+        const allData = visibleData.map((row, index) => [
             index + 1,
             row.pegawai?.nama_lengkap || '',
             `${row.periode_tahun}-${String(row.periode_bulan).padStart(2, '0')}`,
@@ -1097,11 +1223,13 @@ function exportToPDF() {
 function exportToExcel() {
     try {
         const table = $('#gaji-karyawan-table').DataTable();
+        const visibleData = table.rows({ search: 'applied' }).data().toArray();
+        
         const headers = ['No', 'Nama Pegawai', 'Periode Gaji', 'Predikat', 'Kehadiran', 'Lembur', 
                         'Total Pendapatan', 'Total Potongan', 'Gaji Bersih', 'Divisi', 'Jabatan'];
         
-        // Ambil data dari DataTable
-        const allData = table.rows().data().toArray().map((row, index) => [
+        // Ambil hanya data yang terlihat
+        const allData = visibleData.map((row, index) => [
             index + 1,
             row.pegawai?.nama_lengkap || '',
             `${row.periode_tahun}-${String(row.periode_bulan).padStart(2, '0')}`,
@@ -1120,7 +1248,6 @@ function exportToExcel() {
         const wb = XLSX.utils.book_new();
         const ws = XLSX.utils.aoa_to_sheet(workSheetData);
         
-        // Atur lebar kolom
         ws['!cols'] = headers.map(() => ({ wch: 20 }));
         
         XLSX.utils.book_append_sheet(wb, ws, "Penggajian");
@@ -1149,11 +1276,13 @@ function exportToExcel() {
 function exportToCSV() {
     try {
         const table = $('#gaji-karyawan-table').DataTable();
+        const visibleData = table.rows({ search: 'applied' }).data().toArray();
+        
         const headers = ['No', 'Nama Pegawai', 'Periode Gaji', 'Predikat', 'Kehadiran', 'Lembur', 
                         'Total Pendapatan', 'Total Potongan', 'Gaji Bersih', 'Divisi', 'Jabatan'];
         
-        // Ambil data dari DataTable
-        const allData = table.rows().data().toArray().map((row, index) => [
+        // Ambil hanya data yang terlihat
+        const allData = visibleData.map((row, index) => [
             index + 1,
             row.pegawai?.nama_lengkap || '',
             `${row.periode_tahun}-${String(row.periode_bulan).padStart(2, '0')}`,
@@ -1200,7 +1329,6 @@ function exportToCSV() {
         });
     }
 }
-
 // Fungsi Salin Tabel
 function copyTableToClipboard() {
     try {

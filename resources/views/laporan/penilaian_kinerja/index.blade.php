@@ -48,7 +48,7 @@ Laporan Penilaian Kinerja
                                     </div>
                                     <h2 id="totalPenilaianCount" class="counter mb-0">0/0</h2>
                                 </div>
-                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#chartModal" data-chart-type="totalPenilaian">
+                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-chart-type="totalPenilaian">
                                     <i class="bi bi-bar-chart-line me-1"></i>Grafik
                                 </button>
                             </div>
@@ -75,8 +75,9 @@ Laporan Penilaian Kinerja
                                         <!-- Predikat akan diisi dinamis -->
                                     </div>
                                 </div>
-                                <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#chartModal" data-chart-type="predikatPenilaian">
-                                    <i class="bi bi-graph-up me-1"></i>Grafik
+                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-chart-type="predikatPenilaian">
+
+                                    <i class="bi bi-bar-chart-line me-1"></i>Grafik
                                 </button>
                             </div>
                         </div>
@@ -100,8 +101,9 @@ Laporan Penilaian Kinerja
                                     </div>
                                     <h2 id="divisiTertinggiNilai" class="mb-0">-</h2>
                                 </div>
-                                <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#chartModal" data-chart-type="penilaianPerDivisi">
-                                    <i class="bi bi-bar-chart me-1"></i>Grafik
+                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-chart-type="penilaianPerDivisi">
+
+                                    <i class="bi bi-bar-chart-line me-1"></i>Grafik
                                 </button>
                             </div>
                         </div>
@@ -125,8 +127,10 @@ Laporan Penilaian Kinerja
                                     </div>
                                     <h2 id="jabatanTertinggiNilai" class="mb-0">-</h2>
                                 </div>
-                                <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#chartModal" data-chart-type="penilaianPerJabatan">
-                                    <i class="bi bi-graph-up me-1"></i>Grafik
+                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-chart-type="penilaianPerJabatan">
+
+
+                                    <i class="bi bi-bar-chart-line me-1"></i>Grafik
                                 </button>
                             </div>
                         </div>
@@ -269,13 +273,95 @@ Laporan Penilaian Kinerja
         </div>
     </div>
 </div>
+
+
+<!-- Modal untuk Input Periode -->
+<div class="modal fade" id="periodModal" tabindex="-1" aria-labelledby="periodModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="periodModalLabel">
+                    <i class="bi bi-calendar-check me-2"></i>Pilih Periode Laporan Penilaian
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="chartYearFilter" class="form-label">
+                            <i class="bi bi-calendar-year me-2"></i>Tahun:
+                        </label>
+                        <select id="chartYearFilter" class="form-control">
+                            <option value="">Pilih Tahun</option>
+                            <!-- Tahun akan diisi dinamis -->
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="chartMonthFilter" class="form-label">
+                            <i class="bi bi-calendar-month me-2"></i>Bulan:
+                        </label>
+                        <select id="chartMonthFilter" class="form-control">
+                            <option value="">Pilih Bulan</option>
+                            <option value="01">Januari</option>
+                            <option value="02">Februari</option>
+                            <option value="03">Maret</option>
+                            <option value="04">April</option>
+                            <option value="05">Mei</option>
+                            <option value="06">Juni</option>
+                            <option value="07">Juli</option>
+                            <option value="08">Agustus</option>
+                            <option value="09">September</option>
+                            <option value="10">Oktober</option>
+                            <option value="11">November</option>
+                            <option value="12">Desember</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-2"></i>Batal
+                </button>
+                <button type="button" class="btn btn-primary" id="generateWidgetBtn">
+                    <i class="bi bi-check-circle me-2"></i>Tampilkan
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('scripts')
     
+<!-- Bootstrap Bundle JS (includes Popper) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+// Tambahkan ini di awal script (setelah DOMContentLoaded)
+let chartModal, periodModal;
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Inisialisasi modal dengan options yang benar
+    chartModal = new bootstrap.Modal(document.getElementById('chartModal'), {
+        backdrop: true,
+        keyboard: true,
+        focus: true
+    });
+    
+    periodModal = new bootstrap.Modal(document.getElementById('periodModal'), {
+        backdrop: true,
+        keyboard: true,
+        focus: true
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Tambahkan ini di bagian atas script
+
+    
+    
     const token = localStorage.getItem('token');
     console.log('Token:', token); // Debug token
 
@@ -430,7 +516,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
  // Fungsi untuk memuat data divisi ke dropdown
- function populateDivisiDropdown() {
+    function populateDivisiDropdown() {
         const divisiSelect = $('#divisiFilter');
         divisiSelect.empty().append('<option value="">Semua Divisi</option>');
         
@@ -559,6 +645,7 @@ document.addEventListener('DOMContentLoaded', function() {
             pegawaiData = fetchedPegawaiData;
             divisiData = fetchedDivisiData;
             jabatanData = fetchedJabatanData;
+            populateYearFilter();
 
             // Populate Year Filter Dropdown
             const uniqueYears = [...new Set(fetchedPenilaianData.map(item => 
@@ -572,6 +659,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
             populateDivisiDropdown();
             populateJabatanDropdown();
+            // updateWidgetCounts();
+            penilaianTable.clear().rows.add(fetchedPenilaianData).draw();
+
             // Update widget counts
            // Calculate total penilaian per periode
             const currentPeriodPenilaianCount = fetchedPenilaianData.filter(penilaian => {
@@ -678,236 +768,406 @@ document.addEventListener('DOMContentLoaded', function() {
         return true;
     }
 
+    $('button[data-chart-type]').on('click', function(event) {
+    event.preventDefault();
+    const chartType = $(this).data('chart-type');
+    
+    // Pastikan modal sebelumnya sudah bersih
+    cleanupModals();
+    
+    // Set chart type ke period modal
+    $('#periodModal').data('chart-type', chartType);
+    
+    // Populate year filter sebelum menampilkan modal
+    populateYearFilter();
+    
+    // Tampilkan modal
+    const periodModal = new bootstrap.Modal($('#periodModal'));
+    periodModal.show();
+});
+    // Event handler for Generate Chart button
+// Event handler for Generate Chart button
+$('#generateWidgetBtn').on('click', function() {
+    const year = $('#chartYearFilter').val();
+    const month = $('#chartMonthFilter').val();
+    
+
+        // Tambahkan pembersihan tambahan
+    $('body').removeClass('modal-open');
+    $('.modal-backdrop').remove();
+    $('body').css({
+        'overflow': '',
+        'padding-right': ''
+    });
+
+    if (!year) {
+        Swal.fire({
+            icon: 'info',
+            title: 'Tidak Ada Data',
+            text: 'Tidak terdapat data penilaian untuk periode yang dipilih.',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
+        return;
+    }
+
+    // Tutup period modal
+    const periodModal = bootstrap.Modal.getInstance($('#periodModal'));
+    if (periodModal) {
+        periodModal.hide();
+    }
+
+    function filterDataByPeriod(year, month) {
+        if (!penilaianData) return [];
+        
+        return penilaianData.filter(item => {
+            const itemDate = new Date(item.periode_penilaian);
+            const itemYear = itemDate.getFullYear();
+            
+            if (!month) {
+                // If only year is specified, return all data for that year
+                return itemYear === parseInt(year);
+            }
+            
+            // If both month and year are specified
+            const itemMonth = (itemDate.getMonth() + 1).toString().padStart(2, '0');
+            return itemYear === parseInt(year) && itemMonth === month;
+        });
+    }
+
+    // Bersihkan sisa modal
+    cleanupModals();
+
+    // Cek data terlebih dahulu
+    const filteredData = filterDataByPeriod(year, month);
+    const chartType = $('#periodModal').data('chart-type');
+    
+    if (filteredData && filteredData.length > 0) {
+        // Jika ada data, tampilkan modal chart
+        setTimeout(() => {
+            const chartModal = new bootstrap.Modal($('#chartModal'));
+            chartModal.show();
+            loadChart(chartType, filteredData, pegawaiData, divisiData, jabatanData);
+        }, 200);
+    } else {
+        // Jika tidak ada data, tampilkan notifikasi saja
+        Swal.fire({
+            icon: 'info',
+            title: 'Tidak Ada Data',
+            text: 'Tidak terdapat data penilaian untuk periode yang dipilih.',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
+    }
+});
+
+function cleanupModals() {
+    $('.modal').modal('hide');
+    $('body').removeClass('modal-open');
+    $('.modal-backdrop').remove();
+    $('body').css('padding-right', '');
+}
+
+// Tambahkan event listener untuk membersihkan saat modal ditutup
+$('.modal').on('hidden.bs.modal', cleanupModals);
+    // Populate Year Filter
+    function populateYearFilter() {
+    const yearSelect = $('#chartYearFilter');
+    
+    // Pastikan penilaianData ada dan memiliki data
+    if (!penilaianData || !penilaianData.length) {
+        console.log('Tidak ada data penilaian');
+        return;
+    }
+
+    // Dapatkan tahun unik dari periode_penilaian
+    const years = [...new Set(penilaianData.map(item => {
+        const date = new Date(item.periode_penilaian);
+        return date.getFullYear();
+    }))].sort((a, b) => b - a); // Sort descending
+
+    console.log('Available years:', years); // Debug
+
+    // Populate dropdown
+    yearSelect.empty().append('<option value="">Pilih Tahun</option>');
+    years.forEach(year => {
+        yearSelect.append(`<option value="${year}">${year}</option>`);
+    });
+}
+
+    // Call populate year filter when data is loaded
+    if (typeof initializePage === 'function') {
+        const originalInitializePage = initializePage;
+        initializePage = function() {
+            originalInitializePage().then(() => {
+                populateYearFilter();
+            });
+        };
+    }
+
+    // Modal cleanup handlers
+    $('#chartModal').on('show.bs.modal', function (event) {
+        const button = $(event.relatedTarget); // Button yang memicu modal
+        const chartType = button.data('chart-type');
+        console.log('Chart type:', chartType); // Debug
+        
+        if (typeof Chart !== 'undefined' && penilaianData && penilaianData.length > 0) {
+            loadChart(chartType, penilaianData, pegawaiData, divisiData, jabatanData);
+        } else {
+            console.error('Chart.js not loaded or data not available');
+        }
+    });
+
+    // Close modal handler
+    $('.btn-close, [data-bs-dismiss="modal"]').on('click', function() {
+        const modal = $(this).closest('.modal');
+        const modalInstance = bootstrap.Modal.getInstance(modal);
+        
+        if (modalInstance) {
+            modalInstance.hide();
+            setTimeout(() => {
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
+                $('body').css({
+                    'padding-right': '',
+                    'overflow': ''
+                });
+            }, 150);
+        }
+    });
+
+    // Escape key handler
+    $(document).on('keydown', function(e) {
+        if (e.key === 'Escape') {
+            $('.modal').each(function() {
+                const modalInstance = bootstrap.Modal.getInstance(this);
+                if (modalInstance) {
+                    modalInstance.hide();
+                }
+            });
+            
+            setTimeout(() => {
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
+                $('body').css({
+                    'padding-right': '',
+                    'overflow': ''
+                });
+            }, 150);
+        }
+    });
+
     // Panggil fungsi inisialisasi hanya jika token valid
     if (checkTokenValidity()) {
         initializePage();
     }
 
-    // Chart Configuration Function
-    function configureChartModal(chartType) {
-        // Clear previous chart if exists
-        if (window.existingChart) {
-            window.existingChart.destroy();
+    function loadChart(chartType, penilaianData, pegawaiData, divisiData, jabatanData) {
+            // Validasi data sebelum membuat chart
+    if (!penilaianData || penilaianData.length === 0) {
+        Swal.fire({
+            icon: 'info',
+            title: 'Tidak Ada Data',
+            text: 'Tidak terdapat data penilaian untuk periode yang dipilih.',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
+        
+        // Tutup modal chart jika terbuka
+        const chartModal = bootstrap.Modal.getInstance($('#chartModal'));
+        if (chartModal) {
+            chartModal.hide();
         }
-
-        const ctx = document.getElementById('chartCanvas').getContext('2d');
-        let chartConfig;
-
-        switch(chartType) {
-            case 'totalPenilaian':
-                chartConfig = configureTotalPenilaianChart();
-                break;
-            case 'predikatPenilaian':
-                chartConfig = configurePredikatPenilaianChart();
-                break;
-            case 'penilaianPerDivisi':
-                chartConfig = configurePenilaianPerDivisiChart();
-                break;
-            case 'penilaianPerJabatan':
-                chartConfig = configurePenilaianPerJabatanChart();
-                break;
-            default:
-                console.error('Invalid chart type');
-                return;
-        }
-
-        window.existingChart = new Chart(ctx, chartConfig);
+        return;
     }
+    const ctx = document.getElementById('chartCanvas').getContext('2d');
+    let chartData;
 
-    // Total Penilaian Chart
-    function configureTotalPenilaianChart() {
-        const employeePenilaianCounts = penilaianData.reduce((acc, curr) => {
-            const pegawai = pegawaiData.find(p => p.id_pegawai === curr.pegawai.id_pegawai);
-            const employeeName = pegawai ? pegawai.nama_lengkap : 'Unknown';
-            acc[employeeName] = (acc[employeeName] || 0) + 1;
-            return acc;
-        }, {});
+    // Consistent color palette like the leave report
+    const colorPalettes = {
+        totalPenilaian: [
+            '#4CAF50', '#2196F3', '#FFC107', '#E91E63', '#9C27B0', 
+            '#00BCD4', '#FF9800', '#795548', '#607D8B', '#3F51B5'
+        ],
+        predikatPenilaian: [
+            '#4CAF50', '#2196F3', '#FFC107', '#E91E63', '#9C27B0'
+        ],
+        penilaianPerDivisi: [
+            '#4CAF50', '#2196F3', '#FFC107', '#E91E63', '#9C27B0', 
+            '#00BCD4', '#FF9800', '#795548', '#607D8B', '#3F51B5'
+        ],
+        penilaianPerJabatan: [
+            '#4CAF50', '#2196F3', '#FFC107', '#E91E63', '#9C27B0', 
+            '#00BCD4', '#FF9800', '#795548', '#607D8B', '#3F51B5'
+        ]
+    };
 
-        return {
-            type: 'bar',
-            data: {
-                labels: Object.keys(employeePenilaianCounts),
+    switch (chartType) {
+        case 'totalPenilaian':
+            const employeeCounts = penilaianData.reduce((acc, curr) => {
+                const pegawai = pegawaiData.find(p => p.id_pegawai === curr.pegawai.id_pegawai);
+                const employeeName = pegawai ? pegawai.nama_lengkap : 'Tidak diketahui';
+                acc[employeeName] = (acc[employeeName] || 0) + 1;
+                return acc;
+            }, {});
+
+            chartData = {
+                labels: Object.keys(employeeCounts),
                 datasets: [{
-                    label: 'Total Penilaian per Pegawai',
-                    data: Object.values(employeePenilaianCounts),
-                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
+                    label: 'Total Penilaian',
+                    data: Object.values(employeeCounts),
+                    backgroundColor: colorPalettes.totalPenilaian.slice(0, Object.keys(employeeCounts).length),
                     borderWidth: 1
                 }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Total Penilaian per Pegawai'
-                    },
-                    legend: { display: false }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Jumlah Penilaian'
-                        }
-                    }
-                }
-            }
-        };
-    }
+            };
+            break;
 
-    // Predikat Penilaian Chart
-    function configurePredikatPenilaianChart() {
-        const predikatCounts = penilaianData.reduce((acc, curr) => {
-            const predikat = curr.predikat.toLowerCase();
-            acc[predikat] = (acc[predikat] || 0) + 1;
-            return acc;
-        }, {});
+        case 'predikatPenilaian':
+            const predikatCounts = penilaianData.reduce((acc, curr) => {
+                const status = curr.predikat.toLowerCase();
+                acc[status] = (acc[status] || 0) + 1;
+                return acc;
+            }, {});
 
-        return {
-            type: 'pie',
-            data: {
-                labels: Object.keys(predikatCounts).map(predikat => 
-                    predikat.charAt(0).toUpperCase() + predikat.slice(1)
+            chartData = {
+                labels: Object.keys(predikatCounts).map(status => 
+                    status.charAt(0).toUpperCase() + status.slice(1)
                 ),
                 datasets: [{
+                    label: 'Predikat Penilaian',
                     data: Object.values(predikatCounts),
-                    backgroundColor: [
-                        'rgba(75, 192, 192, 0.6)',  // Sangat Baik (Green)
-                        'rgba(54, 162, 235, 0.6)',  // Baik (Blue)
-                        'rgba(255, 206, 86, 0.6)',  // Cukup (Yellow)
-                        'rgba(255, 99, 132, 0.6)',   // Kurang (Red)
-                        'rgba(153, 102, 255, 0.6)'   // Sangat Kurang (Purple)
-                    ],
-                    borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(153, 102, 255, 1)'
-                    ],
+                    backgroundColor: colorPalettes.predikatPenilaian.slice(0, Object.keys(predikatCounts).length),
                     borderWidth: 1
                 }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Predikat Penilaian'
-                    },
-                    legend: { 
-                        display: true,
-                        position: 'bottom' 
-                    }
+            };
+            break;
+
+        case 'penilaianPerDivisi':
+            const divisiCounts = penilaianData.reduce((acc, curr) => {
+                const pegawai = pegawaiData.find(p => p.id_pegawai === curr.pegawai.id_pegawai);
+                if (pegawai) {
+                    const divisi = divisiData.find(d => d.id_divisi === pegawai.id_divisi);
+                    const divisiName = divisi ? divisi.nama_divisi : 'Tidak Diketahui';
+                    acc[divisiName] = (acc[divisiName] || 0) + 1;
                 }
-            }
-        };
+                return acc;
+            }, {});
+
+            chartData = {
+                labels: Object.keys(divisiCounts),
+                datasets: [{
+                    label: 'Penilaian per Divisi',
+                    data: Object.values(divisiCounts),
+                    backgroundColor: colorPalettes.penilaianPerDivisi.slice(0, Object.keys(divisiCounts).length),
+                    borderWidth: 1
+                }]
+            };
+            break;
+
+        case 'penilaianPerJabatan':
+            const jabatanCounts = penilaianData.reduce((acc, curr) => {
+                const pegawai = pegawaiData.find(p => p.id_pegawai === curr.pegawai.id_pegawai);
+                if (pegawai) {
+                    const jabatan = jabatanData.find(j => j.id_jabatan === pegawai.id_jabatan);
+                    const jabatanName = jabatan ? jabatan.nama_jabatan : 'Tidak Diketahui';
+                    acc[jabatanName] = (acc[jabatanName] || 0) + 1;
+                }
+                return acc;
+            }, {});
+
+            chartData = {
+                labels: Object.keys(jabatanCounts),
+                datasets: [{
+                    label: 'Penilaian per Jabatan',
+                    data: Object.values(jabatanCounts),
+                    backgroundColor: colorPalettes.penilaianPerJabatan.slice(0, Object.keys(jabatanCounts).length),
+                    borderWidth: 1
+                }]
+            };
+            break;
+
+        default:
+            return;
     }
 
-    // Penilaian per Divisi Chart
-    function configurePenilaianPerDivisiChart() {
-        const divisiPenilaianCounts = penilaianData.reduce((acc, curr) => {
-            const divisiId = curr.pegawai.id_divisi;
-            acc[divisiId] = acc[divisiId] || { total: 0, count: 0 };
-            acc[divisiId].total += curr.nilai_akhir || 0;
-            acc[divisiId].count += 1;
-            return acc;
-        }, {});
+    // Destroy existing chart if exists
+    if (window.chart) {
+        window.chart.destroy();
+    }
 
-        return {
-            type: 'bar',
-            data: {
-                labels: Object.keys(divisiPenilaianCounts),
-                datasets: [{
-                    label: 'Rata-rata Penilaian per Divisi',
-                    data: Object.values(divisiPenilaianCounts).map(item => item.total / item.count),
-                    backgroundColor: 'rgba(153, 102, 255, 0.6)',
-                    borderColor: 'rgba(153, 102, 255, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Rata-rata Penilaian per Divisi'
-                    },
-                    legend: { display: false }
+    // Create new chart with consistent styling
+    window.chart = new Chart(ctx, {
+        type: 'bar',
+        data: chartData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        font: {
+                            size: 14
+                        }
+                    }
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Rata-rata Nilai'
+                title: {
+                    display: true,
+                    text: `Grafik ${chartData.datasets[0].label}`,
+                    font: {
+                        size: 30
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0,
+                        font: {
+                            size: 22
+                        }
+                    }
+                },
+                x: {
+                    ticks: {
+                        font: {
+                            size: 12
                         }
                     }
                 }
-            }
-        };
-    }
-
-    // Penilaian per Jabatan Chart
-    function configurePenilaianPerJabatanChart() {
-        const jabatanPenilaianCounts = penilaianData.reduce((acc, curr) => {
-            const jabatanId = curr.pegawai.id_jabatan;
-            acc[jabatanId] = acc[jabatanId] || { total: 0, count: 0 };
-            acc[jabatanId].total += curr.nilai_akhir || 0;
-            acc[jabatanId].count += 1;
-            return acc;
-        }, {});
-
-        return {
-            type: 'bar',
-            data: {
-                labels: Object.keys(jabatanPenilaianCounts),
-                datasets: [{
-                    label: 'Rata-rata Penilaian per Jabatan',
-                    data: Object.values(jabatanPenilaianCounts).map(item => item.total / item.count),
-                    backgroundColor: 'rgba(255, 159, 64, 0.6)',
-                    borderColor: 'rgba(255, 159, 64, 1)',
-                    borderWidth: 1
-                }]
             },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Rata-rata Penilaian per Jabatan'
-                    },
-                    legend: { display: false }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Rata-rata Nilai'
-                        }
-                    }
+            layout: {
+                padding: {
+                    left: 15,
+                    right: 15,
+                    top: 15,
+                    bottom: 15
                 }
             }
-        };
-    }
-
-    // Event Listener for Chart Modal
-    $(document).ready(function() {
-        $('#chartModal').on('show.bs.modal', function (event) {
-            const button = $(event.relatedTarget);
-            const chartType = button.data('chart-type');
-            
-            // Pastikan Chart.js tersedia dan data sudah dimuat
-            if (typeof Chart !== 'undefined' && penilaianData && penilaianData.length > 0) {
-                configureChartModal(chartType);
-            } else {
-                console.error('Chart.js not loaded or data not available');
-            }
-        });
+        }
     });
+}
+
+// Event Listener for Chart Modal
+$(document).ready(function() {
+    $('#chartModal').on('show.bs.modal', function (event) {
+        const button = $(event.relatedTarget);
+        const chartType = button.data('chart-type');
+        
+        if (typeof Chart !== 'undefined' && penilaianData && penilaianData.length > 0) {
+            loadChart(chartType, penilaianData, pegawaiData, divisiData, jabatanData);
+        } else {
+            console.error('Chart.js not loaded or data not available');
+        }
+    });
+});
 });
 
 
@@ -1197,5 +1457,21 @@ $(document).ready(function() {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <!-- Bootstrap JS dan Popper.js -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
+
+@endpush
+
+@push('css')
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- DataTables CSS -->
+<link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+
+<!-- Bootstrap Icons CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+<!-- Your custom CSS should be last -->
+<style>
+    /* Your custom styles here */
+</style>
 @endpush

@@ -53,16 +53,16 @@
                             <table id="jatah-cuti-table" class="table table-striped" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Nama Pegawai</th>
-                                        <th>Jabatan</th>
-                                        <th>Jatah Cuti Umum</th>
-                                        <th>Sisa</th>
-                                        <th>Jatah Cuti Menikah</th>
-                                        <th>Sisa</th>
-                                        <th>Jatah Cuti Melahirkan</th>
-                                        <th>Sisa</th>
-                                        <th>Action</th>
+                                        <th><i class="bi bi-hash me-1"></i>No</th>
+                                        <th><i class="bi bi-person me-1"></i>Nama Pegawai</th>
+                                        <th><i class="bi bi-person-badge me-1"></i>Jabatan</th>
+                                        <th><i class="bi bi-calendar-event me-1"></i>Jatah Cuti Umum</th>
+                                        <th><i class="bi bi-arrow-down-circle me-1"></i>Sisa</th>
+                                        <th><i class="bi bi-calendar-heart me-1"></i>Jatah Cuti Menikah</th>
+                                        <th><i class="bi bi-arrow-down-circle me-1"></i>Sisa</th>
+                                        <th><i class="bi bi-calendar-heart me-1"></i>Jatah Cuti Melahirkan</th>
+                                        <th><i class="bi bi-arrow-down-circle me-1"></i>Sisa</th>
+                                        <th><i class="bi bi-gear me-1"></i>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -80,7 +80,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const token = localStorage.getItem('token');
-        const baseUrl = 'http://127.0.0.1:8000/api';
+        const baseUrl = API_BASE_URL;
         let pegawai = []; // Store pegawai data globally
         
         if (!token) {

@@ -444,7 +444,7 @@ function setButtonStatus(status) {
     const rejectBtn = document.getElementById('rejectBtn');
 
     // Reset semua kondisi tombol
-    approveBtn.classList.remove('btn-success', 'btn-secondary', 'btn-primary');
+    approveBtn.classList.remove('btn-success', 'btn-secondary', 'btn-success');
     rejectBtn.classList.remove('btn-danger', 'btn-secondary', 'btn-primary');
 
     // Reset status disabled
@@ -464,7 +464,7 @@ function setButtonStatus(status) {
         
         case 'gagal':
             // Tombol lulus aktif dengan warna primary
-            approveBtn.classList.add('btn-primary');
+            approveBtn.classList.add('btn-success');
             approveBtn.disabled = false;
             
             // Tombol gagal menjadi secondary dan tidak bisa diklik
@@ -474,13 +474,13 @@ function setButtonStatus(status) {
         
         case 'tertunda':
             // Kedua tombol aktif
-            approveBtn.classList.add('btn-primary');
+            approveBtn.classList.add('btn-success');
             rejectBtn.classList.add('btn-danger');
             break;
         
         default:
             // Fallback ke kondisi default
-            approveBtn.classList.add('btn-primary');
+            approveBtn.classList.add('btn-success');
             rejectBtn.classList.add('btn-danger');
     }
 }

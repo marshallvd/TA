@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Fetch existing data
-    fetch(`{{ url('api/komponen-kompetensi') }}/${kompetensiId}`, {
+    fetch(`/api/komponen-kompetensi/${kompetensiId}`, {
         headers: {
             'Authorization': `Bearer ${token}`,
             'Accept': 'application/json'
@@ -326,7 +326,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Send update request
-        fetch(`{{ url('api/komponen-kompetensi') }}/${kompetensiId}`, {
+        fetch(`/api/komponen-kompetensi/${kompetensiId}`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,

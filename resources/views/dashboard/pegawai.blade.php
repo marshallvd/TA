@@ -20,7 +20,7 @@
 
                         </div>
                         <div class="col-md-6 text-end">
-                            <img src="{{ asset('assets/images/icon.png') }}" 
+                            <img src="{{ asset('assets/images/dashboard/d3.png') }}" 
                                 alt="Logo HRMS SEB" 
                                 class="img-fluid" 
                                 style="max-width: 100%; height: auto; max-height: 800px; object-fit: contain;">

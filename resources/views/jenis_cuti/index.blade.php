@@ -38,11 +38,11 @@
                         <table id="jenis-cuti-table" class="table table-striped"style="width:100%">
                             <thead>
                                 <tr>
-                                    <th width="5%">No</th>
-                                    <th width="25%">Nama Jenis Cuti</th>
-                                    <th width="15%">Kategori</th>
-                                    <th width="15%">Jumlah Hari Diizinkan</th>
-                                    <th width="10%">Aksi</th>
+                                    <th width="5%"><i class="bi bi-hash me-1"></i>No</th>
+                                    <th width="25%"><i class="bi bi-card-list me-1"></i>Nama Jenis Cuti</th>
+                                    <th width="15%"><i class="bi bi-tag me-1"></i>Kategori</th>
+                                    <th width="15%"><i class="bi bi-calendar-check me-1"></i>Jumlah Hari Diizinkan</th>
+                                    <th width="10%"><i class="bi bi-gear me-1"></i>Aksi</th>
                                 </tr>
                             </thead>
                         </table>
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
         processing: true,
         serverSide: false,
         ajax: {
-            url: '{{ url('api/jenis-cuti') }}',
+            url: '/api/jenis-cuti',
             type: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    fetch(`{{ url('api/jenis-cuti') }}/${jenisCutiId}`, {
+                    fetch(`/api/jenis-cuti/${jenisCutiId}`, {
                         method: 'DELETE',
                         headers: {
                             'Authorization': `Bearer ${token}`,

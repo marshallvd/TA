@@ -38,11 +38,11 @@ Manajemen Komponen Gaji
                         <table id="komponen-gaji-table" class="table table-striped" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th width="5%">No</th>
-                                    <th width="30%">Nama Komponen</th>
-                                    <th width="20%">Jenis</th>
-                                    <th width="25%">Keterangan</th>
-                                    <th width="20%">Aksi</th>
+                                    <th><i class="bi bi-hash me-1"></i>No</th>
+                                    <th><i class="bi bi-cash-stack me-1"></i>Nama Komponen</th>
+                                    <th><i class="bi bi-tag me-1"></i>Jenis</th>
+                                    <th><i class="bi bi-info-circle me-1"></i>Keterangan</th>
+                                    <th><i class="bi bi-three-dots-vertical me-1"></i>Aksi</th>
                                 </tr>
                             </thead>
                         </table>

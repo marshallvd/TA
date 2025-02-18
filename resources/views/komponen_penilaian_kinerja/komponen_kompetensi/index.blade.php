@@ -38,11 +38,11 @@ Manajemen Komponen Kompetensi
                         <table id="kompetensi-table" class="table table-striped"style="width:100%">
                             <thead>
                                 <tr>
-                                    <th >No</th>
-                                    <th >Nama Kompetensi</th>
-                                    <th >Perilaku Utama</th>
-                                    <th >Bobot</th>
-                                    <th >Aksi</th>
+                                    <th><i class="bi bi-hash me-1"></i>No</th>
+                                    <th><i class="bi bi-graph-up me-1"></i>Nama Kompetensi</th>
+                                    <th><i class="bi bi-person-check me-1"></i>Perilaku Utama</th>
+                                    <th><i class="bi bi-percent me-1"></i>Bobot</th>
+                                    <th><i class="bi bi-three-dots-vertical me-1"></i>Aksi</th>
                                 </tr>
                             </thead>
                         </table>
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
         processing: true,
         serverSide: false,
         ajax: {
-            url: '{{ url('api/komponen-kompetensi') }}',
+            url: '/api/komponen-kompetensi',
             type: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,

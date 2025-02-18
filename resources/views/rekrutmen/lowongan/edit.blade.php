@@ -390,7 +390,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function fetchLowonganData() {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/lowongan/${id_lowongan}`, {
+            const response = await fetch(`${API_BASE_URL}/lowongan/${id_lowongan}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -447,7 +447,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function fetchDivisi() {
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/divisi', {
+            const response = await fetch(`${API_BASE_URL}/divisi`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Accept': 'application/json'
@@ -481,7 +481,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!idDivisi) return;
 
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/jabatan/divisi/${idDivisi}`, {
+            const response = await fetch(`${API_BASE_URL}/jabatan/divisi/${idDivisi}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Accept': 'application/json'
@@ -528,7 +528,7 @@ document.addEventListener('DOMContentLoaded', function() {
         data.id_lowongan = id_lowongan;
 
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/lowongan/${id_lowongan}`, {
+            const response = await fetch(`${API_BASE_URL}/lowongan/${id_lowongan}`, {
                 method: 'PUT',
                 headers:{
                 'Authorization': `Bearer ${token}`,

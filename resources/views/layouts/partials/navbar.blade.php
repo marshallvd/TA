@@ -58,17 +58,16 @@
         margin-right: 15px; /* Tambahan margin di sebelah kanan */
 
     }
-
-    .iq-navbar-header {
-        position: relative;
-    }
+    .iq-navbar-header .text-overlay h1 {
+    color: #ffffff !important;
+}
 
     .text-overlay {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        color: rgb(255, 255, 255);
+        color: #ffffff !important; /* Tambahkan !important */
         z-index: 10;
         text-align: center;
     }
@@ -238,8 +237,8 @@
                         localStorage.removeItem('token');
                         await Swal.fire({
                             icon: 'warning',
-                            title: 'Session Expired',
-                            text: 'Your session has expired. Please login again.',
+                            title: 'Sesi Berakhir',
+                            text: 'Sesi Anda sudah berakhir. SIlahkan Login kembali.',
                             confirmButtonText: 'OK'
                         });
                         window.location.href = '/login';

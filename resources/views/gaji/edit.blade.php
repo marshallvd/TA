@@ -240,384 +240,333 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-   const token = localStorage.getItem('token');
-   const pathSegments = window.location.pathname.split('/');
-   const idGaji = pathSegments[pathSegments.length - 1];
-   
-   if (!token) {
-       Swal.fire({
-           icon: 'error',
-           title: 'Error',
-           text: 'Token tidak ditemukan. Silakan login kembali.'
-       }).then(() => {
-           window.location.href = '/login';
-       });
-       return;
-   }
-
-   document.getElementById('id_gaji').value = idGaji;
-
-   async function fetchData(endpoint) {
-       try {
-           const response = await fetch(`http://127.0.0.1:8000/api/${endpoint}`, {
-               method: 'GET',
-               headers: {
-                   'Authorization': `Bearer ${token}`,
-                   'Accept': 'application/json',
-                   'Content-Type': 'application/json'
-               }
-           });
-
-           if (!response.ok) {
-               throw new Error(`HTTP error! status: ${response.status}`);
-           }
-
-           const data = await response.json();
-           return data;
-       } catch (error) {
-           console.error(`Fetch error for ${endpoint}:`, error);
-           throw new Error(error.message || 'Terjadi kesalahan saat mengambil data');
-       }
-   }
-
-   async function fetchDivisiDetails(idDivisi) {
-       try {
-           const data = await fetchData(`divisi/${idDivisi}`);
-           if (!data) {
-               throw new Error('Data divisi tidak ditemukan');
-           }
-           return data;
-       } catch (error) {
-           console.error('Error fetching divisi details:', error);
-           throw error;
-       }
-   }
-
-   let jabatanData = null;
-
-   async function fetchJabatanDetails(idJabatan) {
-       try {
-           const data = await fetchData(`jabatan/${idJabatan}`);
-           if (!data) {
-               throw new Error('Data jabatan tidak ditemukan');
-           }
-           jabatanData = data;
-           console.log('Jabatan Data:', jabatanData);
-           return data;
-       } catch (error) {
-           console.error('Error fetching jabatan details:', error);
-           throw error;
-       }
-   }
-
-   async function fetchGajiDetails() {
-       try {
-           const data = await fetchData(`gaji/${idGaji}`);
-           
-           if (!data.data) {
-               throw new Error('Data gaji tidak ditemukan');
-           }
-           
-           const gajiData = data.data;
-           
-           // Debug logs
-           console.log('Gaji Data:', gajiData);
-           console.log('Pegawai Data:', gajiData.pegawai);
-           
-           // Set form values
-           document.getElementById('id_pegawai').value = gajiData.id_pegawai;
-           document.getElementById('divisi_pegawai').value = gajiData.pegawai.id_divisi;
-           document.getElementById('jumlah_kehadiran').value = gajiData.jumlah_kehadiran;
-           document.getElementById('jumlah_hari_lembur').value = gajiData.jumlah_hari_lembur;
-           document.getElementById('periodeView').value = `${gajiData.periode_tahun}-${String(gajiData.periode_bulan).padStart(2, '0')}`;
-           
-           // Update pegawai basic details
-           document.getElementById('pegawaiName').textContent = gajiData.pegawai?.nama_lengkap || '-';
-           document.getElementById('pegawaiNIK').textContent = gajiData.pegawai?.nik || '-';
-
-           // Fetch and update divisi details
-           if (gajiData.pegawai?.id_divisi) {
-               try {
-                   const divisiData = await fetchDivisiDetails(gajiData.pegawai.id_divisi);
-                   document.getElementById('pegawaiDivision').textContent = divisiData.nama_divisi || '-';
-               } catch (error) {
-                   console.error('Error fetching divisi:', error);
-                   document.getElementById('pegawaiDivision').textContent = '-';
-               }
-           }
-
-           // Fetch and update jabatan details
-           if (gajiData.pegawai?.id_jabatan) {
-               try {
-                   const jabatanData = await fetchJabatanDetails(gajiData.pegawai.id_jabatan);
-                   document.getElementById('pegawaiPosition').textContent = jabatanData.nama_jabatan || '-';
-                   // Setelah mendapatkan data jabatan, update preview
-                   await updatePreview();
-               } catch (error) {
-                   console.error('Error fetching jabatan:', error);
-                   document.getElementById('pegawaiPosition').textContent = '-';
-               }
-           }
-
-       } catch (error) {
-           console.error('Error fetching gaji details:', error);
-           await Swal.fire({
-               icon: 'error',
-               title: 'Error',
-               text: error.message || 'Gagal mengambil data gaji'
-           });
-       }
-   }
-
-   function getGajiPokok() {
-       if (!jabatanData) {
-           console.warn("Data jabatan belum tersedia");
-           return 0;
-       }
-       const gajiPokok = parseFloat(jabatanData.gaji_pokok) || 0;
-       console.log('Gaji Pokok from jabatanData:', gajiPokok);
-       return gajiPokok;
-   }
-
-   function getTarifLembur() {
-       if (!jabatanData) {
-           console.warn("Data jabatan belum tersedia");
-           return 0;
-       }
-       return parseFloat(jabatanData.tarif_lembur_per_hari) || 0;
-   }
-
-   async function hitungInsentif() {
-       const idPegawai = document.getElementById('id_pegawai').value;
-       const periodeView = document.getElementById('periodeView').value;
-       
-       console.log('Menghitung insentif untuk:', {
-           idPegawai,
-           periodeView
-       });
-
-       try {
-           const data = await fetchData(`penilaian-kinerja?id_pegawai=${idPegawai}&periode=${periodeView}`);
-           console.log('Data Penilaian Kinerja:', data);
-           
-           if (!data.data || data.data.length === 0) {
-               console.warn('Penilaian kinerja tidak ditemukan');
-               return 0;
-           }
-
-           const penilaian = data.data[0];
-           console.log('Predikat Penilaian:', penilaian.predikat);
-
-           const gajiPokok = getGajiPokok();
-           console.log('Gaji Pokok untuk perhitungan insentif:', gajiPokok);
-
-           const persentaseInsentif = {
-               'sangat baik': 0.15,
-               'baik': 0.10,
-               'cukup': 0.05,
-               'kurang': 0.02,
-               'sangat kurang': 0.00
-           }[penilaian.predikat.toLowerCase()] || 0;
-
-           console.log('Persentase Insentif:', persentaseInsentif);
-
-           const insentif = gajiPokok * persentaseInsentif;
-           console.log('Hasil perhitungan insentif:', insentif);
-
-           return insentif;
-       } catch (error) {
-           console.error('Error dalam perhitungan insentif:', error);
-           console.error('Detail Error:', {
-               message: error.message,
-               stack: error.stack
-           });
-           return 0;
-       }
-   }
-
-   function hitungBonusKehadiran(jumlahKehadiran) {
-       return jumlahKehadiran * 25000;
-   }
-
-   function hitungTunjanganLembur(jumlahHariLembur, tarifLemburPerHari) {
-       return jumlahHariLembur * tarifLemburPerHari;
-   }
-
-   function hitungPotonganPajak(totalPendapatan) {
-       return totalPendapatan * 0.1;
-   }
-
-   function formatCurrency(value) {
-       const numValue = typeof value === 'string' ? parseFloat(value.replace(/[^\d.-]/g, '')) : value;
-       
-       if (isNaN(numValue)) {
-           return 'Rp 0';
-       }
-
-       return new Intl.NumberFormat('id-ID', {
-           style: 'currency',
-           currency: 'IDR',
-           minimumFractionDigits: 0,
-           maximumFractionDigits: 0
-       }).format(numValue);
-   }
-
-   function parseCurrencyToNumber(currencyString) {
-       if (!currencyString) return 0;
-       return parseFloat(currencyString.replace(/[^0-9-]/g, '')) || 0;
-   }
-
-   async function updatePreview() {
-       try {
-           const jumlahKehadiran = parseInt(document.getElementById('jumlah_kehadiran').value) || 0;
-           const jumlahHariLembur = parseInt(document.getElementById('jumlah_hari_lembur').value) || 0;
-           
-           const gajiPokok = getGajiPokok();
-           console.log('Preview - Gaji Pokok:', gajiPokok);
-           
-           const tarifLemburPerHari = getTarifLembur();
-           console.log('Preview - Tarif Lembur:', tarifLemburPerHari);
-           
-           const insentif = await hitungInsentif();
-           console.log('Preview - Insentif:', insentif);
-           
-           const bonusKehadiran = hitungBonusKehadiran(jumlahKehadiran);
-           const tunjanganLembur = hitungTunjanganLembur(jumlahHariLembur, tarifLemburPerHari);
-           
-           const totalPendapatan = gajiPokok + insentif + bonusKehadiran + tunjanganLembur;
-           const potonganPajak = hitungPotonganPajak(totalPendapatan);
-           const potonganBPJS = 200000;
-           const totalPotongan = potonganPajak + potonganBPJS;
-           const gajiBersih = totalPendapatan - totalPotongan;
-
-           document.getElementById('gajiPokokPreview').value = formatCurrency(gajiPokok);
-           document.getElementById('insentifPreview').value = formatCurrency(insentif);
-           document.getElementById('bonusKehadiranPreview').value = formatCurrency(bonusKehadiran);
-           document.getElementById('tunjanganLemburPreview').value = formatCurrency(tunjanganLembur);
-           document.getElementById('totalPendapatanPreview').value = formatCurrency(totalPendapatan);
-           document.getElementById('potonganPajakPreview').value = formatCurrency(potonganPajak);
-           document.getElementById('potonganBPJSPreview').value = formatCurrency(potonganBPJS);
-           document.getElementById('gajiBersihPreview').value = formatCurrency(gajiBersih);
-       } catch (error) {
-           console.error('Error updating preview:', error);
-           await Swal.fire({
-               icon: 'error',
-               title: 'Error',
-               text: 'Gagal mengupdate preview gaji'
-           });
-       }
-   }
-
-   document.getElementById('jumlah_kehadiran').addEventListener('input', updatePreview);
-   document.getElementById('jumlah_hari_lembur').addEventListener('input', updatePreview);
-   
-   fetchGajiDetails();
-   
-// Add form submit handler
-const editGajiForm = document.getElementById('editGajiForm');
-editGajiForm.addEventListener('submit', async function(e) {
-    // Prevent default form submission
-    e.preventDefault();
+    const token = localStorage.getItem('token');
+    const pathSegments = window.location.pathname.split('/');
+    const idGaji = pathSegments[pathSegments.length - 1];
     
-    try {
-        const idPegawai = document.getElementById('id_pegawai').value;
-        if (!idPegawai) {
-            throw new Error('ID Pegawai tidak ditemukan');
-        }
-
-        const periodeView = document.getElementById('periodeView').value;
-        const [tahun, bulan] = periodeView.split('-');
-        
-        const getNumericValue = (elementId) => {
-            const value = document.getElementById(elementId).value;
-            return parseCurrencyToNumber(value);
-        };
-
-        const requestBody = {
-            id_pegawai: idPegawai,
-            id_divisi: document.getElementById('divisi_pegawai').value,
-            periode_tahun: tahun,
-            periode_bulan: bulan,
-            jumlah_kehadiran: parseInt(document.getElementById('jumlah_kehadiran').value) || 0,
-            jumlah_hari_lembur: parseInt(document.getElementById('jumlah_hari_lembur').value) || 0,
-            gaji_pokok: getGajiPokok(),
-            insentif: await hitungInsentif(),
-            bonus_kehadiran: getNumericValue('bonusKehadiranPreview'),
-            tunjangan_lembur: getNumericValue('tunjanganLemburPreview'),
-            total_pendapatan: getNumericValue('totalPendapatanPreview'),
-            potongan_pajak: getNumericValue('potonganPajakPreview'),
-            potongan_bpjs: 200000,
-            gaji_bersih: getNumericValue('gajiBersihPreview')
-        };
-
-        const confirmation = await Swal.fire({
-            title: 'Konfirmasi Update',
-            text: 'Apakah Anda yakin ingin mengupdate data gaji ini?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Ya, Update',
-            cancelButtonText: 'Batal'
+    if (!token) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Token tidak ditemukan. Silakan login kembali.'
+        }).then(() => {
+            window.location.href = '/login';
         });
+        return;
+    }
 
-        if (confirmation.isConfirmed) {
-            const response = await fetch(`http://127.0.0.1:8000/api/gaji/${idGaji}`, {
-                method: 'PUT',
+    document.getElementById('id_gaji').value = idGaji;
+
+    async function fetchData(endpoint) {
+        try {
+            const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(requestBody)
+                    'Accept': 'application/json'
+                }
             });
-
+            
+            const data = await response.json();
+            
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Gagal mengupdate gaji');
+                throw new Error(data.message || `HTTP error! status: ${response.status}`);
             }
-
-            const result = await response.json();
-            await Swal.fire({
-                icon: 'success',
-                title: 'Berhasil',
-                text: result.message || 'Gaji berhasil diupdate'
-            });
-
-            // Redirect after successful update
-            window.location.href = '/gaji';
+            
+            return data;
+        } catch (error) {
+            console.error(`Fetch error for ${endpoint}:`, error);
+            throw error;
         }
+    }
+
+    async function fetchPegawaiDetails() {
+    try {
+        const gajiResponse = await fetchData(`gaji/${idGaji}`);
+        if (!gajiResponse.data) {
+            throw new Error('Data gaji tidak ditemukan');
+        }
+        
+        const gajiData = gajiResponse.data;
+        const pegawaiResponse = await fetchData(`pegawai/${gajiData.id_pegawai}`);
+        if (!pegawaiResponse.data) {
+            throw new Error('Data pegawai tidak ditemukan');
+        }
+        
+        const pegawai = pegawaiResponse.data;
+        const jabatanResponse = await fetchData(`jabatan/${pegawai.id_jabatan}`);
+        const divisiResponse = await fetchData(`divisi/${pegawai.id_divisi}`);
+
+        // Update UI with employee details
+        document.getElementById('pegawaiName').textContent = pegawai.nama_lengkap || '-';
+        document.getElementById('pegawaiNIK').textContent = pegawai.nik || '-';
+        document.getElementById('pegawaiDivision').textContent = divisiResponse.nama_divisi || '-';
+        document.getElementById('pegawaiPosition').textContent = jabatanResponse.nama_jabatan || '-';
+        document.getElementById('id_pegawai').value = pegawai.id_pegawai;
+        document.getElementById('divisi_pegawai').value = pegawai.id_divisi;
+
+        // Format periode untuk display
+        const periodeStr = `${gajiData.periode_tahun}-${String(gajiData.periode_bulan).padStart(2, '0')}`;
+        document.getElementById('periodeView').value = periodeStr;
+        document.getElementById('jumlah_kehadiran').value = gajiData.jumlah_kehadiran;
+        document.getElementById('jumlah_hari_lembur').value = gajiData.jumlah_hari_lembur;
+
+        // Hanya satu kali pemanggilan untuk penilaian kinerja
+        try {
+            const penilaianResponse = await fetchData(
+                `penilaian-kinerja/pegawai/${pegawai.id_pegawai}/tahun/${gajiData.periode_tahun}/bulan/${String(gajiData.periode_bulan).padStart(2, '0')}`
+            );
+            
+            console.log('Penilaian Kinerja Response:', penilaianResponse);
+            
+            if (penilaianResponse && penilaianResponse.data) {
+                const predikat = penilaianResponse.data.predikat;
+                document.getElementById('predikat').value = predikat;
+                console.log('Setting predikat to:', predikat);
+            } else {
+                document.getElementById('predikat').value = 'Belum ada penilaian';
+            }
+        } catch (penilaianError) {
+            console.error('Error mengambil penilaian kinerja:', penilaianError);
+            // Jangan override nilai jika sudah ada
+            if (!document.getElementById('predikat').value || document.getElementById('predikat').value === '-') {
+                document.getElementById('predikat').value = 'Data tidak tersedia';
+            }
+        }
+
+        window.jabatanData = jabatanResponse;
+        await updatePreview();
+        
     } catch (error) {
-        console.error('Error updating gaji:', error);
+        console.error('Error in fetchPegawaiDetails:', error);
         await Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: error.message || 'Terjadi kesalahan saat mengupdate gaji'
+            text: 'Gagal mengambil data pegawai: ' + error.message
         });
     }
-});
+}
 
-// Remove the click event listener from the update button since we're handling the form submit
+    async function fetchSettingGaji() {
+        try {
+            const response = await fetch('/api/setting-gaji', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json'
+                }
+            });
+            const data = await response.json();
+            return data.data;
+        } catch (error) {
+            console.error('Error fetching setting gaji:', error);
+            return null;
+        }
+    }
 
-   // Handle back button click
-document.getElementById('btnBack').addEventListener('click', async function() {
-    // Show SweetAlert2 confirmation dialog
-    const result = await Swal.fire({
-        title: 'Konfirmasi',
-        text: 'Apakah Anda yakin ingin kembali? Data yang belum disimpan akan hilang.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Ya, kembali',
-        cancelButtonText: 'Batal',
-        allowOutsideClick: false
+    async function updatePreview() {
+        try {
+            const settingGaji = await fetchSettingGaji();
+            if (!settingGaji) {
+                throw new Error('Gagal mengambil setting gaji');
+            }
+
+            // Validasi input
+            const jumlahKehadiran = Math.max(0, parseInt(document.getElementById('jumlah_kehadiran').value) || 0);
+            const jumlahHariLembur = Math.max(0, parseInt(document.getElementById('jumlah_hari_lembur').value) || 0);
+            const periode = new Date(document.getElementById('periodeView').value);
+
+            // Hitung komponen gaji
+            const gajiPokok = Number(settingGaji.hitung_gaji_pokok ? window.jabatanData.gaji_pokok : 0);
+            const insentif = Number(settingGaji.hitung_insentif ? await hitungInsentif(periode, settingGaji) : 0);
+            const bonusKehadiran = Number(settingGaji.hitung_bonus_kehadiran ? jumlahKehadiran * settingGaji.bonus_per_kehadiran : 0);
+            const tunjanganLembur = Number(settingGaji.hitung_tunjangan_lembur ? jumlahHariLembur * window.jabatanData.tarif_lembur_per_hari : 0);
+
+            // Hitung total
+            const totalPendapatan = gajiPokok + insentif + bonusKehadiran + tunjanganLembur;
+            const potonganPajak = totalPendapatan * (Number(settingGaji.persentase_pajak) / 100);
+            const potonganBPJS = Number(settingGaji.potongan_bpjs);
+            const totalPotongan = potonganPajak + potonganBPJS;
+            const gajiBersih = totalPendapatan - totalPotongan;
+
+            // Format currency
+            const currencyOptions = { 
+                style: 'currency', 
+                currency: 'IDR',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            };
+
+            // Update UI
+            document.getElementById('gajiPokokPreview').value = gajiPokok.toLocaleString('id-ID', currencyOptions);
+            document.getElementById('insentifPreview').value = insentif.toLocaleString('id-ID', currencyOptions);
+            document.getElementById('bonusKehadiranPreview').value = bonusKehadiran.toLocaleString('id-ID', currencyOptions);
+            document.getElementById('tunjanganLemburPreview').value = tunjanganLembur.toLocaleString('id-ID', currencyOptions);
+            document.getElementById('totalPendapatanPreview').value = totalPendapatan.toLocaleString('id-ID', currencyOptions);
+            document.getElementById('potonganPajakPreview').value = potonganPajak.toLocaleString('id-ID', currencyOptions);
+            document.getElementById('potonganBPJSPreview').value = potonganBPJS.toLocaleString('id-ID', currencyOptions);
+            document.getElementById('gajiBersihPreview').value = gajiBersih.toLocaleString('id-ID', currencyOptions);
+
+            return {
+                gajiPokok,
+                insentif,
+                bonusKehadiran,
+                tunjanganLembur,
+                totalPendapatan,
+                potonganPajak,
+                potonganBPJS,
+                gajiBersih
+            };
+        } catch (error) {
+            console.error('Error dalam perhitungan gaji:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Terjadi kesalahan dalam perhitungan gaji'
+            });
+        }
+    }
+
+    async function hitungInsentif(periode, settingGaji) {
+        try {
+            const tahun = periode.getFullYear();
+    const bulan = String(periode.getMonth() + 1).padStart(2, '0');
+
+    console.log(`Fetching penilaian kinerja untuk tahun: ${tahun}, bulan: ${bulan}`); // Tambahkan log
+
+            
+            try {
+                const penilaianResponse = await fetchData(`penilaian-kinerja/pegawai/${document.getElementById('id_pegawai').value}/tahun/${tahun}/bulan/${bulan}`);
+                
+                if (penilaianResponse && penilaianResponse.data) {
+                    const predikat = penilaianResponse.data.predikat;
+                    const gajiPokok = window.jabatanData.gaji_pokok;
+                    
+                    switch (predikat.toLowerCase()) {
+                        case 'sangat baik':
+                            return gajiPokok * (settingGaji.insentif_sangat_baik / 100);
+                        case 'baik':
+                            return gajiPokok * (settingGaji.insentif_baik / 100);
+                        case 'cukup':
+                            return gajiPokok * (settingGaji.insentif_cukup / 100);
+                        case 'kurang':
+                            return gajiPokok * (settingGaji.insentif_kurang / 100);
+                        case 'sangat kurang':
+                            return gajiPokok * (settingGaji.insentif_sangat_kurang / 100);
+                        default:
+                            return 0;
+                    }
+                }
+            } catch (error) {
+                console.warn('Tidak dapat mengambil data penilaian untuk insentif:', error);
+                return 0;
+            }
+            return 0;
+        } catch (error) {
+            console.error('Error dalam hitungInsentif:', error);
+            return 0;
+        }
+    }
+
+    // Event Listeners
+    document.getElementById('editGajiForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        if (!this.checkValidity()) {
+            e.stopPropagation();
+            this.classList.add('was-validated');
+            return;
+        }
+
+        try {
+            const previewValues = await updatePreview();
+            const result = await Swal.fire({
+                title: 'Konfirmasi',
+                text: 'Apakah Anda yakin ingin mengupdate gaji ini?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, update!',
+                cancelButtonText: 'Batal'
+            });
+
+            if (result.isConfirmed) {
+                const formData = new FormData(this);
+                const dataToSend = {
+                    id_pegawai: formData.get('id_pegawai'),
+                    id_divisi: formData.get('divisi_pegawai'),
+                    periode_bulan: document.getElementById('periodeView').value.split('-')[1], // Ambil bulan dari periode
+                    periode_tahun: document.getElementById('periodeView').value.split('-')[0], // Ambil tahun dari periode
+                    jumlah_kehadiran: formData.get('jumlah_kehadiran'),
+                    jumlah_hari_lembur: formData.get('jumlah_hari_lembur'),
+                    gaji_pokok: previewValues.gajiPokok,
+                    insentif: previewValues.insentif,
+                    bonus_kehadiran: previewValues.bonusKehadiran,
+                    tunjangan_lembur: previewValues.tunjanganLembur,
+                    total_pendapatan: previewValues.totalPendapatan,
+                    potongan_pajak: previewValues.potonganPajak,
+                    potongan_bpjs: previewValues.potonganBPJS,
+                    gaji_bersih: previewValues.gajiBersih
+                };
+
+                const response = await fetch(`${API_BASE_URL}/gaji/${idGaji}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(dataToSend)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Gagal mengupdate gaji');
+                }
+
+                const responseData = await response.json();
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: responseData.message || 'Gaji berhasil diupdate'
+                });
+
+                window.location.href = '/gaji';
+            }
+        } catch (error) {
+            console.error('Error updating gaji:', error);
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error.message || 'Terjadi kesalahan saat mengupdate gaji'
+            });
+        }
     });
 
-    // If user confirms, redirect to index page
-    if (result.isConfirmed) {
-        window.location.href = '/gaji';
-    }
-});
+    document.getElementById('resetButton').addEventListener('click', function() {
+        fetchPegawaiDetails();
+    });
 
+    document.getElementById('jumlah_kehadiran').addEventListener('input', updatePreview);
+    document.getElementById('jumlah_hari_lembur').addEventListener('input', updatePreview);
+
+    document.getElementById('btnBack').addEventListener('click', async function() {
+        const result = await Swal.fire({
+            title: 'Konfirmasi',
+            text: 'Apakah Anda yakin ingin kembali? Data yang belum disimpan akan hilang.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, kembali',
+            cancelButtonText: 'Batal',
+            allowOutsideClick: false
+        });
+
+        if (result.isConfirmed) {
+            window.location.href = '/gaji';
+        }
+    });
+
+    // Initialize the page
+    fetchPegawaiDetails();
 });
 </script>
 @endpush

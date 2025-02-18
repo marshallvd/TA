@@ -8,6 +8,7 @@ use App\Models\PenilaianKinerja;
 use App\Models\PenilaianKPI;
 use App\Models\PenilaianKompetensi;
 use App\Models\PenilaianCoreValues;
+use App\Models\SettingBobot;
 use App\Models\Pegawai;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -123,9 +124,18 @@ class PenilaianKinerjaController extends Controller
             $penilaianKompetensi = PenilaianKompetensi::findOrFail($request->id_penilaian_kompetensi);
             $penilaianCoreValues = PenilaianCoreValues::findOrFail($request->id_penilaian_core_values);
 
-            $nilaiAkhir = ($penilaianKPI->nilai_rata_rata * 0.8) +
-                          ($penilaianKompetensi->nilai_rata_rata * 0.1) +
-                          ($penilaianCoreValues->nilai_rata_rata * 0.1);
+            $settingBobot = SettingBobot::latest()->first();
+
+            if (!$settingBobot) {
+                throw new \Exception('Setting bobot belum dikonfigurasi');
+            }
+
+            $nilaiAkhir = ($penilaianKPI->nilai_rata_rata * ($settingBobot->bobot_kpi / 100)) +
+              ($penilaianKompetensi->nilai_rata_rata * ($settingBobot->bobot_kompetensi / 100)) +
+              ($penilaianCoreValues->nilai_rata_rata * ($settingBobot->bobot_core_values / 100));
+            // $nilaiAkhir = ($penilaianKPI->nilai_rata_rata * 0.8) +
+            //               ($penilaianKompetensi->nilai_rata_rata * 0.1) +
+            //               ($penilaianCoreValues->nilai_rata_rata * 0.1);
 
             $predikat = $this->hitungPredikat($nilaiAkhir);
 
@@ -192,10 +202,19 @@ class PenilaianKinerjaController extends Controller
             $penilaianKPI = PenilaianKPI::findOrFail($request->id_penilaian_kpi);
             $penilaianKompetensi = PenilaianKompetensi::findOrFail($request->id_penilaian_kompetensi);
             $penilaianCoreValues = PenilaianCoreValues::findOrFail($request->id_penilaian_core_values);
+            
+            $settingBobot = SettingBobot::latest()->first();
 
-            $nilaiAkhir = ($penilaianKPI->nilai_rata_rata * 0.8) +
-                          ($penilaianKompetensi->nilai_rata_rata * 0.1) +
-                          ($penilaianCoreValues->nilai_rata_rata * 0.1);
+            if (!$settingBobot) {
+                throw new \Exception('Setting bobot belum dikonfigurasi');
+            }
+            $nilaiAkhir = ($penilaianKPI->nilai_rata_rata * ($settingBobot->bobot_kpi / 100)) +
+            ($penilaianKompetensi->nilai_rata_rata * ($settingBobot->bobot_kompetensi / 100)) +
+            ($penilaianCoreValues->nilai_rata_rata * ($settingBobot->bobot_core_values / 100));
+            
+            // $nilaiAkhir = ($penilaianKPI->nilai_rata_rata * 0.8) +
+            //               ($penilaianKompetensi->nilai_rata_rata * 0.1) +
+            //               ($penilaianCoreValues->nilai_rata_rata * 0.1);
 
             $predikat = $this->hitungPredikat($nilaiAkhir);
 

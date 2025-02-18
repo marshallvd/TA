@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 throw new Error('Token tidak tersedia');
             }
 
-            const response = await fetch(`http://127.0.0.1:8000/api/lowongan/${jobId}`, {
+            const response = await fetch(`${API_BASE_URL}/lowongan/${jobId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Accept': 'application/json'

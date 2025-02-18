@@ -33,12 +33,12 @@
                         <table id="lamaran-table" class="table table-striped" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Lowongan Pekerjaan</th>
-                                    <th>Divisi</th>
-                                    <th>Tanggal Lamaran</th>
-                                    <th>Status Lamaran</th>
-                                    <th>Aksi</th>
+                                    <th><i class="bi bi-hash me-1"></i>No</th>
+                                    <th><i class="bi bi-briefcase me-1"></i>Lowongan Pekerjaan</th>
+                                    <th><i class="bi bi-building me-1"></i>Divisi</th>
+                                    <th><i class="bi bi-calendar me-1"></i>Tanggal Lamaran</th>
+                                    <th><i class="bi bi-file-earmark-text me-1"></i>Status Lamaran</th>
+                                    <th><i class="bi bi-three-dots-vertical me-1"></i>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -66,7 +66,8 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const pelamarToken = localStorage.getItem('pelamar_token');
-
+    const baseUrl = 'http://localhost:8000/api';
+    const divisiCache = {};
     if (!pelamarToken) {
         Swal.fire({
             icon: 'error',
@@ -109,7 +110,54 @@ document.addEventListener('DOMContentLoaded', function() {
             return null;
         }
     }
+    async function fetchDivisiData(divisiId) {
+    // Only proceed with numeric IDs
+    if (!divisiId || isNaN(divisiId)) {
+        //console.log(`Skipping fetch for invalid division ID: ${divisiId}`);
+        return 'Tidak Diketahui';
+    }
 
+    // Check cache first
+    if (divisiCache[divisiId]) {
+        //console.log(`Returning cached data for division ID ${divisiId}:`, divisiCache[divisiId]);
+        return divisiCache[divisiId];
+    }
+
+    try {
+        //console.log(`Fetching data for division ID: ${divisiId}`);
+        //console.log(`URL: ${baseUrl}/public/divisi/${divisiId}`);
+
+        const response = await fetch(`${baseUrl}/public/divisi/${divisiId}`, {
+            headers: {
+                'Authorization': `Bearer ${pelamarToken}`,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+
+        //console.log(`Response status for division ${divisiId}:`, response.status);
+
+        if (!response.ok) {
+            //console.warn(`Division fetch failed for ID ${divisiId}: ${response.status}`);
+            return 'Tidak Diketahui';
+        }
+
+        const result = await response.json();
+        //console.log(`API Response for division ${divisiId}:`, result);
+        
+        if (result && result.nama_divisi) {
+            //console.log(`Successfully fetched division name for ID ${divisiId}:`, result.nama_divisi);
+            divisiCache[divisiId] = result.nama_divisi;
+            return result.nama_divisi;
+        }
+
+        //console.warn(`Unexpected data structure for division ID ${divisiId}:`, result);
+        return 'Tidak Diketahui';
+    } catch (error) {
+       //console.error(`Error fetching division data for ID ${divisiId}:`, error);
+        return 'Tidak Diketahui';
+    }
+}
     // Fungsi untuk mengambil data lamaran
     async function fetchLamaranData(pelamarId) {
         try {
@@ -181,12 +229,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 $('#lamaran-table').html('<div class="alert alert-info text-center">Anda belum memiliki riwayat lamaran.</div>');
                 return;
             }
+            // Pre-fetch all division data before initializing DataTable
+            const uniqueDivisiIds = [...new Set(lamaran.map(item => item.lowongan_pekerjaan?.id_divisi).filter(id => id))];
+                    await Promise.all(uniqueDivisiIds.map(id => fetchDivisiData(id)));
 
             table = $('#lamaran-table').DataTable({
                 data: lamaran.map((item, index) => ({
                     no: index + 1,
                     judulPekerjaan: item.lowongan_pekerjaan?.judul_pekerjaan || 'Tidak Diketahui',
-                    namaDivisi: item.lowongan_pekerjaan?.divisi?.nama_divisi || 'Tidak Diketahui',
+                    divisiId: item.lowongan_pekerjaan?.id_divisi || null,
+
                     tanggalDibuat: formatDate(item.tanggal_dibuat),
                     statusLamaran: item.status_lamaran,
                     idLamaran: item.id_lamaran_pekerjaan
@@ -194,7 +246,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 columns: [
                     { data: 'no' },
                     { data: 'judulPekerjaan' },
-                    { data: 'namaDivisi' },
+                                    {
+                    data: 'divisiId',
+                    render: function(data, type, row) {
+                        if (type === 'display') {
+                            return divisiCache[data] || 'Tidak Diketahui';
+                        }
+                        return data;
+                    }
+                },
                     { data: 'tanggalDibuat' },
                     { 
                         data: 'statusLamaran',
@@ -332,7 +392,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (confirmDelete.isConfirmed) {
             try {
-                const response = await fetch(`http://localhost:8000/api/pelamar/lamaran/${lamaranId}`, {
+                const response = await fetch(`${API_BASE_URL}/pelamar/lamaran/${lamaranId}`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `Bearer ${pelamarToken}`,

@@ -43,10 +43,10 @@
                             <table id="gaji-pribadi-table" class="table table-striped" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Periode Gaji</th>
-                                        <th>Gaji Bersih</th>
-                                        <th>Action</th>
+                                        <th><i class="bi bi-hash me-1"></i>No</th>
+                                        <th><i class="bi bi-calendar-event me-1"></i>Periode Gaji</th>
+                                        <th><i class="bi bi-wallet2 me-1"></i>Gaji Bersih</th>
+                                        <th><i class="bi bi-three-dots-vertical me-1"></i>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -65,7 +65,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const token = localStorage.getItem('token');
-    const baseUrl = 'http://127.0.0.1:8000/api';
+    //const baseUrl = 'http://127.0.0.1:8000/api';
     let dataTableInstance = null;
 
     // Cek token
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let idPegawai = null;
     async function fetchUserData() {
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/auth/me', {
+            const response = await fetch(`${API_BASE_URL}/auth/me`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Accept': 'application/json'
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
             processing: true,
             serverSide: false,
             ajax: {
-                url: `${baseUrl}/gaji/pegawai/${idPegawai}`,
+                url: `${API_BASE_URL}/gaji/pegawai/${idPegawai}`,
                 type: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`

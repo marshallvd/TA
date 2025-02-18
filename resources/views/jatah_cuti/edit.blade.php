@@ -249,7 +249,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Constants and Configurations
     const token = localStorage.getItem('token');
-    const baseUrl = 'http://127.0.0.1:8000/api';
+    const baseUrl = API_BASE_URL;
     const idPegawai = document.getElementById('id_pegawai').value;
     const idJatahCuti = document.getElementById('id_jatah_cuti').value;
     const jatahCutiForm = document.getElementById('jatahCutiForm');
@@ -309,7 +309,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // API Functions
     async function fetchPegawaiDetails() {
         try {
-            showLoadingAlert('Mengambil data pegawai...');
+            // showLoadingAlert('Mengambil data pegawai...');
 
             const pegawaiResponse = await fetch(`${baseUrl}/pegawai/${idPegawai}`, {
                 headers: {
@@ -451,7 +451,7 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             validateForm();
             
-            const loadingAlert = await showLoadingAlert('Sedang memperbarui data...');
+            // const loadingAlert = await showLoadingAlert('Sedang memperbarui data...');
             
             const formData = {
                 id_pegawai: document.getElementById('id_pegawai').value,

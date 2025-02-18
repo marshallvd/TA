@@ -11,10 +11,10 @@
                     <a href="{{ route('landing.index') }}" class="navbar-brand d-flex align-items-center mb-3">
                         <div class="logo-main">
                             <div class="logo-normal">
-                                <img src="{{ asset('assets/images/logo seb.png') }}" alt="Logo HRMS SEB" class="icon-30">
+                                <img src="{{ asset('assets/images/logo_app.png') }}" alt="Logo HRMS SEB" class="icon-30">
                             </div>
                             <div class="logo-mini">
-                                <img src="{{ asset('assets/images/logo seb.png') }}" alt="Logo HRMS SEB" class="icon-30">
+                                <img src="{{ asset('assets/images/logo_app.png') }}" alt="Logo HRMS SEB" class="icon-30">
                             </div>
                         </div>
                         <h4 class="logo-title ms-3">HRMS SEB</h4>
@@ -40,15 +40,15 @@
                             <div class="col-lg-12 d-flex justify-content-between">
                                 <div class="form-check mb-3">
                                     <input type="checkbox" class="form-check-input" id="remember" name="remember">
-                                    <label class="form-check-label" for="remember">Remember Me</label>
+                                    <label class="form-check-label" for="remember">Ingat Saya</label>
                                 </div>
                             </div>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary">Sign In</button>
+                            <button type="submit" class="btn btn-primary">Masuk</button>
                         </div>
                         <p class="mt-3 text-center">
-                            Don't have an account? <a href="{{ route('pelamar.register') }}" class="text-underline">Click here to sign up.</a>
+                            Belum memiiliki akun? <a href="{{ route('pelamar.register') }}" class="text-underline">Klik disini untuk Daftar.</a>
                         </p>
                     </form>
                 </div>

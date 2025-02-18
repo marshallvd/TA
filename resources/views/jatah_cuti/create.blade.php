@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const token = localStorage.getItem('token');
     const urlParams = new URLSearchParams(window.location.search);
     const idPegawai = urlParams.get('id_pegawai');
-    const baseUrl = 'http://127.0.0.1:8000/api';
+    const baseUrl = API_BASE_URL;
     const jatahCutiForm = document.getElementById('jatahCutiForm');
     const resetButton = document.getElementById('resetButton');
 

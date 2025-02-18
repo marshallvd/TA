@@ -273,7 +273,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let originalData = {};
 
     // Fetch existing data
-    fetch(`{{ url('api/komponen-core-values') }}/${coreValuesId}`, {
+    fetch(`/api/komponen-core-values/${coreValuesId}`, {
         headers: {
             'Authorization': `Bearer ${token}`,
             'Accept': 'application/json'
@@ -367,7 +367,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             // Send update request
-            const response = await fetch(`{{ url('api/komponen-core-values') }}/${coreValuesId}`, {
+            const response = await fetch(`{{ url(            const response = await fetch(`/api/komponen-core-values/${coreValuesId}`, {
+'api/komponen-core-values') }}/${coreValuesId}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,

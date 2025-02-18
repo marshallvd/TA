@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             // Send data to API
-            const response = await fetch('{{ url('api/komponen-gaji') }}', {
+            const response = await fetch('/api/komponen-gaji', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,

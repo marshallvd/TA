@@ -38,11 +38,11 @@ Manajemen Jabatan
                         <table id="jabatan-table" class="table table-striped" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th width="5%">No</th>
-                                    <th width="25%">Nama Jabatan</th>
-                                    <th width="25%">Divisi</th>
-                                    <th width="20%">Gaji Pokok</th>
-                                    <th width="25%">Aksi</th>
+                                    <th width="5%"><i class="bi bi-hash me-1"></i>No</th>
+                                    <th width="25%"><i class="bi bi-person-badge me-1"></i>Nama Jabatan</th>
+                                    <th width="25%"><i class="bi bi-building me-1"></i>Divisi</th>
+                                    <th width="20%"><i class="bi bi-cash-stack me-1"></i>Gaji Pokok</th>
+                                    <th width="25%"><i class="bi bi-gear me-1"></i>Aksi</th>
                                 </tr>
                             </thead>
                         </table>

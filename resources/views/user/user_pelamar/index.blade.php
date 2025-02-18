@@ -40,12 +40,12 @@
                             <table id="user-list-table" class="table table-striped" style="width:100%">
                                 <thead>
                                     <tr class="ligth">
-                                        <th><b>No</b></th>
-                                        <th><b>Nama Pelamar</b></th>
-                                        <th><b>Email</b></th>
-                                        <th><b>No HP</b></th>
-                                        <th><b>Pendidikan Terakhir</b></th>
-                                        <th style="min-width: 100px"><b>Action</b></th>
+                                        <th><i class="bi bi-hash me-1"></i>No</th>
+                                        <th><i class="bi bi-person me-1"></i>Nama Pelamar</th>
+                                        <th><i class="bi bi-envelope me-1"></i>Email</th>
+                                        <th><i class="bi bi-phone me-1"></i>No HP</th>
+                                        <th><i class="bi bi-book me-1"></i>Pendidikan Terakhir</th>
+                                        <th style="min-width: 100px"><i class="bi bi-gear me-1"></i>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody id="user-table-body">
@@ -68,7 +68,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Konfigurasi Utama
     const token = localStorage.getItem('token');
-    const API_URL = 'http://localhost:8000/api/pelamar';
+    const API_URL = API_BASE_URL;
     let userTable; // Variabel global untuk DataTable
 
     // SVG Icons

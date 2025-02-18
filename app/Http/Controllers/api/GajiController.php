@@ -8,6 +8,7 @@ use App\Models\Pegawai;
 use App\Models\Gaji;
 use App\Models\DetailGaji;
 use App\Models\Pajak;
+use App\Models\SettingGaji;
 use App\Models\KomponenGaji;
 use App\Models\PenilaianKinerja;
 use Carbon\Carbon;
@@ -167,22 +168,29 @@ class GajiController extends Controller
         {
             $pegawai = Pegawai::with('jabatan')->findOrFail($request->id_pegawai);
             $periodeDate = Carbon::parse($request->periode);
+            $settingGaji = SettingGaji::getActive();
         
-            // Hitung komponen gaji
-            $gajiPokok = $pegawai->jabatan->gaji_pokok;
-            $insentif = $this->hitungInsentif($pegawai, $periodeDate);
-            $bonusKehadiran = $this->hitungBonusKehadiran($request->jumlah_kehadiran);
-            $tunjanganLembur = $this->hitungTunjanganLembur($request->jumlah_hari_lembur, $pegawai->jabatan->tarif_lembur_per_hari);
+            // Hitung komponen gaji berdasarkan setting
+            $gajiPokok = $settingGaji->hitung_gaji_pokok ? $pegawai->jabatan->gaji_pokok : 0;
+            
+            $insentif = $settingGaji->hitung_insentif ? 
+                $this->hitungInsentif($pegawai, $periodeDate, $settingGaji) : 0;
+            
+            $bonusKehadiran = $settingGaji->hitung_bonus_kehadiran ? 
+                $request->jumlah_kehadiran * $settingGaji->bonus_per_kehadiran : 0;
+            
+            $tunjanganLembur = $settingGaji->hitung_tunjangan_lembur ? 
+                $this->hitungTunjanganLembur($request->jumlah_hari_lembur, $pegawai->jabatan->tarif_lembur_per_hari) : 0;
             
             $totalPemasukan = $gajiPokok + $insentif + $bonusKehadiran + $tunjanganLembur;
-            $potonganPajak = $this->hitungPotonganPajak($totalPemasukan);
-            $potonganBPJS = 200000; // Potongan BPJS tetap
             
-            // Hitung total potongan
+            // Hitung potongan berdasarkan setting
+            $potonganPajak = $totalPemasukan * ($settingGaji->persentase_pajak / 100);
+            $potonganBPJS = $settingGaji->potongan_bpjs;
+            
             $totalPotongan = $potonganPajak + $potonganBPJS;
-        
-            // Hitung gaji bersih
             $gajiBersih = $totalPemasukan - $totalPotongan;
+        
         
             // Simpan atau update data gaji
             $gaji = $existingGaji ?? new Gaji();
@@ -214,61 +222,75 @@ class GajiController extends Controller
             return $gaji->load('detailGaji');
         }
 
-        private function hitungInsentif($pegawai, $periode)
+        private function hitungInsentif($pegawai, $periode, $settingGaji)
         {
-            // Tambahkan log untuk debugging
-            \Log::info('Mencari Penilaian Kinerja', [
-                'id_pegawai' => $pegawai->id_pegawai,
-                'periode' => $periode->format('Y')
-            ]);
-        
             $penilaianKinerja = PenilaianKinerja::where('id_pegawai', $pegawai->id_pegawai)
-            ->where('periode_penilaian', $periode->format('Y-m')) // Cocokkan dengan format YYYY-MM
-            ->first();
-        
-            // Tambahkan pengecekan null
-            if (!$penilaianKinerja) {
-                \Log::warning('Tidak ada penilaian kinerja ditemukan', [
-                    'id_pegawai' => $pegawai->id_pegawai,
-                    'periode' => $periode->format('Y')
-                ]);
+                ->where('periode_penilaian', $periode->format('Y-m'))
+                ->first();
+
+            if (!$penilaianKinerja || !$penilaianKinerja->predikat) {
                 return 0;
             }
-        
-            // Tambahkan pengecekan predikat
-            if (!$penilaianKinerja->predikat) {
-                \Log::warning('Predikat tidak ditemukan', [
-                    'penilaian_kinerja' => $penilaianKinerja
-                ]);
-                return 0;
-            }
-        
-            $persentaseInsentif = 0;
-            switch (strtolower($penilaianKinerja->predikat)) {
-                case 'sangat baik':
-                    $persentaseInsentif = 0.15;
-                    break;
-                case 'baik':
-                    $persentaseInsentif = 0.10;
-                    break;
-                case 'cukup':
-                    $persentaseInsentif = 0.05;
-                    break;
-                case 'kurang':
-                    $persentaseInsentif = 0.02;
-                    break;
-                case 'sangat kurang':
-                    $persentaseInsentif = 0.00;
-                    break;
-                default:
-                    \Log::warning('Predikat tidak dikenali', [
-                        'predikat' => $penilaianKinerja->predikat
-                    ]);
-                    return 0;
-            }
-        
-            return $pegawai->jabatan->gaji_pokok * $persentaseInsentif;
+
+            $persentaseInsentif = $settingGaji->getInsentifByPredikat($penilaianKinerja->predikat);
+            return $pegawai->jabatan->gaji_pokok * ($persentaseInsentif / 100);
         }
+
+        // private function hitungInsentif($pegawai, $periode)
+        // {
+        //     // Tambahkan log untuk debugging
+        //     \Log::info('Mencari Penilaian Kinerja', [
+        //         'id_pegawai' => $pegawai->id_pegawai,
+        //         'periode' => $periode->format('Y')
+        //     ]);
+        
+        //     $penilaianKinerja = PenilaianKinerja::where('id_pegawai', $pegawai->id_pegawai)
+        //     ->where('periode_penilaian', $periode->format('Y-m')) // Cocokkan dengan format YYYY-MM
+        //     ->first();
+        
+        //     // Tambahkan pengecekan null
+        //     if (!$penilaianKinerja) {
+        //         \Log::warning('Tidak ada penilaian kinerja ditemukan', [
+        //             'id_pegawai' => $pegawai->id_pegawai,
+        //             'periode' => $periode->format('Y')
+        //         ]);
+        //         return 0;
+        //     }
+        
+        //     // Tambahkan pengecekan predikat
+        //     if (!$penilaianKinerja->predikat) {
+        //         \Log::warning('Predikat tidak ditemukan', [
+        //             'penilaian_kinerja' => $penilaianKinerja
+        //         ]);
+        //         return 0;
+        //     }
+        
+        //     $persentaseInsentif = 0;
+        //     switch (strtolower($penilaianKinerja->predikat)) {
+        //         case 'sangat baik':
+        //             $persentaseInsentif = 0.15;
+        //             break;
+        //         case 'baik':
+        //             $persentaseInsentif = 0.10;
+        //             break;
+        //         case 'cukup':
+        //             $persentaseInsentif = 0.05;
+        //             break;
+        //         case 'kurang':
+        //             $persentaseInsentif = 0.02;
+        //             break;
+        //         case 'sangat kurang':
+        //             $persentaseInsentif = 0.00;
+        //             break;
+        //         default:
+        //             \Log::warning('Predikat tidak dikenali', [
+        //                 'predikat' => $penilaianKinerja->predikat
+        //             ]);
+        //             return 0;
+        //     }
+        
+        //     return $pegawai->jabatan->gaji_pokok * $persentaseInsentif;
+        // }
 
     private function hitungBonusKehadiran($jumlahKehadiran)
     {

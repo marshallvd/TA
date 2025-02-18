@@ -8,10 +8,10 @@
             <!--Logo start-->
             <div class="logo-main">
                 <div class="logo-normal">
-                    <img src="{{ asset('assets/images/logo seb.png') }}" alt="Logo HRMS SEB" class="icon-30">
+                    <img src="{{ asset('assets/images/logo_app.png') }}" alt="Logo HRMS SEB" class="icon-30">
                 </div>
                 <div class="logo-mini">
-                    <img src="{{ asset('assets/images/logo seb.png') }}" alt="Logo HRMS SEB" class="icon-30">
+                    <img src="{{ asset('assets/images/logo_app.png') }}" alt="Logo HRMS SEB" class="icon-30">
                 </div>
             </div>
             <!--logo End-->

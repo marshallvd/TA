@@ -72,7 +72,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <span>Cuti Khusus</span>
+                                <span>Cuti Menikah</span>
                                 <span class="badge bg-info" id="sisaCutiKhusus">0 hari</span>
                             </div>
                             <div class="progress" style="height: 8px;">
@@ -101,6 +101,9 @@
                 </div>
                 <div class="card-body">
                     <form id="pengajuanCutiForm" class="needs-validation" novalidate>
+
+                        <input type="hidden" name="id_pegawai" id="id_pegawai">
+
                         <div class="row">
                             <div class="form-group col-md-6 mb-3">
                                 <label class="form-label">Jenis Cuti <span class="text-danger">*</span></label>
@@ -203,7 +206,7 @@
                                 </li>
                                 <li class="mb-2">
                                     <i class="bi bi-calendar2 text-info me-2"></i>
-                                    Cuti Khusus: Untuk acara/keperluan tertentu
+                                    Cuti Menikah: Untuk acara pernikahan
                                 </li>
                                 <li class="mb-2">
                                     <i class="bi bi-calendar2 text-success me-2"></i>
@@ -276,348 +279,306 @@
 @endpush
 @push('scripts')
 <script>
+// Constants and Configuration
+const ENDPOINTS = {
+    AUTH: 'auth/me',
+    PEGAWAI: 'pegawai',
+    JABATAN: 'jabatan',
+    DIVISI: 'divisi',
+    JATAH_CUTI: 'jatah-cuti/check-jatah-cuti',
+    JENIS_CUTI: 'jenis-cuti',
+    CUTI: 'cuti'
+};
+
 document.addEventListener('DOMContentLoaded', function() {
-    const token = localStorage.getItem('token');
-    if (!token) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Token tidak ditemukan. Silakan login kembali.'
-        }).then(() => {
-            window.location.href = '/login';
-        });
+    // Check if API_BASE_URL is defined
+    if (typeof API_BASE_URL === 'undefined') {
+        console.error('API_BASE_URL is not defined');
         return;
     }
 
-    // Tambahkan elemen tersembunyi untuk menyimpan ID Pegawai
-    if (!document.getElementById('id_pegawai')) {
-        const hiddenInput = document.createElement('input');
-        hiddenInput.type = 'hidden';
-        hiddenInput.id = 'id_pegawai';
-        hiddenInput.name = 'id_pegawai';
-        document.getElementById('pengajuanCutiForm').appendChild(hiddenInput);
-    }
+    // Initialize necessary variables
+    const token = localStorage.getItem('token');
+    let leaveQuotaData = null;
 
-    // Back button functionality
-    const btnBack = document.getElementById('btnBack');
-    if (btnBack) {
-        btnBack.addEventListener('click', function() {
-            window.history.back();
+    // Utility Functions
+    const showErrorAlert = (message) => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: message
+        }).then(() => {
+            if (message.includes('login')) {
+                window.location.href = `${BASE_URL}/login`;
+            }
         });
-    }
+    };
 
-    // Validasi Tanggal
-    function validateDates() {
-        const tanggalMulai = document.getElementById('tanggal_mulai');
-        const tanggalSelesai = document.getElementById('tanggal_selesai');
+    const showSuccessAlert = (message, redirect = null) => {
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: message
+        }).then(() => {
+            if (redirect) window.location.href = redirect;
+        });
+    };
 
-        if (!tanggalMulai || !tanggalSelesai) return false;
-
-        const startDate = new Date(tanggalMulai.value);
-        const endDate = new Date(tanggalSelesai.value);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        if (startDate < today) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Validasi Tanggal',
-                text: 'Tanggal mulai cuti tidak boleh kurang dari hari ini'
-            });
-            return false;
-        }
-
-        if (endDate < startDate) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Validasi Tanggal',
-                text: 'Tanggal selesai harus lebih besar dari tanggal mulai'
-            });
-            return false;
-        }
-
-        return true;
-    }
-
-    // Validasi Sisa Jatah Cuti
-    function validateLeaveQuota(selectedLeaveType, requestedDays) {
-        if (!window.leaveQuotaData) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Data jatah cuti belum dimuat'
-            });
-            return false;
-        }
-
-        const jenisCuti = document.getElementById('jenis_cuti');
-        const selectedOption = jenisCuti.options[jenisCuti.selectedIndex];
-        const kategori = selectedOption.getAttribute('data-kategori');
-
-        switch(kategori) {
-            case 'Umum':
-                if (requestedDays > window.leaveQuotaData.sisa_cuti_umum) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Jatah Cuti Tidak Mencukupi',
-                        text: `Sisa cuti umum Anda hanya ${window.leaveQuotaData.sisa_cuti_umum} hari`
-                    });
-                    return false;
-                }
-                break;
-            case 'Menikah':
-                if (requestedDays > window.leaveQuotaData.sisa_cuti_menikah) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Jatah Cuti Tidak Mencukupi',
-                        text: `Sisa cuti menikah Anda hanya ${window.leaveQuotaData.sisa_cuti_menikah} hari`
-                    });
-                    return false;
-                }
-                break;
-            case 'Melahirkan':
-                if (requestedDays > window.leaveQuotaData.sisa_cuti_melahirkan) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Jatah Cuti Tidak Mencukupi',
-                        text: `Sisa cuti melahirkan Anda hanya ${window.leaveQuotaData.sisa_cuti_melahirkan} hari`
-                    });
-                    return false;
-                }
-                break;
-        }
-
-        return true;
-    }
-
-    // Fetch User and Pegawai Details
-    async function fetchUserAndPegawai() {
+    // API Handler
+    const apiHandler = {
+    async fetchData(endpoint, options = {}) {
         try {
-            const userResponse = await fetch('http://127.0.0.1:8000/api/auth/me', {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('Token tidak ditemukan. Silakan login kembali.');
+            }
+
+            const defaultHeaders = {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            };
+
+            const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
+                ...options,
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json'
+                    ...defaultHeaders,
+                    ...options.headers
                 }
             });
 
-            if (!userResponse.ok) {
-                throw new Error('Gagal mengambil data user');
+            // Handle different HTTP status codes
+            if (response.status === 401) {
+                localStorage.removeItem('token'); // Clear invalid token
+                throw new Error('Sesi anda telah berakhir. Silakan login kembali.');
             }
 
-            const userData = await userResponse.json();
+            if (response.status === 403) {
+                throw new Error('Anda tidak memiliki akses untuk melakukan operasi ini.');
+            }
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || `Error! Status: ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error(`API Error (${endpoint}):`, error);
             
+            // Handle network errors
+            if (error.name === 'TypeError' && error.message === 'Failed to fetch') {
+                throw new Error('Tidak dapat terhubung ke server. Periksa koneksi internet Anda.');
+            }
+
+            // Re-throw the error to be handled by the calling function
+            throw error;
+        }
+    }
+};
+
+    // Data Fetchers
+    const dataFetcher = {
+        async fetchUserAndPegawaiDetails() {
+        try {
+            const userData = await apiHandler.fetchData(ENDPOINTS.AUTH);
             const idPegawai = userData.pegawai?.id_pegawai;
-            const idPegawaiInput = document.getElementById('id_pegawai');
             
-            if (idPegawaiInput && idPegawai) {
+            if (!idPegawai) throw new Error('ID Pegawai tidak ditemukan');
+
+            // Add null check before setting value
+            const idPegawaiInput = document.getElementById('id_pegawai');
+            if (idPegawaiInput) {
                 idPegawaiInput.value = idPegawai;
+            } else {
+                console.error('Element id_pegawai not found in the DOM');
+                throw new Error('Form tidak lengkap: id_pegawai tidak ditemukan');
             }
 
-            // Update pegawai details
-            const nameEl = document.getElementById('pegawaiName');
-            const nikEl = document.getElementById('pegawaiNIK');
-            const positionEl = document.getElementById('pegawaiPosition');
-            const divisionEl = document.getElementById('pegawaiDivision');
-
-            if (nameEl) nameEl.textContent = userData.pegawai?.nama_lengkap || '-';
-            if (nikEl) nikEl.textContent = userData.pegawai?.nik || '-';
+            // Update element display with null checks
+            this.updatePegawaiDisplay(userData.pegawai);
 
             // Fetch additional details
-            const pegawaiResponse = await fetch(`http://127.0.0.1:8000/api/pegawai/${idPegawai}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json'
-                }
-            });
-
-            if (!pegawaiResponse.ok) {
-                throw new Error('Gagal mengambil data pegawai');
-            }
-
-            const pegawaiData = await pegawaiResponse.json();
-
-            // Fetch jabatan
-            const idJabatan = pegawaiData.data.id_jabatan;
-            if (idJabatan) {
-                const jabatanResponse = await fetch(`http://127.0.0.1:8000/api/jabatan/${idJabatan}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/json'
-                    }
-                });
-
-                if (!jabatanResponse.ok) {
-                    throw new Error('Gagal mengambil data jabatan');
-                }
-
-                const jabatanData = await jabatanResponse.json();
-                if (positionEl) positionEl.textContent = jabatanData.nama_jabatan;
-
-                // Fetch divisi
-                const idDivisi = pegawaiData.data.id_divisi;
-                if (idDivisi) {
-                    const divisiResponse = await fetch(`http://127.0.0.1:8000/api/divisi/${idDivisi}`, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Accept': 'application/json'
-                        }
-                    });
-
-                    if (!divisiResponse.ok) {
-                        throw new Error('Gagal mengambil data divisi');
-                    }
-
-                    const divisiData = await divisiResponse.json();
-                    if (divisionEl) divisionEl.textContent = divisiData.nama_divisi;
-                }
-            }
-
-
-            // Fetch Jatah Cuti
-            await fetchJatahCuti(idPegawai);
+            const pegawaiData = await apiHandler.fetchData(`${ENDPOINTS.PEGAWAI}/${idPegawai}`);
+            await this.fetchAndDisplayPosition(pegawaiData.data.id_jabatan);
+            await this.fetchAndDisplayDivision(pegawaiData.data.id_divisi);
+            await this.fetchLeaveQuota(idPegawai);
+            await this.fetchLeaveTypes();
 
         } catch (error) {
-            console.error('Error fetching data:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: error.message
-            });
+            showErrorAlert(error.message);
         }
-    }
+    },
 
-    // Fetch Jatah Cuti
-    async function fetchJatahCuti(idPegawai) {
-        try {
-            const response = await fetch(`http://127.0.0.1:8000/api/jatah-cuti/check-jatah-cuti/${idPegawai}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json'
-                }
-            });
+    updatePegawaiDisplay(pegawai) {
+        // Add null checks for all element updates
+        const elements = {
+            'pegawaiName': pegawai?.nama_lengkap || '-',
+            'pegawaiNIK': pegawai?.nik || '-',
+            'pegawaiPosition': '-',
+            'pegawaiDivision': '-'
+        };
 
-            if (!response.ok) {
-                throw new Error('Gagal mengambil jatah cuti');
+        Object.entries(elements).forEach(([id, value]) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = value;
+            } else {
+                console.warn(`Element ${id} not found in the DOM`);
             }
+        });
+    },
 
-            const result = await response.json();
-            
+        async fetchAndDisplayPosition(idJabatan) {
+            const jabatanData = await apiHandler.fetchData(`${ENDPOINTS.JABATAN}/${idJabatan}`);
+            document.getElementById('pegawaiPosition').textContent = jabatanData.nama_jabatan;
+        },
+
+        async fetchAndDisplayDivision(idDivisi) {
+            const divisiData = await apiHandler.fetchData(`${ENDPOINTS.DIVISI}/${idDivisi}`);
+            document.getElementById('pegawaiDivision').textContent = divisiData.nama_divisi;
+        },
+
+        async fetchLeaveQuota(idPegawai) {
+            const result = await apiHandler.fetchData(`${ENDPOINTS.JATAH_CUTI}/${idPegawai}`);
             if (result.status === 'success') {
-                const data = result.data;
-                
-                // Update leave quota display
-                const umum = document.getElementById('sisaCutiUmum');
-                const khusus = document.getElementById('sisaCutiKhusus');
-                const melahirkan = document.getElementById('sisaCutiMelahirkan');
-
-                if (umum) umum.textContent = `${data.sisa_cuti_umum || 0} hari`;
-                if (khusus) khusus.textContent = `${data.sisa_cuti_menikah || 0} hari`;
-                if (melahirkan) melahirkan.textContent = `${data.sisa_cuti_melahirkan || 0} hari`;
-
-                window.leaveQuotaData = data;
+                leaveQuotaData = result.data;
+                this.updateLeaveQuotaDisplay(result.data);
             }
-        } catch (error) {
-            console.error('Error fetching jatah cuti:', error);
-        }
-    }
+        },
 
-    // Fetch Jenis Cuti
-    async function fetchJenisCuti() {
-        try {
-            const response = await fetch('http://127.0.0.1:8000/api/jenis-cuti', {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json'
-                }
-            });
+        updateLeaveQuotaDisplay(data) {
+            document.getElementById('sisaCutiUmum').textContent = `${data.sisa_cuti_umum || 0} hari`;
+            document.getElementById('sisaCutiKhusus').textContent = `${data.sisa_cuti_menikah || 0} hari`;
+            document.getElementById('sisaCutiMelahirkan').textContent = `${data.sisa_cuti_melahirkan || 0} hari`;
 
-            if (!response.ok) {
-                throw new Error('Gagal mengambil jenis cuti');
-            }
+            // Update progress bars
+            document.getElementById('progressCutiUmum').style.width = `${(data.sisa_cuti_umum / 12) * 100}%`;
+            document.getElementById('progressCutiKhusus').style.width = `${(data.sisa_cuti_menikah / 3) * 100}%`;
+            document.getElementById('progressCutiMelahirkan').style.width = `${(data.sisa_cuti_melahirkan / 90) * 100}%`;
+        },
 
-            const data = await response.json();
-            const jenisCutiSelect = document.getElementById('jenis_cuti');
-            jenisCutiSelect.innerHTML = '<option value="" selected disabled>Pilih jenis cuti</option>'; // Reset options
+        async fetchLeaveTypes() {
+            const data = await apiHandler.fetchData(ENDPOINTS.JENIS_CUTI);
+            const select = document.getElementById('jenis_cuti');
+            select.innerHTML = '<option value="" selected disabled>Pilih jenis cuti</option>';
             
             data.forEach(jenis => {
                 const option = document.createElement('option');
                 option.value = jenis.id_jenis_cuti;
                 option.textContent = jenis.nama_jenis_cuti;
                 option.setAttribute('data-kategori', jenis.kategori);
-                jenisCutiSelect.appendChild(option);
+                select.appendChild(option);
             });
-
-        } catch (error) {
-            console.error('Error fetching jenis cuti:', error);
         }
-    }
+    };
 
-    // Form Submission
-    const form = document.getElementById('pengajuanCutiForm');
-    if (form) {
-        form.addEventListener('submit', async function(event) {
-            event.preventDefault();
+    // Validators
+    const validators = {
+        validateDates() {
+            const tanggalMulai = new Date(document.getElementById('tanggal_mulai').value);
+            const tanggalSelesai = new Date(document.getElementById('tanggal_selesai').value);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
 
-            // Validasi form kosong dengan SweetAlert2
+            if (tanggalMulai < today) {
+                showErrorAlert('Tanggal mulai cuti tidak boleh kurang dari hari ini');
+                return false;
+            }
+
+            if (tanggalSelesai < tanggalMulai) {
+                showErrorAlert('Tanggal selesai harus lebih besar dari tanggal mulai');
+                return false;
+            }
+
+            return true;
+        },
+
+        validateLeaveQuota(selectedLeaveType, requestedDays) {
+            if (!leaveQuotaData) {
+                showErrorAlert('Data jatah cuti belum dimuat');
+                return false;
+            }
+
             const jenisCuti = document.getElementById('jenis_cuti');
-            const tanggalMulai = document.getElementById('tanggal_mulai');
-            const tanggalSelesai = document.getElementById('tanggal_selesai');
-            const keterangan = document.getElementById('keterangan');
+            const kategori = jenisCuti.options[jenisCuti.selectedIndex].getAttribute('data-kategori');
+            const quotaMap = {
+                'Umum': { quota: leaveQuotaData.sisa_cuti_umum, message: 'umum' },
+                'Menikah': { quota: leaveQuotaData.sisa_cuti_menikah, message: 'menikah' },
+                'Melahirkan': { quota: leaveQuotaData.sisa_cuti_melahirkan, message: 'melahirkan' }
+            };
 
+            const selectedQuota = quotaMap[kategori];
+            if (requestedDays > selectedQuota.quota) {
+                showErrorAlert(`Sisa cuti ${selectedQuota.message} Anda hanya ${selectedQuota.quota} hari`);
+                return false;
+            }
+
+            return true;
+        },
+
+        validateForm() {
+            const fields = [
+                { id: 'jenis_cuti', label: 'Jenis Cuti' },
+                { id: 'tanggal_mulai', label: 'Tanggal Mulai' },
+                { id: 'tanggal_selesai', label: 'Tanggal Selesai' },
+                { id: 'keterangan', label: 'Keterangan' }
+            ];
+            
             let isValid = true;
             let errorMessage = '';
 
-            if (!jenisCuti.value) {
-                isValid = false;
-                errorMessage += '- Jenis Cuti harus dipilih<br>';
-                jenisCuti.classList.add('is-invalid');
-            } else {
-                jenisCuti.classList.remove('is-invalid');
-            }
+            fields.forEach(field => {
+                const element = document.getElementById(field.id);
+                const value = element.value.trim();
+                
+                if (!value) {
+                    isValid = false;
+                    errorMessage += `- ${field.label} harus diisi<br>`;
+                    element.classList.add('is-invalid');
+                } else {
+                    element.classList.remove('is-invalid');
+                }
+            });
 
-            if (!tanggalMulai.value) {
-                isValid = false;
-                errorMessage += '- Tanggal Mulai harus diisi<br>';
-                tanggalMulai.classList.add('is-invalid');
-            } else {
-                tanggalMulai.classList.remove('is-invalid');
-            }
-
-            if (!tanggalSelesai.value) {
-                isValid = false;
-                errorMessage += '- Tanggal Selesai harus diisi<br>';
-                tanggalSelesai.classList.add('is-invalid');
-            } else {
-                tanggalSelesai.classList.remove('is-invalid');
-            }
-
-            if (!keterangan.value.trim()) {
-                isValid = false;
-                errorMessage += '- Keterangan harus diisi<br>';
-                keterangan.classList.add('is-invalid');
-            } else {
-                keterangan.classList.remove('is-invalid');
-            }
-
-            // Jika form tidak valid, tampilkan SweetAlert
             if (!isValid) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Formulir Tidak Lengkap',
-                    html: `Silakan lengkapi formulir berikut:<br>${errorMessage}`,
-                    customClass: {
-                        popup: 'swal-error-popup',
-                        title: 'swal-error-title',
-                        content: 'swal-error-content'
-                    }
+                    html: errorMessage,
                 });
-                return;
             }
 
-            // Validasi tanggal
-            if (!validateDates()) return;
+            return isValid;
+        }
+    };
 
-            const formData = new FormData(this);
+    // Event Handlers
+    const eventHandlers = {
+        initializeEventListeners() {
+            // Form submission
+            document.getElementById('pengajuanCutiForm').addEventListener('submit', this.handleFormSubmit.bind(this));
+            
+            // Date inputs
+            ['tanggal_mulai', 'tanggal_selesai'].forEach(id => {
+                document.getElementById(id).addEventListener('change', this.updateTotalDays);
+            });
+
+            // Reset button
+            document.getElementById('resetButton').addEventListener('click', this.handleReset);
+
+            // Back button
+            document.getElementById('btnBack').addEventListener('click', () => window.history.back());
+
+            // Date validation
+            this.initializeDateValidation();
+        },
+
+        async handleFormSubmit(event) {
+            event.preventDefault();
+            if (!validators.validateForm() || !validators.validateDates()) return;
+
+            const formData = new FormData(event.target);
             const data = {
                 id_pegawai: formData.get('id_pegawai'),
                 id_jenis_cuti: formData.get('jenis_cuti'),
@@ -626,120 +587,80 @@ document.addEventListener('DOMContentLoaded', function() {
                 alasan: formData.get('keterangan')
             };
 
-            const startDate = new Date(data.tanggal_mulai);
-            const endDate = new Date(data.tanggal_selesai);
-            const diffDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
-
-            // Validasi jatah cuti
-            if (!validateLeaveQuota(data.id_jenis_cuti, diffDays)) return;
+            const diffDays = this.calculateDaysDifference(data.tanggal_mulai, data.tanggal_selesai);
+            if (!validators.validateLeaveQuota(data.id_jenis_cuti, diffDays)) return;
 
             try {
-                const response = await fetch('http://127.0.0.1:8000/api/cuti', {
+                await apiHandler.fetchData(ENDPOINTS.CUTI, {
                     method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
 
-                const responseData = await response.json();
-
-                if (response.ok) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil',
-                        text: 'Pengajuan cuti berhasil diajukan'
-                    }).then(() => {
-                        window.location.href = '/cuti-pribadi';
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: responseData.message || 'Gagal mengajukan cuti'
-                    });
-                }
+                showSuccessAlert('Pengajuan cuti berhasil diajukan', window.location.origin + '/cuti-pribadi');
             } catch (error) {
-                console.error('Error submitting cuti:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: error.message
-                });
+                showErrorAlert(error.message);
             }
-        });
-    }
+        },
 
-    // Tambahkan fungsi untuk menghitung hari
-    function hitungHariCuti() {
-        const tanggalMulai = document.getElementById('tanggal_mulai');
-        const tanggalSelesai = document.getElementById('tanggal_selesai');
-        const totalHariCuti = document.getElementById('totalHariCuti');
+        calculateDaysDifference(startDate, endDate) {
+            return Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24)) + 1;
+        },
 
-        if (tanggalMulai.value && tanggalSelesai.value) {
-            const startDate = new Date(tanggalMulai.value);
-            const endDate = new Date(tanggalSelesai.value);
-            
-            // Tambahkan 1 untuk menghitung hari terakhir
-            const diffDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
-            
-            totalHariCuti.textContent = `${diffDays} hari`;
-        } else {
-            totalHariCuti.textContent = '0 hari';
-        }
-    }
+        updateTotalDays() {
+            const start = document.getElementById('tanggal_mulai').value;
+            const end = document.getElementById('tanggal_selesai').value;
+            const totalElement = document.getElementById('totalHariCuti');
 
-    // Tambahkan event listener pada input tanggal
-    document.getElementById('tanggal_mulai').addEventListener('change', hitungHariCuti);
-    document.getElementById('tanggal_selesai').addEventListener('change', hitungHariCuti);
+            if (start && end) {
+                const days = eventHandlers.calculateDaysDifference(start, end);
+                totalElement.textContent = `${days} hari`;
+            } else {
+                totalElement.textContent = '0 hari';
+            }
+        },
 
-    // Reset button functionality
-    const resetButton = document.getElementById('resetButton');
-    if (resetButton) {
-        resetButton.addEventListener('click', function() {
-            // Reset form
+        handleReset() {
             document.getElementById('pengajuanCutiForm').reset();
-            
-            // Reset total hari cuti
             document.getElementById('totalHariCuti').textContent = '0 hari';
-        });
-    }
+            // Remove validation classes
+            document.querySelectorAll('.is-invalid').forEach(element => {
+                element.classList.remove('is-invalid');
+            });
+        },
 
-    // Validasi tanggal dengan warna dan efek visual
-    function validateDateRange() {
-        const tanggalMulai = document.getElementById('tanggal_mulai');
-        const tanggalSelesai = document.getElementById('tanggal_selesai');
+        initializeDateValidation() {
+            const tanggalMulai = document.getElementById('tanggal_mulai');
+            const tanggalSelesai = document.getElementById('tanggal_selesai');
 
-        // Tambahkan event listener untuk validasi real-time
-        tanggalMulai.addEventListener('change', function() {
-            // Set min date untuk tanggal selesai
-            tanggalSelesai.min = tanggalMulai.value;
-            
-            // Visual feedback
-            if (new Date(this.value) < new Date()) {
-                this.classList.add('is-invalid');
-            } else {
-                this.classList.remove('is-invalid');
-            }
-        });
+            tanggalMulai.addEventListener('change', function() {
+                tanggalSelesai.min = this.value;
+                this.classList.toggle('is-invalid', new Date(this.value) < new Date());
+            });
 
-        tanggalSelesai.addEventListener('change', function() {
-            // Visual feedback
-            if (new Date(this.value) < new Date(tanggalMulai.value)) {
-                this.classList.add('is-invalid');
-            } else {
-                this.classList.remove('is-invalid');
-            }
-        });
-    }
+            tanggalSelesai.addEventListener('change', function() {
+                this.classList.toggle('is-invalid', new Date(this.value) < new Date(tanggalMulai.value));
+            });
+        }
+    };
 
-    // Panggil fungsi validasi
-    validateDateRange();
-    // Initialize data fetching
-    fetchUserAndPegawai();
-    fetchJenisCuti();
+    // Initialize Application
+    const initialize = async () => {
+        if (!token) {
+            showErrorAlert('Token tidak ditemukan. Silakan login kembali.');
+            return;
+        }
+
+        try {
+            await dataFetcher.fetchUserAndPegawaiDetails();
+            eventHandlers.initializeEventListeners();
+        } catch (error) {
+            showErrorAlert('Gagal menginisialisasi aplikasi: ' + error.message);
+        }
+    };
+
+    // Start the application
+    initialize();
 });
 </script>
 @endpush

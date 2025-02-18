@@ -235,17 +235,17 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         try {
-            // Show loading state
-            const loadingAlert = await Swal.fire({
-                title: 'Mohon Tunggu',
-                text: 'Sedang memperbarui data...',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                showConfirmButton: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
+            // // Show loading state
+            // const loadingAlert = await Swal.fire({
+            //     title: 'Mohon Tunggu',
+            //     text: 'Sedang memperbarui data...',
+            //     allowOutsideClick: false,
+            //     allowEscapeKey: false,
+            //     showConfirmButton: false,
+            //     didOpen: () => {
+            //         Swal.showLoading();
+            //     }
+            // });
 
             // Send update request
             const response = await fetch(`/api/divisi/${divisiId}`, {
@@ -258,7 +258,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify(formData)
             });
 
-            await loadingAlert.close();
+            // await loadingAlert.close();
 
             const responseData = await response.json();
 

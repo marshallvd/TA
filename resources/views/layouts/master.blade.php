@@ -7,7 +7,7 @@
     <title>HRMS SEB - @yield('title')</title>
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{{ asset('assets/images/logo seb.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('assets/images/logo_app.png') }}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <!-- CSS Dependencies -->
     <link rel="stylesheet" href="{{ asset('assets/css/core/libs.min.css') }}">
@@ -38,6 +38,7 @@
             --sidebar-collapsed-width: 80px;
             --transition-speed: 0.3s;
         }
+
 
         .wrapper {
             display: flex;

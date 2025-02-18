@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const resetButton = document.getElementById('resetButton');
     const pegawaiSelect = document.getElementById('pegawaiSelect');
     const roleSelect = document.getElementById('roleSelect');
-    const API_URL = 'http://127.0.0.1:8000/api';
+    const API_URL = API_BASE_URL;
     
     // Store original data for reset functionality
     let originalData = null;

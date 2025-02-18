@@ -131,17 +131,17 @@
                             </div>
                         </div>
                         
-                        <!-- Action Buttons -->
-                        <div class="row mt-5">
-                            <div class="col-12 d-flex justify-content-end gap-2">
-                                <a href="{{ route('rekrutmen.wawancara.index') }}" class="btn btn-danger me-2">
-                                    <i class="bi bi-arrow-left me-2"></i>Kembali
-                                </a>
-                                <button type="submit" class="btn btn-success">
-                                    <i class="bi bi-save me-2"></i>Simpan Hasil Seleksi
-                                </button>
-                            </div>
-                        </div>
+<!-- Action Buttons -->
+<div class="row mt-5">
+    <div class="col-12 d-flex justify-content-end gap-2">
+        <button type="reset" class="btn btn-warning me-2">
+            <i class="bi bi-arrow-counterclockwise me-2"></i>Reset
+        </button>
+        <button type="submit" class="btn btn-success">
+            <i class="bi bi-save me-2"></i>Simpan Hasil Seleksi
+        </button>
+    </div>
+</div>
                     </form>
                 </div>
             </div>
@@ -390,7 +390,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 title: 'Berhasil',
                 text: result.pesan || 'Hasil seleksi berhasil disimpan'
             }).then(() => {
-                window.location.href = '/rekrutmen/wawancara';
+                window.location.href = '/rekrutmen/hasil_seleksi';
             });
 
         } catch (error) {

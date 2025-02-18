@@ -40,4 +40,9 @@ class PenilaianKinerjaController extends Controller
             // Kirim data ke tampilan
             return view('penilaian_kinerja.view', compact('penilaian'));
         }
+
+    public function setting()
+    {
+        return view('penilaian_kinerja.setting');
+    }
 }

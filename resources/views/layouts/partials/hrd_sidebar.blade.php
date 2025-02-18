@@ -7,10 +7,10 @@
             <!--Logo start-->
             <div class="logo-main">
                 <div class="logo-normal">
-                    <img src="{{ asset('assets/images/logo seb.png') }}" alt="Logo HRMS SEB" class="icon-30">
+                    <img src="{{ asset('assets/images/logo_app.png') }}" alt="Logo HRMS SEB" class="icon-30">
                 </div>
                 <div class="logo-mini">
-                    <img src="{{ asset('assets/images/logo seb.png') }}" alt="Logo HRMS SEB" class="icon-30">
+                    <img src="{{ asset('assets/images/logo_app.png') }}" alt="Logo HRMS SEB" class="icon-30">
                 </div>
             </div>
             <!--logo End-->
@@ -88,7 +88,7 @@
                                 <span class="item-name">Jenis Cuti</span>
                             </a>
                         </li> --}}
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link " href="{{ route('jatah_cuti.index') }}">
                                <i class="icon">
                                     <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
@@ -100,7 +100,7 @@
                                 <i class="sidenav-mini-icon"> V </i>
                                 <span class="item-name">Jatah Cuti</span>
                             </a>
-                        </li>
+                        </li> --}}
                         <li class="nav-item">
                             <a class="nav-link " href="{{ route('cuti.index') }}">
                                <i class="icon">
@@ -225,6 +225,18 @@
                                 <span class="item-name">Daftar Penilaian</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('penilaian_kinerja.pribadi') }}">
+                                <i class="icon">
+                                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                        <g>
+                                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                        </g>
+                                    </svg>
+                                </i>
+                                <span class="item-name">Penilaian Pribadi</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item">
@@ -243,7 +255,7 @@
                         </i>
                     </a>
                     <ul class="sub-nav collapse" id="penggajian" data-bs-parent="#sidebar-menu">
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link" href="{{ route('komponen_gaji.index') }}" role="button">
                                 <i class="icon">
                                     <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
@@ -254,7 +266,7 @@
                                 </i>
                                 <span class="item-name">Komponen Gaji</span>
                             </a>
-                        </li>
+                        </li> --}}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('gaji.index') }}">
                                 <i class="icon">
@@ -298,7 +310,7 @@
                         </i>
                     </a>
                     <ul class="sub-nav collapse" id="sidebar-form" data-bs-parent="#sidebar-menu">
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link" href="{{ route('landing.index') }}">
                                 <i class="icon">
                                     <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
@@ -323,7 +335,7 @@
                                <i class="sidenav-mini-icon"> E </i>
                                <span class="item-name">Lowongan</span>
                             </a>
-                        </li>
+                        </li> --}}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('rekrutmen.lamaran.index') }}">
                                 <i class="icon">

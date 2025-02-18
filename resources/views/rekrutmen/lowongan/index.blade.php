@@ -38,16 +38,16 @@
                         <div class="table-responsive">
                             <table id="lowongan-table" class="table table-striped" style="width:100%">
                                 <thead>
-                                    <tr class="ligth">
-                                        <th><b>No</b></th>
-                                        <th><b>Judul Pekerjaan</b></th>
-                                        <th><b>Jabatan</b></th>
-                                        <th><b>Lokasi</b></th>
-                                        <th><b>Rentang Gaji</b></th>
-                                        <th><b>Status</b></th>
-                                        <th><b>Periode</b></th>
-                                        <th><b>Total Pelamar</b></th>
-                                        <th style="min-width: 100px"><b>Action</b></th>
+                                    <tr class="light">
+                                        <th><i class="bi bi-hash me-1"></i>No</th>
+                                        <th><i class="bi bi-briefcase me-1"></i>Judul Pekerjaan</th>
+                                        <th><i class="bi bi-person-badge me-1"></i>Jabatan</th>
+                                        <th><i class="bi bi-geo-alt me-1"></i>Lokasi</th>
+                                        <th><i class="bi bi-cash-stack me-1"></i>Rentang Gaji</th>
+                                        <th><i class="bi bi-check-square me-1"></i>Status</th>
+                                        <th><i class="bi bi-calendar-event me-1"></i>Periode</th>
+                                        <th><i class="bi bi-people me-1"></i>Total Pelamar</th>
+                                        <th style="min-width: 100px"><i class="bi bi-three-dots-vertical me-1"></i>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
     async function fetchData() {
         try {
             // Mengambil data lowongan
-            const lowonganResponse = await fetch('http://127.0.0.1:8000/api/lowongan', {
+            const lowonganResponse = await fetch(`${API_BASE_URL}/lowongan`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const lowonganData = await lowonganResponse.json();
 
             // Mengambil data lamaran untuk setiap lowongan
-            const lamaranResponse = await fetch('http://127.0.0.1:8000/api/admin/lamaran', {
+            const lamaranResponse = await fetch(`${API_BASE_URL}/admin/lamaran`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fungsi untuk menghapus lowongan
     async function deleteLowongan(id) {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/lowongan/${id}`, {
+            const response = await fetch(`${API_BASE_URL}/lowongan/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -267,9 +267,11 @@ document.addEventListener('DOMContentLoaded', function() {
             text: 'Apakah Anda yakin ingin menghapus lowongan ini?',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Ya, Hapus',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
             cancelButtonText: 'Batal',
-            reverseButtons: true
+            confirmButtonText: 'Ya, Hapus',
+            reverseButtons: false
         }).then((result) => {
             if (result.isConfirmed) {
                 deleteLowongan(id)

@@ -8,10 +8,10 @@
             <!--Logo start-->
             <div class="logo-main">
                 <div class="logo-normal">
-                    <img src="{{ asset('assets/images/logo seb.png') }}" alt="Logo HRMS SEB" class="icon-30">
+                    <img src="{{ asset('assets/images/logo_app.png') }}" alt="Logo HRMS SEB" class="icon-30">
                 </div>
                 <div class="logo-mini">
-                    <img src="{{ asset('assets/images/logo seb.png') }}" alt="Logo HRMS SEB" class="icon-30">
+                    <img src="{{ asset('assets/images/logo_app.png') }}" alt="Logo HRMS SEB" class="icon-30">
                 </div>
             </div>
             <!--logo End-->
@@ -351,6 +351,30 @@
                                 <span class="item-name">Daftar Penilaian</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('penilaian_kinerja.pribadi') }}">
+                                <i class="icon">
+                                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                        <g>
+                                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                        </g>
+                                    </svg>
+                                </i>
+                                <span class="item-name">Penilaian Pribadi</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('penilaian_kinerja.setting') }}">
+                                <i class="icon">
+                                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                        <g>
+                                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                        </g>
+                                    </svg>
+                                </i>
+                                <span class="item-name">Setting Penilaian</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item">
@@ -403,6 +427,18 @@
                                     </svg>
                                 </i>
                                 <span class="item-name">Gaji Pribadi</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('gaji.setting') }}">
+                                <i class="icon">
+                                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                        <g>
+                                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                        </g>
+                                    </svg>
+                                </i>
+                                <span class="item-name">Setting Gaji</span>
                             </a>
                         </li>
                     </ul>

@@ -142,7 +142,7 @@
 
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="formKPI">
-                                <h5 class="mb-3">Penilaian KPI</h5>
+                                <h5 class="mb-3">Edit Penilaian KPI</h5>
                                 <div id="kpiItems">
                                     <div class="text-center py-3">
                                         <div class="spinner-border text-primary" role="status">
@@ -154,7 +154,7 @@
                             </div>
 
                             <div class="tab-pane fade" id="formKompetensi">
-                                <h5 class="mb-3">Peni laian Kompetensi</h5>
+                                <h5 class="mb-3">Edit Penilaian Kompetensi</h5>
                                 <div id="kompetensiItems">
                                     <div class="text-center py-3">
                                         <div class="spinner-border text-primary" role="status">
@@ -166,7 +166,7 @@
                             </div>
 
                             <div class="tab-pane fade" id="formCoreValues">
-                                <h5 class="mb-3">Penilaian Core Values</h5>
+                                <h5 class="mb-3">Edit Penilaian Core Values</h5>
                                 <div id="coreValuesItems">
                                     <div class="text-center py-3">
                                         <div class="spinner-border text-primary" role="status">
@@ -257,7 +257,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function fetchData(endpoint) {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/${endpoint}`, {
+            const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -345,7 +345,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function fetchData(endpoint) {
     try {
-        const response = await fetch(`http://127.0.0.1:8000/api/${endpoint}`, {
+        const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -763,7 +763,7 @@ async function makeApiCall(endpoint, data, method = 'POST') {
     try {
         console.log(`Making ${method} request to ${endpoint}:`, data);
         
-        const response = await fetch(`http://127.0.0.1:8000/api/${endpoint}`, {
+        const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
             method: method,
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,

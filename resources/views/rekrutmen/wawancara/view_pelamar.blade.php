@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         try {
-            const response = await fetch(`http://localhost:8000/api/wawancara/${wawancaraId}`, {
+            const response = await fetch(`${API_BASE_URL}/wawancara/${wawancaraId}`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',

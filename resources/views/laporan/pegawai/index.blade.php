@@ -288,15 +288,15 @@ Laporan Kepegawaian
                                 <table id="pegawai-list-table" class="table table-striped table-bordered" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>No</th>
-                                            <th>Nama</th>
-                                            <th>Jenis Kelamin</th>
-                                            <th>Telepon</th>
-                                            <th>Email</th>
-                                            <th>Jabatan</th>
-                                            <th>Divisi</th>
-                                            <th>Status</th>
-                                            <th>Tanggal Masuk</th>
+                                            <th><i class="bi bi-hash me-1"></i>No</th>
+                                            <th><i class="bi bi-person me-1"></i>Nama</th>
+                                            <th><i class="bi bi-gender-ambiguous me-1"></i>Jenis Kelamin</th>
+                                            <th><i class="bi bi-phone me-1"></i>Telepon</th>
+                                            <th><i class="bi bi-envelope me-1"></i>Email</th>
+                                            <th><i class="bi bi-person-badge me-1"></i>Jabatan</th>
+                                            <th><i class="bi bi-building me-1"></i>Divisi</th>
+                                            <th><i class="bi bi-check-square me-1"></i>Status</th>
+                                            <th><i class="bi bi-calendar me-1"></i>Tanggal Masuk</th>
                                         </tr>
                                     </thead>
                                     <tbody>

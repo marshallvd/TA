@@ -374,7 +374,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fetch Divisi
     async function fetchDivisi() {
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/divisi', {
+            const response = await fetch(`${API_BASE_URL}/divisi`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Accept': 'application/json'
@@ -407,7 +407,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fetch Jabatan berdasarkan Divisi
     async function fetchJabatanByDivisi(idDivisi) {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/jabatan/divisi/${idDivisi}`, {
+            const response = await fetch(`${API_BASE_URL}/jabatan/divisi/${idDivisi}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Accept': 'application/json'
@@ -552,7 +552,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             // Kirim data ke API
-            const response = await fetch('http://127.0.0.1:8000/api/lowongan', {
+            const response = await fetch(`${API_BASE_URL}/lowongan`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,

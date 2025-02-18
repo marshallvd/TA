@@ -42,7 +42,7 @@ Laporan Rekrutmen
                                 </div>
                             </div>
                             <h2 id="totalPelamarCount" class="counter mb-0">0</h2>
-                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#chartModal" data-chart-type="pendidikanPelamar">
+                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#periodModal" data-chart-type="pendidikanPelamar">
                                 <i class="bi bi-bar-chart-line me-1"></i>Grafik
                             </button>
                         </div>
@@ -60,7 +60,7 @@ Laporan Rekrutmen
                                 </div>
                             </div>
                             <h2 id="totalLowonganCount" class="counter mb-0">0</h2>
-                            <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#chartModal" data-chart-type="lowonganJabatan">
+                            <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#periodModal" data-chart-type="lowonganJabatan">
                                 <i class="bi bi-bar-chart-line me-1"></i>Grafik
                             </button>
                         </div>
@@ -78,7 +78,7 @@ Laporan Rekrutmen
                                 </div>
                             </div>
                             <h2 id="totalLamaranCount" class="counter mb-0">0</h2>
-                            <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#chartModal" data-chart-type="statusLamaran">
+                            <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#periodModal" data-chart-type="statusLamaran">
                                 <i class="bi bi-bar-chart-line me-1"></i>Grafik
                             </button>
                         </div>
@@ -96,7 +96,7 @@ Laporan Rekrutmen
                                 </div>
                             </div>
                             <h2 id="totalWawancaraCount" class="counter mb-0">0</h2>
-                            <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#chartModal" data-chart-type="hasilWawancara">
+                            <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#periodModal" data-chart-type="hasilWawancara">
                                 <i class="bi bi-bar-chart-line me-1"></i>Grafik
                             </button>
                         </div>
@@ -224,11 +224,79 @@ Laporan Rekrutmen
         </div>
     </div>
 </div>
+
+
+<!-- Modal for Selecting Period -->
+<!-- Modal for Selecting Period -->
+<div class="modal fade" id="periodChartModal" tabindex="-1" aria-labelledby="periodModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="periodModalLabel">
+                    <i class="bi bi-calendar-check me-2"></i>Pilih Periode Laporan Rekrutmen
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="chartYearFilter" class="form-label">
+                            <i class="bi bi-calendar-year me-2"></i>Tahun:
+                        </label>
+                        <select id="chartYearFilter" class="form-control">
+                            <option value="">Pilih Tahun</option>
+                            <!-- Years will be populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="chartMonthFilter" class="form-label">
+                            <i class="bi bi-calendar-month me-2"></i>Bulan:
+                        </label>
+                        <select id="chartMonthFilter" class="form-control">
+                            <option value="">Pilih Bulan</option>
+                            <option value="01">Januari</option>
+                            <option value="02">Februari</option>
+                            <option value="03">Maret</option>
+                            <option value="04">April</option>
+                            <option value="05">Mei</option>
+                            <option value="06">Juni</option>
+                            <option value="07">Juli</option>
+                            <option value="08">Agustus</option>
+                            <option value="09">September</option>
+                            <option value="10">Oktober</option>
+                            <option value="11">November</option>
+                            <option value="12">Desember</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-2"></i>Batal
+                </button>
+                <button type="button" class="btn btn-primary" id="generateChartBtn">
+                    <i class="bi bi-check-circle me-2"></i>Tampilkan
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="chartModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <canvas id="chartCanvas"></canvas> <!-- Pastikan id ini benar -->
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @push('scripts')
 <script>
- document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     let rekrutmenTable;
     const token = localStorage.getItem('token');
 
@@ -643,236 +711,340 @@ Laporan Rekrutmen
         window.existingChart = new Chart(ctx, chartConfig);
     }
 
-    // Common chart options
-    const commonBarChartOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: { display: false },
+    // Warna yang lebih variatif dan konsisten
+    const colorPalettes = {
+        totalCuti: [
+            '#4CAF50', '#2196F3', '#FFC107', '#E91E63', '#9C27B0', 
+            '#00BCD4', '#FF9800', '#795548', '#607D8B', '#3F51B5'
+        ],
+        statusCuti: [
+            '#4CAF50', '#2196F3', '#FFC107', '#E91E63', '#9C27B0', 
+            '#00BCD4', '#FF9800', '#795548', '#607D8B', '#3F51B5'
+        ],
+        cutiPerDivisi: [
+            '#4CAF50', '#2196F3', '#FFC107', '#E91E63', '#9C27B0', 
+            '#00BCD4', '#FF9800', '#795548', '#607D8B', '#3F51B5'
+        ],
+        cutiPerJabatan: [
+            '#4CAF50', '#2196F3', '#FFC107', '#E91E63', '#9C27B0', 
+            '#00BCD4', '#FF9800', '#795548', '#607D8B', '#3F51B5'
+        ]
+    };
+// Common chart options with updated colors
+const commonBarChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        legend: { display: false },
+    },
+    scales: {
+        y: {
+            beginAtZero: true,
+            ticks: { stepSize: 1 }
         },
-        scales: {
-            y: {
-                beginAtZero: true,
-                ticks: {
-                    stepSize: 1
-                }
-            },
-            x: {
-                ticks: {
-                    maxRotation: 45,
-                    minRotation: 45
+        x: {
+            ticks: {
+                maxRotation: 45,
+                minRotation: 45
+            }
+        }
+    }
+};
+
+// Pendidikan Pelamar Chart
+function configurePendidikanPelamarChart(lamaranData) {
+    const pendidikanCounts = lamaranData.reduce((acc, curr) => {
+        const pendidikan = curr.pendidikan_terakhir || 'Tidak Diketahui';
+        acc[pendidikan] = (acc[pendidikan] || 0) + 1;
+        return acc;
+    }, {});
+
+    return {
+        type: 'bar',
+        data: {
+            labels: Object.keys(pendidikanCounts),
+            datasets: [{
+                label: 'Jumlah Pelamar',
+                data: Object.values(pendidikanCounts),
+                backgroundColor: colorPalettes.totalCuti,
+                borderColor: colorPalettes.totalCuti,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            ...commonBarChartOptions,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Distribusi Pendidikan Pelamar'
                 }
             }
         }
     };
+}
 
-    // Pendidikan Pelamar Chart
-    function configurePendidikanPelamarChart(lamaranData) {
-        const pendidikanCounts = lamaranData.reduce((acc, curr) => {
-            const pendidikan = curr.pendidikan_terakhir || 'Tidak Diketahui';
-            acc[pendidikan] = (acc[pendidikan] || 0) + 1;
-            return acc;
-        }, {});
+// Lowongan per Jabatan Chart
+function configureLowonganJabatanChart(lowonganData) {
+    const jabatanCounts = lowonganData.reduce((acc, curr) => {
+        const jabatan = curr.jabatan?.nama_jabatan || 'Tidak Diketahui';
+        acc[jabatan] = (acc[jabatan] || 0) + 1;
+        return acc;
+    }, {});
 
-        return {
-            type: 'bar',
-            data: {
-                labels: Object.keys(pendidikanCounts),
-                datasets: [{
-                    label: 'Jumlah Pelamar',
-                    data: Object.values(pendidikanCounts),
-                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                ...commonBarChartOptions,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Distribusi Pendidikan Pelamar'
-                    }
+    return {
+        type: 'bar',
+        data: {
+            labels: Object.keys(jabatanCounts),
+            datasets: [{
+                label: 'Jumlah Lowongan',
+                data: Object.values(jabatanCounts),
+                backgroundColor: colorPalettes.cutiPerJabatan,
+                borderColor: colorPalettes.cutiPerJabatan,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            ...commonBarChartOptions,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Lowongan per Jabatan'
                 }
             }
-        };
-    }
+        }
+    };
+}
 
-    // Lowongan per Jabatan Chart
-    function configureLowonganJabatanChart(lowonganData) {
-        const jabatanCounts = lowonganData.reduce((acc, curr) => {
-            const jabatan = curr.jabatan?.nama_jabatan || 'Tidak Diketahui';
-            acc[jabatan] = (acc[jabatan] || 0) + 1;
-            return acc;
-        }, {});
+// Status Lamaran Chart
+function configureStatusLamaranChart(lamaranData) {
+    const statusCounts = lamaranData.reduce((acc, curr) => {
+        const status = curr.status_lamaran || 'Tidak Diketahui';
+        acc[status] = (acc[status] || 0) + 1;
+        return acc;
+    }, {});
 
-        return {
-            type: 'bar',
-            data: {
-                labels: Object.keys(jabatanCounts),
-                datasets: [{
-                    label: 'Jumlah Lowongan',
-                    data: Object.values(jabatanCounts),
-                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                ...commonBarChartOptions,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Lowongan per Jabatan'
-                    }
+    return {
+        type: 'bar',
+        data: {
+            labels: Object.keys(statusCounts),
+            datasets: [{
+                label: 'Jumlah Lamaran',
+                data: Object.values(statusCounts),
+                backgroundColor: colorPalettes.statusCuti,
+                borderColor: colorPalettes.statusCuti,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            ...commonBarChartOptions,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Status Lamaran'
                 }
             }
-        };
-    }
+        }
+    };
+}
 
-    // Status Lamaran Chart
-    function configureStatusLamaranChart(lamaranData) {
-        const statusCounts = lamaranData.reduce((acc, curr) => {
-            const status = curr.status_lamaran || 'Tidak Diketahui';
-            acc[status] = (acc[status] || 0) + 1;
-            return acc;
-        }, {});
+// Hasil Wawancara Chart
+function configureHasilWawancaraChart(wawancaraData) {
+    const hasilCounts = wawancaraData.reduce((acc, curr) => {
+        const hasil = curr.hasil || 'Belum Wawancara';
+        acc[hasil] = (acc[hasil] || 0) + 1;
+        return acc;
+    }, {});
 
-        return {
-            type: 'bar',
-            data: {
-                labels: Object.keys(statusCounts),
-                datasets: [{
-                    label: 'Jumlah Lamaran',
-                    data: Object.values(statusCounts),
-                    backgroundColor: 'rgba(255, 206, 86, 0.6)',
-                    borderColor: 'rgba(255, 206, 86, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                ...commonBarChartOptions,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Status Lamaran'
-                    }
+    return {
+        type: 'bar',
+        data: {
+            labels: Object.keys(hasilCounts),
+            datasets: [{
+                label: 'Jumlah Wawancara',
+                data: Object.values(hasilCounts),
+                backgroundColor: colorPalettes.cutiPerDivisi,
+                borderColor: colorPalettes.cutiPerDivisi,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            ...commonBarChartOptions,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Hasil Wawancara'
                 }
             }
-        };
-    }
+        }
+    };
+}
 
-    // Hasil Wawancara Chart
-    function configureHasilWawancaraChart(wawancaraData) {
-        const hasilCounts = wawancaraData.reduce((acc, curr) => {
-            const hasil = curr.hasil || 'Belum Wawancara';
-            acc[hasil] = (acc[hasil] || 0) + 1;
-            return acc;
-        }, {});
+// Hasil Seleksi Chart
+function configureHasilSeleksiChart(hasilSeleksiData) {
+    const statusCounts = hasilSeleksiData.reduce((acc, curr) => {
+        const status = curr.status || 'Belum Ada Hasil';
+        acc[status] = (acc[status] || 0) + 1;
+        return acc;
+    }, {});
 
-        return {
-            type: 'bar',
-            data: {
-                labels: Object.keys(hasilCounts),
-                datasets: [{
-                    label: 'Jumlah Wawancara',
-                    data: Object.values(hasilCounts),
-                    backgroundColor: 'rgba(153, 102, 255, 0.6)',
-                    borderColor: 'rgba(153, 102, 255, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                ...commonBarChartOptions,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Hasil Wawancara'
-                    }
+    return {
+        type: 'bar',
+        data: {
+            labels: Object.keys(statusCounts),
+            datasets: [{
+                label: 'Jumlah Hasil Seleksi',
+                data: Object.values(statusCounts),
+                backgroundColor: colorPalettes.totalCuti,
+                borderColor: colorPalettes.totalCuti,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            ...commonBarChartOptions,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Status Hasil Seleksi'
                 }
             }
-        };
-    }
+        }
+    };
+}
 
-    // Hasil Seleksi Chart
-    function configureHasilSeleksiChart(hasilSeleksiData) {
-        const statusCounts = hasilSeleksiData.reduce((acc, curr) => {
-            const status = curr.status || 'Belum Ada Hasil';
-            acc[status] = (acc[status] || 0) + 1;
-            return acc;
-        }, {});
-
-        return {
-            type: 'bar',
-            data: {
-                labels: Object.keys(statusCounts),
-                datasets: [{
-                    label: 'Jumlah Hasil Seleksi',
-                    data: Object.values(statusCounts),
-                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                ...commonBarChartOptions,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Status Hasil Seleksi'
-                    }
-                }
-            }
-        };
-    }
-
-    // Event Listener for Chart Modal
-    $('#chartModal').on('show.bs.modal', async function(event) {
-        const button = $(event.relatedTarget);
-        const chartType = button.data('chart-type');
+        // Add event listener for chart buttons
+        $('.btn[data-chart-type]').on('click', function(e) {
+        e.preventDefault();
+        const chartType = $(this).data('chart-type');
         
-        try {
-            // Set modal height for better bar chart display
-            document.getElementById('chartCanvas').style.height = '400px';
-            
-            // Fetch required data based on chart type
-            let chartData;
-            switch(chartType) {
-                case 'pendidikanPelamar':
-                case 'statusLamaran':
-                    chartData = await fetchData('admin/lamaran');
-                    break;
-                case 'lowonganJabatan':
-                    chartData = await fetchData('lowongan');
-                    break;
-                case 'hasilWawancara':
-                    chartData = await fetchData('wawancara');
-                    break;
-                case 'hasilSeleksi':
-                    chartData = await fetchData('hasil-seleksi');
-                    break;
-            }
+        // Store chart type in the period modal's data
+        $('#periodChartModal').data('chartType', chartType);
+        
+        // Populate year dropdown (last 5 years)
+        const currentYear = new Date().getFullYear();
+        const yearSelect = $('#chartYearFilter');
+        yearSelect.empty();
+        yearSelect.append('<option value="">Pilih Tahun</option>');
+        for (let year = currentYear; year >= currentYear - 4; year--) {
+            yearSelect.append(`<option value="${year}">${year}</option>`);
+        }
+        
+        // Show period selection modal
+        $('#periodChartModal').modal('show');
+    });
 
-            // Update modal title based on chart type
-            const titles = {
-                pendidikanPelamar: 'Grafik Distribusi Pendidikan Pelamar',
-                lowonganJabatan: 'Grafik Lowongan per Jabatan',
-                statusLamaran: 'Grafik Status Lamaran',
-                hasilWawancara: 'Grafik Hasil Wawancara',
-                hasilSeleksi: 'Grafik Status Hasil Seleksi'
-            };
-            $('#chartModalLabel').text(titles[chartType]);
+    // Handle generate chart button click
+    $('#generateChartBtn').on('click', async function() {
+    const year = $('#chartYearFilter').val();
+    const month = $('#chartMonthFilter').val();
+    
+    if (!year || !month) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Peringatan',
+            text: 'Silakan pilih tahun dan bulan terlebih dahulu!'
+        });
+        return;
+    }
 
-            // Configure and show chart
-            if (typeof Chart !== 'undefined' && chartData) {
-                configureChartModal(chartType, chartData);
-            } else {
-                console.error('Chart.js not loaded or data not available');
-                showErrorAlert('Gagal memuat grafik');
-            }
-        } catch (error) {
-            console.error('Error loading chart:', error);
-            showErrorAlert('Terjadi kesalahan saat memuat grafik');
+    const chartType = $('#periodChartModal').data('chartType');
+    
+    try {
+        // Close period modal
+        $('#periodChartModal').modal('hide');
+        
+        // Show loading
+        Swal.fire({
+            title: 'Memuat data...',
+            allowOutsideClick: false,
+            didOpen: () => Swal.showLoading()
+        });
+
+        // Fetch data based on selected period
+        let chartData;
+        switch(chartType) {
+            case 'pendidikanPelamar':
+            case 'statusLamaran':
+                chartData = await fetchData('admin/lamaran');
+                break;
+            case 'lowonganJabatan':
+                chartData = await fetchData('lowongan');
+                break;
+            case 'hasilWawancara':
+                chartData = await fetchData('wawancara');
+                break;
+            case 'hasilSeleksi':
+                chartData = await fetchData('hasil-seleksi');
+                break;
+        }
+
+        // Filter data based on selected period
+        const filteredData = chartData.filter(item => {
+            const itemDate = new Date(item.tanggal_dibuat);
+            return itemDate.getFullYear() === parseInt(year) && 
+                   (itemDate.getMonth() + 1) === parseInt(month);
+        });
+
+        // Close loading
+        Swal.close();
+
+        // Check if filtered data is empty
+        if (!filteredData || filteredData.length === 0) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Tidak Ada Data',
+                text: 'Tidak terdapat data rekrutmen untuk periode yang dipilih.',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            return;
+        }
+
+        // Show chart modal
+        $('#chartModal').modal('show');
+
+        // Update modal title with period
+        const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                          'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        const periodText = `${monthNames[parseInt(month) - 1]} ${year}`;
+        
+        const titles = {
+            pendidikanPelamar: `Grafik Distribusi Pendidikan Pelamar - ${periodText}`,
+            lowonganJabatan: `Grafik Lowongan per Jabatan - ${periodText}`,
+            statusLamaran: `Grafik Status Lamaran - ${periodText}`,
+            hasilWawancara: `Grafik Hasil Wawancara - ${periodText}`,
+            hasilSeleksi: `Grafik Status Hasil Seleksi - ${periodText}`
+        };
+        $('#chartModalLabel').text(titles[chartType]);
+
+        // Configure and show chart
+        if (typeof Chart !== 'undefined' && filteredData) {
+            configureChartModal(chartType, filteredData);
+        } else {
+            throw new Error('Chart.js not loaded or data not available');
+        }
+
+    } catch (error) {
+        console.error('Error generating chart:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Terjadi kesalahan saat memuat grafik'
+        });
+    }
+});
+
+    // Reset period selection when period modal is hidden
+    $('#periodChartModal').on('hidden.bs.modal', function() {
+        $('#chartYearFilter').val('');
+        $('#chartMonthFilter').val('');
+    });
+
+    // Cleanup when chart modal is hidden
+    $('#chartModal').on('hidden.bs.modal', function() {
+        if (window.existingChart) {
+            window.existingChart.destroy();
         }
     });
 

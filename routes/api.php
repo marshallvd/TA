@@ -33,6 +33,10 @@ use App\Http\Controllers\Api\HasilSeleksiController;
 use App\Http\Controllers\Api\AdminLamaranController;
 use App\Http\Controllers\Api\JatahCutiController;
 
+// Bobott penilaian kinerja
+use App\Http\Controllers\Api\SettingBobotController;
+
+use App\Http\Controllers\Api\SettingGajiController;
 // Route::middleware(['cache.response'])->group(function () {
 // Publik routes (tanpa token)
 Route::prefix('public')->group(function () {
@@ -123,7 +127,8 @@ Route::get('/hasil-seleksi/{id}', [HasilSeleksiController::class, 'show']);
             Route::apiResource('gaji', GajiController::class);
             Route::get('pegawai/gaji-status', [GajiController::class, 'getGajiStatus']);
             Route::put('/update-gaji/{id}', [GajiController::class, 'update']);
-
+            Route::get('setting-gaji', [SettingGajiController::class, 'index']);
+            Route::post('setting-gaji', [SettingGajiController::class, 'update']);
 
             // Route untuk melihat semua pelamar
             Route::get('/pelamar', [PelamarController::class, 'index']);
@@ -170,6 +175,7 @@ Route::get('/hasil-seleksi/{id}', [HasilSeleksiController::class, 'show']);
 
         // Admin Only Routes
         Route::group(['middleware' => ['role:admin,hrd,pegawai']], function () {
+            Route::apiResource('setting-bobot', SettingBobotController::class);
             // Master Data Management
             Route::apiResource('users', UserController::class);
             Route::apiResource('divisi', DivisiController::class);

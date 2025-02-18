@@ -7,13 +7,30 @@
 
 @section('content')
 <div class="container-fluid content-inner mt-n5 py-0">
+    {{-- Header Card --}}
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div class="flex-grow-1">
+                    <b><h2 class="card-title mb-1">Manajemen Wawancara</h2></b>
+                    <p class="card-text text-muted">Human Resource Management System SEB</p>
+                </div>
+                <div>
+                    <i class="bi bi-calendar-check text-primary" style="font-size: 3rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="card-title">Jadwalkan Wawancara Baru</h4>
-                    <a href="{{ route('rekrutmen.wawancara.index') }}" class="btn btn-secondary btn-sm">
-                        <i class="fas fa-arrow-left me-1"></i>Kembali
+                <div class="card-header d-flex justify-content-between">
+                    <div class="header-title">
+                        <h4 class="card-title">Form Jadwal Wawancara</h4>
+                    </div>
+                    <a href="{{ route('rekrutmen.wawancara.index') }}" class="btn btn-danger btn-sm">
+                        <i class="bi bi-arrow-left me-2"></i>Kembali
                     </a>
                 </div>
                 <div class="card-body">
@@ -22,66 +39,115 @@
                         <input type="hidden" id="idLamaranPekerjaan" name="id_lamaran_pekerjaan" 
                                value="{{ request()->get('lamaran_id') }}">
                         
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Nama Pelamar</label>
-                                <input type="text" class="form-control" id="namaPelamar" readonly>
-                            </div>
-                            
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Email Pelamar</label>
-                                <input type="email" class="form-control" id="emailPelamar" readonly>
-                            </div>
-                            
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Lowongan Pekerjaan</label>
-                                <input type="text" class="form-control" id="judulPekerjaan" readonly>
-                            </div>
-                            
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Tanggal Wawancara *</label>
-                                <input type="datetime-local" class="form-control" 
-                                       id="tanggalWawancara" name="tanggal_wawancara" required>
-                                <div class="invalid-feedback">
-                                    Tanggal wawancara tidak boleh kosong
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <div class="form-group position-relative">
+                                    <label class="form-label fw-bold" for="namaPelamar">
+                                        <i class="bi bi-person me-1"></i>Nama Pelamar
+                                    </label>
+                                    <input type="text" 
+                                           class="form-control form-control-lg shadow-none border-2" 
+                                           id="namaPelamar" 
+                                           readonly>
                                 </div>
                             </div>
                             
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Lokasi Wawancara *</label>
-                                <input type="text" class="form-control" 
-                                       id="lokasiWawancara" name="lokasi" required>
-                                <div class="invalid-feedback">
-                                    Lokasi wawancara tidak boleh kosong
+                            <div class="col-md-4">
+                                <div class="form-group position-relative">
+                                    <label class="form-label fw-bold" for="emailPelamar">
+                                        <i class="bi bi-envelope me-1"></i>Email Pelamar
+                                    </label>
+                                    <input type="email" 
+                                           class="form-control form-control-lg shadow-none border-2" 
+                                           id="emailPelamar" 
+                                           readonly>
                                 </div>
                             </div>
                             
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Metode Wawancara</label>
-                                <select class="form-control" id="metodeWawancara" name="metode">
-                                    <option value="offline">Offline</option>
-                                    <option value="online">Online</option>
-                                    <option value="hybrid">Hybrid</option>
-                                </select>
+                            <div class="col-md-4">
+                                <div class="form-group position-relative">
+                                    <label class="form-label fw-bold" for="judulPekerjaan">
+                                        <i class="bi bi-briefcase me-1"></i>Lowongan Pekerjaan
+                                    </label>
+                                    <input type="text" 
+                                           class="form-control form-control-lg shadow-none border-2" 
+                                           id="judulPekerjaan" 
+                                           readonly>
+                                </div>
                             </div>
                             
-                            <div class="col-md-12 mb-3">
-                                <label class="form-label">Catatan Tambahan</label>
-                                <textarea class="form-control" 
-                                          id="catatanWawancara" 
-                                          name="catatan" 
-                                          rows="3" 
-                                          placeholder="Tambahkan catatan atau instruksi khusus"></textarea>
+                            <div class="col-md-6">
+                                <div class="form-group position-relative">
+                                    <label class="form-label fw-bold" for="tanggalWawancara">
+                                        <i class="bi bi-calendar me-1"></i>Tanggal Wawancara
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="datetime-local" 
+                                           class="form-control form-control-lg shadow-none border-2" 
+                                           id="tanggalWawancara" 
+                                           name="tanggal_wawancara" 
+                                           required>
+                                    <div class="invalid-feedback">
+                                        Tanggal wawancara tidak boleh kosong
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="form-group position-relative">
+                                    <label class="form-label fw-bold" for="lokasiWawancara">
+                                        <i class="bi bi-geo-alt me-1"></i>Lokasi Wawancara
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" 
+                                           class="form-control form-control-lg shadow-none border-2" 
+                                           id="lokasiWawancara" 
+                                           name="lokasi" 
+                                           required>
+                                    <div class="invalid-feedback">
+                                        Lokasi wawancara tidak boleh kosong
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="form-group position-relative">
+                                    <label class="form-label fw-bold" for="metodeWawancara">
+                                        <i class="bi bi-camera-video me-1"></i>Metode Wawancara
+                                    </label>
+                                    <select class="form-select form-control-lg shadow-none border-2" 
+                                            id="metodeWawancara" 
+                                            name="metode">
+                                        <option value="offline">Offline</option>
+                                        <option value="online">Online</option>
+                                        <option value="hybrid">Hybrid</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <div class="form-group position-relative">
+                                    <label class="form-label fw-bold" for="catatanWawancara">
+                                        <i class="bi bi-journal-text me-1"></i>Catatan Tambahan
+                                    </label>
+                                    <textarea class="form-control form-control-lg shadow-none border-2" 
+                                              id="catatanWawancara" 
+                                              name="catatan" 
+                                              rows="4" 
+                                              placeholder="Tambahkan catatan atau instruksi khusus"></textarea>
+                                </div>
                             </div>
                         </div>
                         
-                        <div class="text-end">
-                            <button type="button" id="resetButton" class="btn btn-warning me-2">
-                                <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
-                            </button>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save me-1"></i>Simpan Jadwal Wawancara
-                            </button>
+                        <div class="row mt-5">
+                            <div class="col-12 d-flex justify-content-end gap-2">
+                                <button type="button" id="resetButton" class="btn btn-warning">
+                                    <i class="bi bi-arrow-counterclockwise me-2"></i>Reset
+                                </button>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="bi bi-save me-2"></i>Simpan Jadwal Wawancara
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>

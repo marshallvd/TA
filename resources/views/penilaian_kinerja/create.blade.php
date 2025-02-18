@@ -286,7 +286,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function fetchData(endpoint) {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/${endpoint}`, {
+            const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -579,7 +579,7 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             console.log(`Sending data to ${endpoint}:`, data);
             
-            const response = await fetch(`http://127.0.0.1:8000/api/${endpoint}`, {
+            const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,

@@ -102,10 +102,10 @@ Profil Pegawai
                     <div class="row mt-4">
                         <div class="col-12 text-center">
                             <button class="btn btn-primary me-2" id="editProfileBtn">
-                                <i class="bi bi-pencil-square me-2"></i>Edit Profil
+                                <i class="bi bi-pencil-square me-2"></i>Edit Data
                             </button>
                             <button class="btn btn-outline-secondary" id="changePasswordBtn">
-                                <i class="bi bi-key me-2"></i>Ganti Password
+                                <i class="bi bi-key me-2"></i>Edit Akun
                             </button>
                         </div>
                     </div>

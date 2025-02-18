@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', function() {
     async function fetchData(endpoint) {
         const token = localStorage.getItem('token');
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/${endpoint}`, {
+            const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -329,7 +329,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function checkExistingGaji(idPegawai, periode) {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/gaji/check/${idPegawai}/${periode}`, {
+            const response = await fetch(`${API_BASE_URL}/gaji/check/${idPegawai}/${periode}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Accept': 'application/json'
@@ -344,22 +344,32 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     async function initializePreview() {
-        const gajiPokok = await getGajiPokok();
-        const periode = new Date(document.getElementById('periode').value);
-        const insentif = await hitungInsentif(periode);
-        const potonganBPJS = 200000;
+        try {
+            const settingGaji = await fetchSettingGaji();
+            if (!settingGaji) {
+                console.error('Setting gaji tidak tersedia');
+                return;
+            }
 
-        document.getElementById('previewSection').style.display = 'block';
+            const gajiPokok = await getGajiPokok();
+            const periode = new Date(document.getElementById('periode').value);
+            const insentif = await hitungInsentif(periode);
+            const potonganBPJS = settingGaji.potongan_bpjs || 200000;
 
-        document.getElementById('gajiPokokPreview').value = gajiPokok.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
-        document.getElementById('insentifPreview').value = insentif.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
-        document.getElementById('potonganBPJSPreview').value = potonganBPJS.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
+            document.getElementById('previewSection').style.display = 'block';
 
-        document.getElementById('bonusKehadiranPreview').value = 'Rp 0';
-        document.getElementById('tunjanganLemburPreview').value = 'Rp 0';
-        document.getElementById('totalPendapatanPreview').value = 'Rp 0';
-        document.getElementById('potonganPajakPreview').value = 'Rp 0';
-        document.getElementById('gajiBersihPreview').value = 'Rp 0';
+            document.getElementById('gajiPokokPreview').value = gajiPokok.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
+            document.getElementById('insentifPreview').value = insentif.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
+            document.getElementById('potonganBPJSPreview').value = potonganBPJS.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
+
+            document.getElementById('bonusKehadiranPreview').value = 'Rp 0';
+            document.getElementById('tunjanganLemburPreview').value = 'Rp 0';
+            document.getElementById('totalPendapatanPreview').value = 'Rp 0';
+            document.getElementById('potonganPajakPreview').value = 'Rp 0';
+            document.getElementById('gajiBersihPreview').value = 'Rp 0';
+        } catch (error) {
+            console.error('Error dalam initializePreview:', error);
+        }
     }
 
     async function getGajiPokok() {
@@ -379,101 +389,128 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     async function hitungInsentif(periode) {
-        try {
-            const pegawaiResponse = await fetchData(`pegawai/${idPegawai}`);
-            if (!pegawaiResponse || !pegawaiResponse.data) {
-                console.warn('Data pegawai tidak valid');
-                return 0;
-            }
-
-            const tahun = periode.getFullYear();
-            const bulan = String(periode.getMonth() + 1).padStart(2, '0');
-
-            const penilaianResponse = await fetchData(`penilaian-kinerja/pegawai/${idPegawai}/tahun/${tahun}/bulan/${bulan}`);
-            if (!penilaianResponse || !penilaianResponse.data || !penilaianResponse.data.predikat) {
-                console.warn('Penilaian kinerja tidak ditemukan untuk pegawai ini.');
-                await Swal.fire({
-                    icon: 'warning',
-                    title: 'Perhatian',
-                    text: 'Penilaian kinerja tidak ditemukan. Insentif akan dihitung sebagai 0.'
-                });
-                return 0;
-            }
-
-            const predikat = penilaianResponse.data.predikat;
-            let persentaseInsentif = 0;
-
-            switch (predikat.toLowerCase()) {
-                case 'sangat baik':
-                    persentaseInsentif = 0.15;
-                    break;
-                case 'baik':
-                    persentaseInsentif = 0.10;
-                    break;
-                case 'cukup':
-                    persentaseInsentif = 0.05;
-                    break;
-                case 'kurang':
-                    persentaseInsentif = 0.02;
-                    break;
-                case 'sangat kurang':
-                    persentaseInsentif = 0.00;
-                    break;
-                default:
-                    console.warn('Predikat tidak dikenali:', predikat);
-                    break;
-            }
-
-            const gajiPokok = await getGajiPokok();
-            return gajiPokok * persentaseInsentif;
-        } catch (error) {
-            console.error('Error dalam perhitungan insentif:', error);
-            await Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Terjadi kesalahan dalam perhitungan insentif'
-            });
+    try {
+        const settingGaji = await fetchSettingGaji(); // Tambahkan ini
+        if (!settingGaji) {
+            console.error('Setting gaji tidak tersedia');
             return 0;
         }
-    }
 
-    function hitungBonusKehadiran(jumlahKehadiran) {
-        return jumlahKehadiran * 25000;
+        const penilaianResponse = await fetchData(`penilaian-kinerja/pegawai/${idPegawai}/tahun/${periode.getFullYear()}/bulan/${String(periode.getMonth() + 1).padStart(2, '0')}`);
+        
+        if (penilaianResponse && penilaianResponse.data) {
+            const predikat = penilaianResponse.data.predikat;
+            const gajiPokok = await getGajiPokok();
+            
+            switch (predikat.toLowerCase()) {
+                case 'sangat baik':
+                    return gajiPokok * (settingGaji.insentif_sangat_baik / 100);
+                case 'baik':
+                    return gajiPokok * (settingGaji.insentif_baik / 100);
+                case 'cukup':
+                    return gajiPokok * (settingGaji.insentif_cukup / 100);
+                case 'kurang':
+                    return gajiPokok * (settingGaji.insentif_kurang / 100);
+                case 'sangat kurang':
+                    return gajiPokok * (settingGaji.insentif_sangat_kurang / 100);
+                default:
+                    return 0;
+            }
+        }
+        return 0;
+    } catch (error) {
+        console.error('Error dalam hitungInsentif:', error);
+        return 0;
     }
+}
 
-    function hitungTunjanganLembur(jumlahHariLembur, tarifLemburPerHari) {
-        return jumlahHariLembur * tarifLemburPerHari;
+async function hitungTunjanganLembur(jumlahHariLembur) {
+    const pegawai = await fetchData(`pegawai/${idPegawai}`);
+    return jumlahHariLembur * pegawai.data.jabatan.tarif_lembur_per_hari;
+}
+
+    // function hitungBonusKehadiran(jumlahKehadiran) {
+    //     return jumlahKehadiran * 25000;
+    // }
+
+    // function hitungTunjanganLembur(jumlahHariLembur, tarifLemburPerHari) {
+    //     return jumlahHariLembur * tarifLemburPerHari;
+    // }
+
+    // function hitungPotonganPajak(totalPendapatan) {
+    //     return totalPendapatan * 0.1;
+    // }
+
+    async function fetchSettingGaji() {
+    try {
+        const response = await fetch('/api/setting-gaji', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
+            }
+        });
+        const data = await response.json();
+        return data.data;
+    } catch (error) {
+        console.error('Error fetching setting gaji:', error);
+        return null;
     }
+}
+async function updatePreview() {
+    try {
+        const settingGaji = await fetchSettingGaji();
+        if (!settingGaji) {
+            throw new Error('Gagal mengambil setting gaji');
+        }
 
-    function hitungPotonganPajak(totalPendapatan) {
-        return totalPendapatan * 0.1;
-    }
-
-    async function updatePreview() {
-        const jumlahKehadiran = parseInt(document.getElementById('jumlah_kehadiran').value) || 0;
-        const jumlahHariLembur = parseInt(document.getElementById('jumlah_hari_lembur').value) || 0;
+        // Validasi input
+        const jumlahKehadiran = Math.max(0, parseInt(document.getElementById('jumlah_kehadiran').value) || 0);
+        const jumlahHariLembur = Math.max(0, parseInt(document.getElementById('jumlah_hari_lembur').value) || 0);
         const periode = new Date(document.getElementById('periode').value);
 
-        const gajiPokok = await getGajiPokok();
-        const tarifLemburPerHari = await getTarifLembur();
-        const insentif = await hitungInsentif(periode);
-        const bonusKehadiran = hitungBonusKehadiran(jumlahKehadiran);
-        const tunjanganLembur = hitungTunjanganLembur(jumlahHariLembur, tarifLemburPerHari);
-        
+        // Hitung komponen gaji
+        const gajiPokok = Number(settingGaji.hitung_gaji_pokok ? await getGajiPokok() : 0);
+        const insentif = Number(settingGaji.hitung_insentif ? await hitungInsentif(periode, settingGaji) : 0);
+        const bonusKehadiran = Number(settingGaji.hitung_bonus_kehadiran ? jumlahKehadiran * settingGaji.bonus_per_kehadiran : 0);
+        const tunjanganLembur = Number(settingGaji.hitung_tunjangan_lembur ? await hitungTunjanganLembur(jumlahHariLembur) : 0);
+
+        // Hitung total
         const totalPendapatan = gajiPokok + insentif + bonusKehadiran + tunjanganLembur;
-        const potonganPajak = hitungPotonganPajak(totalPendapatan);
-        const potonganBPJS = 200000;
+        const potonganPajak = totalPendapatan * (Number(settingGaji.persentase_pajak) / 100);
+        const potonganBPJS = Number(settingGaji.potongan_bpjs);
         const totalPotongan = potonganPajak + potonganBPJS;
         const gajiBersih = totalPendapatan - totalPotongan;
 
-        document.getElementById('gajiPokokPreview').value = gajiPokok.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
-        document.getElementById('insentifPreview').value = insentif.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
-        document.getElementById('bonusKehadiranPreview').value = bonusKehadiran.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
-        document.getElementById('tunjanganLemburPreview').value = tunjanganLembur.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
-        document.getElementById('totalPendapatanPreview').value = totalPendapatan.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
-        document.getElementById('potonganPajakPreview').value = potonganPajak.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
-        document.getElementById('potonganBPJSPreview').value = potonganBPJS.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
-        document.getElementById('gajiBersihPreview').value = gajiBersih.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
+        // Log untuk debugging
+        console.log('Perhitungan Gaji:', {
+            gajiPokok,
+            insentif,
+            bonusKehadiran,
+            tunjanganLembur,
+            totalPendapatan,
+            potonganPajak,
+            potonganBPJS,
+            totalPotongan,
+            gajiBersih
+        });
+
+        // Format currency
+        const currencyOptions = { 
+            style: 'currency', 
+            currency: 'IDR',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        };
+
+        // Update UI
+        document.getElementById('gajiPokokPreview').value = gajiPokok.toLocaleString('id-ID', currencyOptions);
+        document.getElementById('insentifPreview').value = insentif.toLocaleString('id-ID', currencyOptions);
+        document.getElementById('bonusKehadiranPreview').value = bonusKehadiran.toLocaleString('id-ID', currencyOptions);
+        document.getElementById('tunjanganLemburPreview').value = tunjanganLembur.toLocaleString('id-ID', currencyOptions);
+        document.getElementById('totalPendapatanPreview').value = totalPendapatan.toLocaleString('id-ID', currencyOptions);
+        document.getElementById('potonganPajakPreview').value = potonganPajak.toLocaleString('id-ID', currencyOptions);
+        document.getElementById('potonganBPJSPreview').value = potonganBPJS.toLocaleString('id-ID', currencyOptions);
+        document.getElementById('gajiBersihPreview').value = gajiBersih.toLocaleString('id-ID', currencyOptions);
 
         return {
             gajiPokok,
@@ -485,7 +522,11 @@ document.addEventListener('DOMContentLoaded', function() {
             potonganBPJS,
             gajiBersih
         };
+    } catch (error) {
+        console.error('Error dalam perhitungan gaji:', error);
+        alert('Terjadi kesalahan dalam perhitungan gaji');
     }
+}
 
     // Event Listeners
     document.getElementById('submitGaji').addEventListener('click', async function(e) {
@@ -541,41 +582,42 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Update preview dan dapatkan nilai-nilai terbaru
-        const previewValues = await updatePreview();
+        const settingGaji = await fetchSettingGaji();
+        const previewValues = await updatePreview(settingGaji);
 
-        const result = await Swal.fire({
-            title: 'Konfirmasi',
-            text: 'Apakah Anda yakin ingin menyimpan gaji ini?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Ya, simpan!',
-            cancelButtonText: 'Batal'
-        });
+            const result = await Swal.fire({
+        title: 'Konfirmasi',
+        text: 'Apakah Anda yakin ingin menyimpan gaji ini?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, simpan!',
+        cancelButtonText: 'Batal'
+    });
 
-        if (result.isConfirmed) {
-            const formData = new FormData(form);
-            const dataToSend = {
-                id_pegawai: formData.get('id_pegawai'),
-                periode: formData.get('periode'),
-                jumlah_kehadiran: formData.get('jumlah_kehadiran'),
-                jumlah_hari_lembur: formData.get('jumlah_hari_lembur'),
-                gaji_pokok: previewValues.gajiPokok,
-                insentif: previewValues.insentif,
-                bonus_kehadiran: previewValues.bonusKehadiran,
-                tunjangan_lembur: previewValues.tunjanganLembur,
-                potongan_pajak: previewValues.potonganPajak,
-                potongan_bpjs: previewValues.potonganBPJS,
-                gaji_bersih: previewValues.gajiBersih
-            };
+    if (result.isConfirmed) {
+    try {
+        const formData = new FormData(form);
+        const dataToSend = {
+            id_pegawai: formData.get('id_pegawai'),
+            periode: formData.get('periode'),
+            jumlah_kehadiran: formData.get('jumlah_kehadiran'),
+            jumlah_hari_lembur: formData.get('jumlah_hari_lembur'),
+            gaji_pokok: previewValues.gajiPokok,
+            insentif: previewValues.insentif,
+            bonus_kehadiran: previewValues.bonusKehadiran,
+            tunjangan_lembur: previewValues.tunjanganLembur,
+            total_pendapatan: previewValues.totalPendapatan,
+            potongan_pajak: previewValues.potonganPajak,
+            potongan_bpjs: previewValues.potonganBPJS,
+            gaji_bersih: previewValues.gajiBersih
+        };
 
-            try {
-                const response = await fetch('http://127.0.0.1:8000/api/gaji', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
+        const response = await fetch(`${API_BASE_URL}/gaji`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
             body: JSON.stringify(dataToSend)
         });

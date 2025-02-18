@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function redirectToIndex() {
-        window.location.href = '/jenis-cuti';
+        window.location.href = '/jenis_cuti';
     }
 });
 </script>

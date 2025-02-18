@@ -243,13 +243,13 @@ document.addEventListener('DOMContentLoaded', function() {
             title: 'Authentication Error',
             text: 'Token tidak ditemukan. Silakan login kembali.'
         }).then(() => {
-            window.location.href = '/login';
+            window.location.href = `${BASE_URL}/login`;
         });
         return;
     }
 
     // Fetch divisi options
-    fetch('http://127.0.0.1:8000/api/divisi', {
+    fetch(`${API_BASE_URL}/divisi`, {
         headers: {
             'Authorization': `Bearer ${token}`,
             'Accept': 'application/json'
@@ -283,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Fetch existing KPI data
     function fetchKPIData() {
-        fetch(`http://127.0.0.1:8000/api/komponen-kpi/${kpiId}`, {
+        fetch(`${API_BASE_URL}/komponen-kpi/${kpiId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
@@ -309,7 +309,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 title: 'Error',
                 text: 'Gagal mengambil data KPI: ' + error.message
             }).then(() => {
-                window.location.href = '{{ route("komponen-kpi.index") }}';
+                window.location.href = `${BASE_URL}/komponen-kpi`;
             });
         });
     }
@@ -391,7 +391,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             // Send data to API
-            const response = await fetch(`http://127.0.0.1:8000/api/komponen-kpi/${kpiId}`, {
+            const response = await fetch(`${API_BASE_URL}/komponen-kpi/${kpiId}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -434,7 +434,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 text: 'Data KPI berhasil diperbarui',
                 showConfirmButton: true
             }).then(() => {
-                window.location.href = '{{ route("komponen-kpi.index") }}';
+                window.location.href = `${BASE_URL}/komponen-kpi`;
             });
 
         } catch (error) {

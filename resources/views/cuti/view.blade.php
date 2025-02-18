@@ -331,7 +331,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 throw new Error('ID Cuti tidak valid');
             }
 
-            const response = await fetch(`http://127.0.0.1:8000/api/cuti/${cutiId}`, {
+            const response = await fetch(`${API_BASE_URL}/cuti/${cutiId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -348,7 +348,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const cuti = responseData.data;
             
             // Fetch employee data with error handling
-            const pegawaiResponse = await fetch(`http://127.0.0.1:8000/api/pegawai/${cuti.id_pegawai}`, {
+            const pegawaiResponse = await fetch(`${API_BASE_URL}/pegawai/${cuti.id_pegawai}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Accept': 'application/json'
@@ -368,7 +368,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Fetch division data with error handling
             if (pegawai.id_divisi) {
-                const divisiResponse = await fetch(`http://127.0.0.1:8000/api/divisi/${pegawai.id_divisi}`, {
+                const divisiResponse = await fetch(`${API_BASE_URL}/divisi/${pegawai.id_divisi}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Accept': 'application/json'
@@ -383,7 +383,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Fetch position data with error handling
             if (pegawai.id_jabatan) {
-                const jabatanResponse = await fetch(`http://127.0.0.1:8000/api/jabatan/${pegawai.id_jabatan}`, {
+                const jabatanResponse = await fetch(`${API_BASE_URL}/jabatan/${pegawai.id_jabatan}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Accept': 'application/json'
@@ -398,7 +398,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Fetch leave type data with error handling
             if (cuti.id_jenis_cuti) {
-                const jenisCutiResponse = await fetch(`http://127.0.0.1:8000/api/jenis-cuti/${cuti.id_jenis_cuti}`, {
+                const jenisCutiResponse = await fetch(`${API_BASE_URL}/jenis-cuti/${cuti.id_jenis_cuti}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Accept': 'application/json'
@@ -481,7 +481,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
                 try {
-                    const response = await fetch(`http://127.0.0.1:8000/api/cuti/${cutiId}/ditolak`, {
+                    const response = await fetch(`${API_BASE_URL}/cuti/${cutiId}/ditolak`, {
                         method: 'PUT',
                         headers: {
                             'Authorization': `Bearer ${token}`,
@@ -530,7 +530,7 @@ document.addEventListener('DOMContentLoaded', function() {
             showLoaderOnConfirm: true,
             preConfirm: async () => {
                 try {
-                    const response = await fetch(`http://127.0.0.1:8000/api/cuti/${cutiId}/diterima`, {
+                    const response = await fetch(`${API_BASE_URL}/cuti/${cutiId}/diterima`, {
                         method: 'PUT',
                         headers: {
                             'Authorization': `Bearer ${token}`,
